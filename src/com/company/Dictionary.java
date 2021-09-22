@@ -1,23 +1,37 @@
 package com.company;
 
+import java.util.ArrayList;
+
 public class Dictionary {
-    private Word[] dictionary = new Word[100];
-    private int count = 0;
+    private ArrayList<Word> dictionary;
 
     public void addWord(String wordTarget, String wordExplain) {
-        dictionary[count] = new Word(wordTarget, wordExplain);
-        count++;
+       boolean duplicate = false;
+
+       for (Word i : dictionary) {
+           if (wordTarget.equals(i.getWordTarget())) {
+               duplicate = true;
+               break;
+           }
+       }
+
+       if (!duplicate) {
+           dictionary.add(new Word(wordTarget, wordExplain));
+       }
     }
 
     public void removeWord(String wordTarget) {
-        for (int i = 0; i < count; i++) {
-            if (dictionary[i].getWordTarget().equals(wordTarget)) {
-                System.arraycopy(dictionary, i + 1, dictionary, i, count - 1 - i);
-                dictionary[count - 1] = null;
-                count--;
+        int position = -1;
 
+        for (int i = 0; i < dictionary.size(); i++) {
+            if (wordTarget.equals(dictionary.get(i).getWordTarget())) {
+                position = i;
                 break;
             }
+        }
+
+        if (position >= 0) {
+            dictionary.remove(position);
         }
     }
 
