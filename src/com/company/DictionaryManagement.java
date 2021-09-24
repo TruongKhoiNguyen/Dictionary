@@ -1,0 +1,35 @@
+package com.company;
+
+import java.util.Scanner;
+
+public class DictionaryManagement {
+    private Dictionary dictionary;
+
+    /** Constructor 1. */
+    public DictionaryManagement(Dictionary dictionary) {
+        this.dictionary = dictionary;
+    }
+
+    /** Insert from commandlines and add them to dictionary. */
+    public void insertFromCommandline() {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Input number of words: ");
+        int t = scanner.nextInt();
+        scanner.nextLine();
+
+        for (int i = 0; i < t; i++) {
+            System.out.printf("Word no %d\n", i + 1);
+
+            System.out.println("Word target: ");
+            String wordTarget = scanner.nextLine();
+
+            System.out.println("Word explain: ");
+            String wordExplain = scanner.nextLine();
+
+            dictionary.addWord(wordTarget, wordExplain);
+        }
+
+        scanner.close();
+    }
+}

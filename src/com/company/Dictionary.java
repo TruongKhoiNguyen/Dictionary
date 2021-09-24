@@ -3,7 +3,7 @@ package com.company;
 import java.util.ArrayList;
 
 public class Dictionary {
-    private ArrayList<Word> dictionary;
+    private ArrayList<Word> dictionary = new ArrayList<>();
 
     public void addWord(String wordTarget, String wordExplain) {
        boolean duplicate = false;
@@ -35,4 +35,18 @@ public class Dictionary {
         }
     }
 
+    /** Get size of dictionary. */
+    public int size() {
+        return this.dictionary.size();
+    }
+
+    /** Get wordTarget given position. */
+    public String getWordTarget(int position) {
+        return dictionary.get(position).getWordTarget();
+    }
+
+    /** Get wordExplain given position. */
+    public String getWordExplain(int position) {
+        return dictionary.get(position).getWordExplain();
+    }
 }
