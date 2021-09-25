@@ -1,9 +1,5 @@
 package main.java;
 
-import main.java.Dictionary;
-import main.java.DictionaryCommandline;
-import main.java.DictionaryManagement;
-
 public class Main {
     public static void main(String[] args) {
         Dictionary dictionary = new Dictionary();
