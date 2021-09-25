@@ -1,8 +1,8 @@
 package main.java;
 
 public class Word {
-    private String wordTarget;
-    private String wordExplain;
+    private final String wordTarget;
+    private final String wordExplain;
 
     public Word(String wordTarget, String wordExplain) {
         this.wordTarget = wordTarget;
