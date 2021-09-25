@@ -1,9 +1,7 @@
 package main.java;
 
-import main.java.Dictionary;
-
 public class DictionaryCommandline {
-    private Dictionary dictionary;
+    private final Dictionary dictionary;
 
     /** Constructor 1. */
     public DictionaryCommandline(Dictionary dictionary) {
