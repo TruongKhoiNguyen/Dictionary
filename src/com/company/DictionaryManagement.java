@@ -3,7 +3,7 @@ package com.company;
 import java.util.Scanner;
 
 public class DictionaryManagement {
-    private Dictionary dictionary;
+    private final Dictionary dictionary;
 
     /** Constructor 1. */
     public DictionaryManagement(Dictionary dictionary) {
