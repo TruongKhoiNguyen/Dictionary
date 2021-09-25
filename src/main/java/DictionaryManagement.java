@@ -1,4 +1,6 @@
-package com.company;
+package main.java;
+
+import main.java.Dictionary;
 
 import java.util.Scanner;
 
@@ -10,7 +12,7 @@ public class DictionaryManagement {
         this.dictionary = dictionary;
     }
 
-    /** Insert from commandlines and add them to dictionary. */
+    /** Read words from the commandlines and add them to dictionary. */
     public void insertFromCommandline() {
         Scanner scanner = new Scanner(System.in);
 

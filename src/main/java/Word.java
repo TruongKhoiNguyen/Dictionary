@@ -1,4 +1,4 @@
-package com.company;
+package main.java;
 
 public class Word {
     private String wordTarget;

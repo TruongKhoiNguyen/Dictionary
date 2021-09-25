@@ -1,4 +1,6 @@
-package com.company;
+package main.java;
+
+import main.java.Dictionary;
 
 public class DictionaryCommandline {
     private Dictionary dictionary;
