@@ -21,10 +21,10 @@ public class DictionaryManagement {
         for (int i = 0; i < t; i++) {
             System.out.printf("Word no %d\n", i + 1);
 
-            System.out.println("Word target: ");
+            System.out.print("Word target: ");
             String wordTarget = scanner.nextLine();
 
-            System.out.println("Word explain: ");
+            System.out.print("Word explain: ");
             String wordExplain = scanner.nextLine();
 
             dictionary.addWord(wordTarget, wordExplain);

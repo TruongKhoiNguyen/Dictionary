@@ -16,17 +16,11 @@ public class Dictionary {
     }
 
     public void removeWord(String wordTarget) {
-        int position = -1;
-
         for (int i = 0; i < dictionary.size(); i++) {
             if (wordTarget.equals(dictionary.get(i).getWordTarget())) {
-                position = i;
+                dictionary.remove(i);
                 break;
             }
-        }
-
-        if (position >= 0) {
-            dictionary.remove(position);
         }
     }
 
