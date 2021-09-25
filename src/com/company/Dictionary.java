@@ -6,18 +6,13 @@ public class Dictionary {
     private ArrayList<Word> dictionary = new ArrayList<>();
 
     public void addWord(String wordTarget, String wordExplain) {
-       boolean duplicate = false;
-
-       for (Word i : dictionary) {
+        for (Word i : dictionary) {
            if (wordTarget.equals(i.getWordTarget())) {
-               duplicate = true;
-               break;
+               return;
            }
        }
 
-       if (!duplicate) {
-           dictionary.add(new Word(wordTarget, wordExplain));
-       }
+       dictionary.add(new Word(wordTarget, wordExplain));
     }
 
     public void removeWord(String wordTarget) {
