@@ -35,10 +35,10 @@ public class DictionaryManagement {
 
     /** Insert from file. */
     public void insertFromFile() {
-        File fileData = new File("D:\\Projects\\Dictionary\\src\\main\\resources\\dictionary.txt");
+        File dictionaryData = new File("src/main/resources/dictionary.txt");
 
         try {
-            List<String> listWord = Files.readAllLines(fileData.toPath());
+            List<String> listWord = Files.readAllLines(dictionaryData.toPath());
             for (String wordLine : listWord) {
                 String[] word = wordLine.split(";");
                 dictionary.addWord(word[0], word[1]);
