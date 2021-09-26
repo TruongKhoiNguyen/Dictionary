@@ -1,5 +1,8 @@
 package main.java;
 
+import java.io.*;
+import java.nio.file.Files;
+import java.util.List;
 import java.util.Scanner;
 
 public class DictionaryManagement {
@@ -31,5 +34,19 @@ public class DictionaryManagement {
         }
 
         scanner.close();
+    }
+
+    public void insertFromFile() {
+        File fileData = new File("D:\\Code\\ProjectJavaFxD\\data\\dictionary.txt");
+
+        try {
+            List<String> listWord = Files.readAllLines(fileData.toPath());
+            for (String wordLine : listWord) {
+                String[] word = wordLine.split(";");
+                dictionary.addWord(word[0], word[1]);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

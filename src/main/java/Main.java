@@ -6,7 +6,7 @@ public class Main {
         DictionaryManagement dictMan = new DictionaryManagement(dictionary);
         DictionaryCommandline dictCom = new DictionaryCommandline(dictionary);
 
-        dictMan.insertFromCommandline();
+        dictMan.insertFromFile();
         dictCom.showAllWords();
     }
 }
