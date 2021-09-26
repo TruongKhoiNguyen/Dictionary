@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 public class DictionaryManagement {
     private final Dictionary dictionary;
+    private static final Scanner scanner = new Scanner(System.in);
 
     /** Constructor 1. */
     public DictionaryManagement(Dictionary dictionary) {
@@ -12,8 +13,6 @@ public class DictionaryManagement {
 
     /** Read words from the command lines and add them to dictionary. */
     public void insertFromCommandline() {
-        Scanner scanner = new Scanner(System.in);
-
         System.out.print("Input number of words: ");
         int t = scanner.nextInt();
         scanner.nextLine();
@@ -29,7 +28,5 @@ public class DictionaryManagement {
 
             dictionary.addWord(wordTarget, wordExplain);
         }
-
-        scanner.close();
     }
 }
