@@ -6,8 +6,8 @@ public class DictionaryCommandLineApp {
     private static final Scanner scanner = new Scanner(System.in);
 
     private final Dictionary dictionary = new Dictionary();
-    private final DictionaryManagement dictMan = new DictionaryManagement(dictionary);
-    private final DictionaryCommandline dictCom = new DictionaryCommandline(dictionary);
+    private final DictionaryManagement dictionaryManager = new DictionaryManagement(dictionary);
+    private final DictionaryCommandline dictionaryCommandline = new DictionaryCommandline(dictionary);
     private boolean isRunning = true;
 
     /** isRunning. */
@@ -24,7 +24,7 @@ public class DictionaryCommandLineApp {
     }
 
     private void insertFromFile() {
-        dictMan.insertFromFile();
+        dictionaryManager.insertFromFile();
     }
 
     private static void showOptions() {
@@ -42,8 +42,8 @@ public class DictionaryCommandLineApp {
 
     private void executeOption(int option) {
         switch (option) {
-            case 1 -> dictMan.insertFromCommandline();
-            case 2 -> dictCom.showAllWords();
+            case 1 -> dictionaryManager.insertFromCommandline();
+            case 2 -> dictionaryCommandline.showAllWords();
             case 3 -> isRunning = false;
             default -> {}
         }
