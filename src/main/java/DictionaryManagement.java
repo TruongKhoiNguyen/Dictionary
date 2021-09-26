@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Scanner;
 
 public class DictionaryManagement {
-    private final Dictionary dictionary;
     private static final Scanner scanner = new Scanner(System.in);
+    private final Dictionary dictionary;
 
     /** Constructor 1. */
     public DictionaryManagement(Dictionary dictionary) {

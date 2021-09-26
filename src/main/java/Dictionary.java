@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class Dictionary {
     private final ArrayList<Word> dictionary = new ArrayList<>();
 
+    /** Add word. */
     public void addWord(String wordTarget, String wordExplain) {
         for (Word i : dictionary) {
            if (wordTarget.equals(i.wordTarget())) {
@@ -15,6 +16,7 @@ public class Dictionary {
        dictionary.add(new Word(wordTarget, wordExplain));
     }
 
+    /** Remove word */
     public void removeWord(String wordTarget) {
         for (int i = 0; i < dictionary.size(); i++) {
             if (wordTarget.equals(dictionary.get(i).wordTarget())) {
