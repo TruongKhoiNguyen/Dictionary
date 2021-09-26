@@ -37,7 +37,7 @@ public class DictionaryManagement {
     }
 
     public void insertFromFile() {
-        File fileData = new File("D:\\Code\\ProjectJavaFxD\\data\\dictionary.txt");
+        File fileData = new File("src/dictionary.txt");
 
         try {
             List<String> listWord = Files.readAllLines(fileData.toPath());
