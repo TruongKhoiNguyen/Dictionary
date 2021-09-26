@@ -1,7 +1,0 @@
-map;Bản đồ
-way;Đường
-people;Người
-two;Hai
-family;Gia đình
-system;Hệ thống
-year;Năm
