@@ -15,6 +15,7 @@ public class DictionaryManagement {
         this.dictionary = dictionary;
     }
 
+    /** Insert from command line */
     public void insertFromCommandline() {
         int t = getInputTime();
         readInputAndPutIntoDictionary(t);
@@ -47,6 +48,7 @@ public class DictionaryManagement {
         dictionary.put(wordTarget.toLowerCase(), wordExplain.toLowerCase());
     }
 
+    /** Insert from file. */
     public void insertFromFile() {
         File dictionaryData = new File("src/main/resources/dictionary.txt");
 
@@ -61,6 +63,7 @@ public class DictionaryManagement {
         }
     }
 
+    /** Search. */
     public void dictionaryLookup() {
         String wordTarget = readStringWithMessage("Search key").toLowerCase();
 
