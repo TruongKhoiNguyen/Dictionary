@@ -1,21 +1,24 @@
 package main.java;
 
-public class DictionaryCommandline {
-    private final Dictionary dictionary;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
-    public DictionaryCommandline(Dictionary dictionary) {
+public class DictionaryCommandline {
+    private final LinkedHashMap<String, String> dictionary;
+
+    public DictionaryCommandline(LinkedHashMap<String, String> dictionary) {
         this.dictionary = dictionary;
     }
 
     public void showAllWords() {
         System.out.printf("%-6s |%-18s |%-18s\n", "No", "English", "Vietnamese");
 
-        int size = dictionary.size();
-        for (int i = 0; i < size; i++) {
-            String wordTarget = dictionary.getWordTarget(i);
-            String wordExplain = dictionary.getWordExplain(i);
-
-            System.out.printf("%-6d |%-18s |%-18s\n", i + 1, wordTarget, wordExplain);
+        int counter = 1;
+        for (Map.Entry<String, String> i : dictionary.entrySet()) {
+            String wordTarget = i.getKey();
+            String wordExplain = i.getValue();
+            System.out.printf("%-6d |%-18s |%-18s\n", counter, wordTarget, wordExplain);
+            counter++;
         }
 
         System.out.println();
