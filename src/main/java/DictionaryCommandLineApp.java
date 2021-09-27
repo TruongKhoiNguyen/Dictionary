@@ -31,7 +31,8 @@ public class DictionaryCommandLineApp {
         System.out.println("Options: ");
         System.out.println("1. Insert");
         System.out.println("2. Show");
-        System.out.println("3. Exit");
+        System.out.println("3. Search");
+        System.out.println("4. Exit");
     }
 
     private static int getChoice() {
@@ -44,7 +45,8 @@ public class DictionaryCommandLineApp {
         switch (option) {
             case 1 -> dictionaryManager.insertFromCommandline();
             case 2 -> dictionaryCommandline.showAllWords();
-            case 3 -> isRunning = false;
+            case 3 -> dictionaryCommandline.searchWord();
+            case 4 -> isRunning = false;
             default -> {}
         }
     }
