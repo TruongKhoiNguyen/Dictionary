@@ -23,14 +23,16 @@ public class DictionaryManagement {
         for (int i = 0; i < t; i++) {
             System.out.printf("Word no %d\n", i + 1);
 
-            System.out.print("Word target: ");
-            String wordTarget = scanner.nextLine();
-
-            System.out.print("Word explain: ");
-            String wordExplain = scanner.nextLine();
+            String wordTarget = readStringWithMessage("Target word");
+            String wordExplain = readStringWithMessage("Explain word");
 
             dictionary.put(wordTarget, wordExplain);
         }
+    }
+
+    private static String readStringWithMessage(String message) {
+        System.out.printf("%s: ", message);
+        return scanner.nextLine();
     }
 
     public void insertFromFile() {
@@ -48,8 +50,8 @@ public class DictionaryManagement {
     }
 
     public void dictionaryLookup() {
-        System.out.print("Lookup word: ");
-        String wordTarget = scanner.nextLine();
+        String wordTarget = readStringWithMessage("Search key: ");
+
         if (dictionary.containsKey(wordTarget)) {
             String wordExplain = dictionary.get(wordTarget);
             System.out.printf("Your searched word mean: %s\n", wordExplain);
