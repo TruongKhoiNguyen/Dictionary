@@ -62,7 +62,7 @@ public class DictionaryManagement {
     }
 
     public void dictionaryLookup() {
-        String wordTarget = readStringWithMessage("Search key");
+        String wordTarget = readStringWithMessage("Search key").toLowerCase();
 
         if (dictionary.containsKey(wordTarget)) {
             String wordExplain = dictionary.get(wordTarget);
