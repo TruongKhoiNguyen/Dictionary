@@ -9,6 +9,18 @@ public class Dictionary {
         dictionary = new ArrayList<>();
     }
 
+    public int size() {
+        return this.dictionary.size();
+    }
+
+    public String getWordTarget(int position) {
+        return dictionary.get(position).wordTarget();
+    }
+
+    public String getWordExplain(int position) {
+        return dictionary.get(position).wordExplain();
+    }
+
     public void addWord(String wordTarget, String wordExplain) {
         for (Word i : dictionary) {
            if (wordTarget.equals(i.wordTarget())) {
@@ -26,17 +38,5 @@ public class Dictionary {
                 break;
             }
         }
-    }
-
-    public int size() {
-        return this.dictionary.size();
-    }
-
-    public String getWordTarget(int position) {
-        return dictionary.get(position).wordTarget();
-    }
-
-    public String getWordExplain(int position) {
-        return dictionary.get(position).wordExplain();
     }
 }

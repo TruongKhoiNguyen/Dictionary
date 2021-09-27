@@ -7,6 +7,7 @@ import java.util.Scanner;
 
 public class DictionaryManagement {
     private static final Scanner scanner = new Scanner(System.in);
+
     private final Dictionary dictionary;
 
     public DictionaryManagement(Dictionary dictionary) {
