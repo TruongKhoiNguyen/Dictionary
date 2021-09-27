@@ -17,5 +17,7 @@ public class DictionaryCommandline {
 
             System.out.printf("%-6d |%-18s |%-18s\n", i + 1, wordTarget, wordExplain);
         }
+
+        System.out.println();
     }
 }
