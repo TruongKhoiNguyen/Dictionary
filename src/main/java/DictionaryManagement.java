@@ -1,9 +1,13 @@
 package main.java;
 
+import java.io.*;
+import java.nio.file.Files;
+import java.util.List;
 import java.util.Scanner;
 
 public class DictionaryManagement {
     private final Dictionary dictionary;
+    private static final Scanner scanner = new Scanner(System.in);
 
     /** Constructor 1. */
     public DictionaryManagement(Dictionary dictionary) {
@@ -12,8 +16,6 @@ public class DictionaryManagement {
 
     /** Read words from the command lines and add them to dictionary. */
     public void insertFromCommandline() {
-        Scanner scanner = new Scanner(System.in);
-
         System.out.print("Input number of words: ");
         int t = scanner.nextInt();
         scanner.nextLine();
@@ -29,7 +31,20 @@ public class DictionaryManagement {
 
             dictionary.addWord(wordTarget, wordExplain);
         }
+    }
 
-        scanner.close();
+    /** Insert from file. */
+    public void insertFromFile() {
+        File dictionaryData = new File("src/main/resources/dictionary.txt");
+
+        try {
+            List<String> listWord = Files.readAllLines(dictionaryData.toPath());
+            for (String wordLine : listWord) {
+                String[] word = wordLine.split(";");
+                dictionary.addWord(word[0], word[1]);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
