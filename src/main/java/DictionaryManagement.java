@@ -16,23 +16,35 @@ public class DictionaryManagement {
     }
 
     public void insertFromCommandline() {
-        System.out.print("Input number of words: ");
-        int t = scanner.nextInt();
-        scanner.nextLine();
+        int t = getInputTime();
+        readInputAndPutIntoDictionary(t);
+    }
 
-        for (int i = 0; i < t; i++) {
+    private static int getInputTime() {
+        System.out.print("Input number of words: ");
+        int input = scanner.nextInt();
+        scanner.nextLine();
+        return input;
+    }
+
+    private void readInputAndPutIntoDictionary(int times) {
+        for (int i = 0; i < times; i++) {
             System.out.printf("Word no %d\n", i + 1);
 
             String wordTarget = readStringWithMessage("Target word");
             String wordExplain = readStringWithMessage("Explain word");
 
-            dictionary.put(wordTarget, wordExplain);
+            insertWord(wordTarget, wordExplain);
         }
     }
 
     private static String readStringWithMessage(String message) {
         System.out.printf("%s: ", message);
         return scanner.nextLine();
+    }
+
+    private void insertWord(String wordTarget, String wordExplain) {
+        dictionary.put(wordTarget.toLowerCase(), wordExplain.toLowerCase());
     }
 
     public void insertFromFile() {
@@ -42,7 +54,7 @@ public class DictionaryManagement {
             List<String> listWord = Files.readAllLines(dictionaryData.toPath());
             for (String wordLine : listWord) {
                 String[] word = wordLine.split(";");
-                dictionary.put(word[0], word[1]);
+                insertWord(word[0], word[1]);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -50,7 +62,7 @@ public class DictionaryManagement {
     }
 
     public void dictionaryLookup() {
-        String wordTarget = readStringWithMessage("Search key: ");
+        String wordTarget = readStringWithMessage("Search key");
 
         if (dictionary.containsKey(wordTarget)) {
             String wordExplain = dictionary.get(wordTarget);
