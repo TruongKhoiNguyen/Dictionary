@@ -5,12 +5,19 @@ import java.util.Scanner;
 public class DictionaryCommandLineApp {
     private static final Scanner scanner = new Scanner(System.in);
 
-    private final Dictionary dictionary = new Dictionary();
-    private final DictionaryManagement dictionaryManager = new DictionaryManagement(dictionary);
-    private final DictionaryCommandline dictionaryCommandline = new DictionaryCommandline(dictionary);
-    private boolean isRunning = true;
+    private final Dictionary dictionary;
+    private final DictionaryManagement dictionaryManager;
+    private final DictionaryCommandline dictionaryCommandline;
 
-    /** isRunning. */
+    private boolean isRunning;
+
+    public DictionaryCommandLineApp() {
+        dictionary = new Dictionary();
+        dictionaryManager = new DictionaryManagement(dictionary);
+        dictionaryCommandline = new DictionaryCommandline(dictionary);
+        isRunning = true;
+    }
+
     public boolean isRunning() {
         return isRunning;
     }

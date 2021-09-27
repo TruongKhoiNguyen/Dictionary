@@ -3,7 +3,6 @@ package main.java;
 public class DictionaryCommandline {
     private final Dictionary dictionary;
 
-    /** Constructor 1. */
     public DictionaryCommandline(Dictionary dictionary) {
         this.dictionary = dictionary;
     }

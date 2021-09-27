@@ -9,12 +9,10 @@ public class DictionaryManagement {
     private static final Scanner scanner = new Scanner(System.in);
     private final Dictionary dictionary;
 
-    /** Constructor 1. */
     public DictionaryManagement(Dictionary dictionary) {
         this.dictionary = dictionary;
     }
 
-    /** Read words from the command lines and add them to dictionary. */
     public void insertFromCommandline() {
         System.out.print("Input number of words: ");
         int t = scanner.nextInt();
@@ -33,7 +31,6 @@ public class DictionaryManagement {
         }
     }
 
-    /** Insert from file. */
     public void insertFromFile() {
         File dictionaryData = new File("src/main/resources/dictionary.txt");
 
