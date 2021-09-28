@@ -25,7 +25,6 @@ public class DictionaryCommandLineApp {
 
     /** Run dictionary cli app. */
     public void dictionaryBasic() {
-        insertFromFile();
         showOptions();
         int option = getChoice();
         executeOption(option);

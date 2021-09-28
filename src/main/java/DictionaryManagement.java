@@ -13,6 +13,7 @@ public class DictionaryManagement {
 
     public DictionaryManagement(LinkedHashMap<String, String> dictionary) {
         this.dictionary = dictionary;
+        insertFromFile();
     }
 
     /** Insert from command line */
