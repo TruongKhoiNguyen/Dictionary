@@ -23,7 +23,7 @@ public class DictionaryManagement {
             List<String> listWord = Files.readAllLines(dictionaryData.toPath());
             for (String wordLine : listWord) {
                 String[] word = wordLine.split(";");
-                insertWord(word[0], word[1]);
+                addWord(word[0], word[1]);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -50,7 +50,7 @@ public class DictionaryManagement {
             String wordTarget = readStringWithMessage("Target word");
             String wordExplain = readStringWithMessage("Explain word");
 
-            insertWord(wordTarget, wordExplain);
+            addWord(wordTarget, wordExplain);
         }
     }
 
@@ -59,7 +59,7 @@ public class DictionaryManagement {
         return scanner.nextLine();
     }
 
-    private void insertWord(String wordTarget, String wordExplain) {
+    private void addWord(String wordTarget, String wordExplain) {
         dictionary.put(wordTarget.toLowerCase(), wordExplain.toLowerCase());
     }
 
