@@ -16,6 +16,20 @@ public class DictionaryManagement {
         insertFromFile();
     }
 
+    private void insertFromFile() {
+        File dictionaryData = new File("src/main/resources/dictionary.txt");
+
+        try {
+            List<String> listWord = Files.readAllLines(dictionaryData.toPath());
+            for (String wordLine : listWord) {
+                String[] word = wordLine.split(";");
+                insertWord(word[0], word[1]);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     /** Insert from command line */
     public void insertFromCommandline() {
         int t = getInputTime();
@@ -47,21 +61,6 @@ public class DictionaryManagement {
 
     private void insertWord(String wordTarget, String wordExplain) {
         dictionary.put(wordTarget.toLowerCase(), wordExplain.toLowerCase());
-    }
-
-    /** Insert from file. */
-    public void insertFromFile() {
-        File dictionaryData = new File("src/main/resources/dictionary.txt");
-
-        try {
-            List<String> listWord = Files.readAllLines(dictionaryData.toPath());
-            for (String wordLine : listWord) {
-                String[] word = wordLine.split(";");
-                insertWord(word[0], word[1]);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     /** Search. */

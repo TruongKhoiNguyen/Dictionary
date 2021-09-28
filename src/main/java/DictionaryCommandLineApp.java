@@ -30,10 +30,6 @@ public class DictionaryCommandLineApp {
         executeOption(option);
     }
 
-    private void insertFromFile() {
-        dictionaryManager.insertFromFile();
-    }
-
     private static void showOptions() {
         System.out.println("Options: ");
         System.out.println("1. Insert");
