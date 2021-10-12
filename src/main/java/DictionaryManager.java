@@ -70,32 +70,22 @@ public class DictionaryManager {
     /** insertWord :: dictionaryDBConnection -> Word -> IO String */
     /* Return "" if the method successfully insert word */
     public String insertWord(Word word) {
-        if (dictionaryDBConnection.isEmpty()) {
-            return "Database not connected.";
-        }
-
         final var query = INSERT_QUERY.apply(word);
-
-        try {
-            final var statement = dictionaryDBConnection.get().createStatement();
-            statement.executeUpdate(query);
-            statement.close();
-
-        } catch (Exception e) {
-            return e.getMessage();
-        }
-
-        return "";
+        return executeUpdate(query);
     }
 
     /** removeWord :: dictionaryDBConnection -> String -> IO String */
     /* Return "" if the method successfully remove word */
     public String removeWord(String en_word) {
+        final var query = DELETE_QUERY.apply(en_word);
+        return executeUpdate(query);
+    }
+
+    /** executeQuery :: dictionaryDBConnection -> String -> IO String */
+    private String executeUpdate(String query) {
         if (dictionaryDBConnection.isEmpty()) {
             return "Database not connected.";
         }
-
-        final var query = DELETE_QUERY.apply(en_word);
 
         try {
             final var statement = dictionaryDBConnection.get().createStatement();
