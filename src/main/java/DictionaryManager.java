@@ -16,12 +16,13 @@ public class DictionaryManager {
     private static final String VI_WORD = "detail";
     // private static final String PRONUNCIATION = "pronounce";
 
+    private static final String ALL_FIELD = String.format("%s, %s", EN_WORD, VI_WORD);
+
     /* Query builder */
     private static final Function<Word, String> INSERT_QUERY = word -> String.format(
-            "insert into %s (%s, %s) values ('%s', '%s')",
+            "insert into %s (%s) values ('%s', '%s')",
             TABLE_NAME,
-            EN_WORD,
-            VI_WORD,
+            ALL_FIELD,
             word.en_word().toLowerCase(),
             word.vi_word().toLowerCase()
     );
@@ -33,15 +34,14 @@ public class DictionaryManager {
     );
 
     private static final Function<String, String> SEARCH_QUERY = searchTerm -> String.format(
-            "select %s, %s from %s where %s like '%s%%'",
-            EN_WORD,
-            VI_WORD,
+            "select %s from %s where %s like '%s%%'",
+            ALL_FIELD,
             TABLE_NAME,
             EN_WORD,
             searchTerm
     );
 
-    Optional<Connection> dictionaryDBConnection;
+    Optional<Connection> dictionaryDBConnection = Optional.empty();
 
     /** DictionaryManager :: DictionaryManager */
     public DictionaryManager() {
@@ -51,11 +51,10 @@ public class DictionaryManager {
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            dictionaryDBConnection = Optional.empty();
         }
     }
 
-    /** finalized :: dictionaryDBConnection -> IO () */
+    /** close :: dictionaryDBConnection -> IO () */
     public void close() {
         dictionaryDBConnection.ifPresent(
                 connection -> {
@@ -111,7 +110,7 @@ public class DictionaryManager {
         return "";
     }
 
-    /** search :: String -> IO Either Map(String, Word) Error */
+    /** search :: Connection -> String -> IO Either Map(String, Word) Error */
     /* If key "Error!" is not "" then the method return error */
     public HashMap<String, Word> search(String searchTerm) {
         final var result = new HashMap<String, Word>();
@@ -130,7 +129,7 @@ public class DictionaryManager {
             while (resultSet.next()) {
                 final var word = resultSet.getString(EN_WORD);
                 final var detail = resultSet.getString(VI_WORD);
-                // System.out.printf("%s %s", word, detail);
+
                 result.put(word, new Word(word, detail));
             }
 
