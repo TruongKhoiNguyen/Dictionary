@@ -121,6 +121,51 @@ public class DictionaryManager {
         return result;
     }
 
+    /**
+     * This is override for the search function above, used to limit result.
+     * @param searchTerm like above
+     * @param limitation limit number of result
+     * @return like above
+     */
+    public HashMap<String, Word> search(String searchTerm, int limitation) {
+        if (dictionaryDBConnection == null) {
+            error.add("Database not connected");
+            return null;
+        }
+
+        final var searchQuery = String.format(
+                "select %s from %s where %s like '%s%%' limit %d",
+                ALL_FIELD,
+                TABLE_NAME,
+                KEY_WORD,
+                searchTerm,
+                limitation
+        );
+
+        final var result = new HashMap<String, Word>();
+
+        try {
+            final var statement = dictionaryDBConnection.createStatement();
+            final var resultSet = statement.executeQuery(searchQuery);
+
+            while (resultSet.next()) {
+                final var word = resultSet.getString(KEY_WORD);
+                final var detail = resultSet.getString(DESCRIPTION);
+
+                result.put(word, new Word(word, detail));
+            }
+
+            statement.close();
+            resultSet.close();
+
+        } catch (Exception e) {
+            error.add(e.getMessage());
+            return null;
+        }
+
+        return result;
+    }
+
     public ArrayList<String> getError() {
         return error;
     }
