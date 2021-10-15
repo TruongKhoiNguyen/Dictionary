@@ -1,3 +1,3 @@
 package main.java;
 
-public record Word(String en_word, String vi_word) {}
+public record Word(String keyWord, String description){}

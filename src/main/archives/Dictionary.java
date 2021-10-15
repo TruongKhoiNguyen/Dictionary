@@ -1,7 +1,5 @@
 package main.archives;
 
-import main.archives.Word;
-
 import java.util.ArrayList;
 
 public class Dictionary {
