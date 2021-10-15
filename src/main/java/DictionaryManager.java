@@ -2,8 +2,8 @@ package main.java;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 /*
 1. Separation
@@ -22,7 +22,7 @@ public class DictionaryManager {
     private static final String ALL_FIELD = String.format("%s, %s", KEY_WORD, DESCRIPTION);
 
     private Connection dictionaryDBConnection = null;
-    private List<String> error;
+    private ArrayList<String> error = new ArrayList<>();
 
     /* Main method */
 
@@ -121,7 +121,7 @@ public class DictionaryManager {
         return result;
     }
 
-    public List<String> getError() {
+    public ArrayList<String> getError() {
         return error;
     }
 
