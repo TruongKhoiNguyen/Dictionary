@@ -1,9 +1,11 @@
 package main.java;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +15,7 @@ import java.util.List;
 3. Immutable
 */
 
-public class DictionaryManager {
+public class DictionaryManager implements AutoCloseable {
     // database related configuration
     private static final String DB_NAME = "src/main/resources/dict_hh.db";
     private static final String TABLE_NAME = "av";
@@ -23,13 +25,7 @@ public class DictionaryManager {
     private static final String KEY_WORD = "word";
     private static final String DESCRIPTION = "description";
     private static final String PRONUNCIATION = "pronounce";
-    // private static final String ADDED_DATE = "date_add";
-
-    private static final String ALL_FIELD = String.format(
-            "%s, %s, %s",
-            KEY_WORD,
-            DESCRIPTION,
-            PRONUNCIATION);
+    private static final String ADDED_DATE = "date_add";
 
     // attributes
     private Connection dictionaryDBConnection = null;
@@ -46,48 +42,81 @@ public class DictionaryManager {
         }
     }
 
-    public boolean close() {
+    /**
+     *  Override AutoClosable interface, used to close db connection.
+     */
+    @Override
+    public void close() {
         if (dictionaryDBConnection != null) {
             try {
                 dictionaryDBConnection.close();
 
             } catch (Exception e) {
                 error.add(e.getMessage());
-                return false;
             }
         }
-
-        return true;
     }
 
     /**
      * @return false if new word can not be inserted to the database.
      */
-    public boolean insertWord(Word word) {
-        final var query = String.format(
-                "insert into %s (%s) values ('%s', '%s', '%s')",
-                TABLE_NAME,
-                ALL_FIELD,
-                word.keyWord().toLowerCase(),
-                word.description().toLowerCase(),
-                word.pronunciation()
+    public boolean insertWord(@NotNull Word word) {
+        // initiate current date
+        final var now = new java.util.Date();
+        final var sqlNow = new java.sql.Date(now.getTime());
+
+        final var insertQuery = String.format(
+          "INSERT INTO %s (%s, %s, %s, %s) VALUES (?, ?, ?, ?)",
+          TABLE_NAME,
+          KEY_WORD,
+          DESCRIPTION,
+          PRONUNCIATION,
+          ADDED_DATE
         );
 
-        return executeUpdate(query);
+        try (
+                final var preStatement = dictionaryDBConnection.prepareStatement(insertQuery)
+        ) {
+            // set value
+            preStatement.setString(1, word.keyWord());
+            preStatement.setString(2, word.description());
+            preStatement.setString(3, word.pronunciation());
+            preStatement.setDate(4, sqlNow);
+
+            // execute update
+            preStatement.executeUpdate();
+
+        } catch (Exception e) {
+            error.add(e.getMessage());
+            return false;
+        }
+
+        return true;
     }
 
 
     /**
      * @return false if word can not be deleted from the database.
      */
-    public boolean removeWord(String keyWord) {
-        final var query = String.format(
-                "delete from %s where word = '%s'",
+    public boolean removeWord(@NotNull String keyWord) {
+        final var removeQuery = String.format(
+                "DELETE FROM %s WHERE %s = ?",
                 TABLE_NAME,
-                keyWord.toLowerCase()
+                KEY_WORD
         );
 
-        return executeUpdate(query);
+        try (final var preStatement = dictionaryDBConnection.prepareStatement(removeQuery)) {
+            // set deleting word
+            preStatement.setString(1, keyWord);
+
+            preStatement.executeUpdate();
+
+        } catch (Exception e) {
+            error.add(e.getMessage());
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -96,14 +125,12 @@ public class DictionaryManager {
      */
     public List<Word> search(String searchTerm) {
         final var searchQuery = String.format(
-                "select %s from %s where %s like '%s%%'",
-                ALL_FIELD,
+                "SELECT * FROM %s WHERE %s LIKE ?",
                 TABLE_NAME,
-                KEY_WORD,
-                searchTerm
+                KEY_WORD
         );
 
-        return searchByQuery(searchQuery);
+        return getSearchResultFromDB(searchQuery, searchTerm);
     }
 
     /**
@@ -111,15 +138,13 @@ public class DictionaryManager {
      */
     public List<Word> search(String searchTerm, int limitation) {
         final var searchQuery = String.format(
-                "select %s from %s where %s like '%s%%' limit %d",
-                ALL_FIELD,
+                "SELECT * FROM %s WHERE %s LIKE ? LIMIT %d",
                 TABLE_NAME,
                 KEY_WORD,
-                searchTerm,
                 limitation
         );
 
-        return searchByQuery(searchQuery);
+        return getSearchResultFromDB(searchQuery, searchTerm);
     }
 
     // getter, setter
@@ -130,28 +155,26 @@ public class DictionaryManager {
 
     // supportive methods and procedures
     private @Nullable
-    List<Word> searchByQuery(String searchQuery) {
-        if (dictionaryDBConnection == null) {
-            error.add("Database not connected");
-            return null;
-        }
+    List<Word> getSearchResultFromDB(String searchQuery, String searchTerm) {
+        var result = new ArrayList<Word>();
 
-        final var result = new ArrayList<Word>();
+        try (final var preStatement = dictionaryDBConnection.prepareStatement(searchQuery)) {
+            // search in database
+            preStatement.setString(1, searchTerm + "%");
+            final var searchResult = preStatement.executeQuery();
 
-        try {
-            final var statement = dictionaryDBConnection.createStatement();
-            final var resultSet = statement.executeQuery(searchQuery);
+            // get result and add to result list
+            while (searchResult.next()) {
+                final var keyWord = searchResult.getString(KEY_WORD);
+                final var description = searchResult.getString(DESCRIPTION);
+                final var pronunciation = searchResult.getString(PRONUNCIATION);
 
-            while (resultSet.next()) {
-                final var word = resultSet.getString(KEY_WORD);
-                final var detail = resultSet.getString(DESCRIPTION);
-                final var pronunciation = resultSet.getString(PRONUNCIATION);
+                // process sql date
+                final var sqlAddedDate = searchResult.getString(ADDED_DATE);
+                final var addedDate = new SimpleDateFormat("yyyy-MM-dd").parse(sqlAddedDate);
 
-                result.add(new Word(word, detail, pronunciation));
+                result.add(new Word(keyWord, description, pronunciation, addedDate));
             }
-
-            statement.close();
-            resultSet.close();
 
         } catch (Exception e) {
             error.add(e.getMessage());
@@ -159,24 +182,5 @@ public class DictionaryManager {
         }
 
         return result;
-    }
-
-    private boolean executeUpdate(String query) {
-        if (dictionaryDBConnection == null) {
-            error.add("Database not connected");
-            return false;
-        }
-
-        try {
-            var statement = dictionaryDBConnection.createStatement();
-            statement.executeUpdate(query);
-            statement.close();
-
-        } catch(Exception e) {
-            error.add(e.getMessage());
-            return false;
-        }
-
-        return true;
     }
 }

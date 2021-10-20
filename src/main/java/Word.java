@@ -4,4 +4,5 @@ import java.util.Date;
 
 public record Word(String keyWord,
                    String description,
-                   String pronunciation){}
+                   String pronunciation,
+                   Date addedDate){}
