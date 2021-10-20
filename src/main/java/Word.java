@@ -1,3 +1,7 @@
 package main.java;
 
-public record Word(String keyWord, String description){}
+import java.util.Date;
+
+public record Word(String keyWord,
+                   String description,
+                   String pronunciation){}
