@@ -12,14 +12,20 @@ import java.util.HashMap;
 */
 
 public class DictionaryManager {
-    private static final String DB_NAME = "edict.db";
-    private static final String TABLE_NAME = "tbl_edict";
-    private static final String DB_URL = String.format("jdbc:sqlite:./%s", DB_NAME);
+    private static final String DB_NAME = "dict_hh.db";
+    private static final String TABLE_NAME = "av";
+    private static final String DB_URL = String.format("jdbc:sqlite:./main\\resources\\%s", DB_NAME);
 
+    private static final String ID = "id";
     private static final String KEY_WORD = "word";
-    private static final String DESCRIPTION = "detail";
+    private static final String DESCRIPTION = "description";
+    private static final String PRONOUNCE = "pronounce";
+    private static final String DATE_ADD = "date_add";
 
-    private static final String ALL_FIELD = String.format("%s, %s", KEY_WORD, DESCRIPTION);
+    private static final String ALL_FIELD = String.format("%s, %s, %s, %s, %s", ID, KEY_WORD,
+            DESCRIPTION, PRONOUNCE, DATE_ADD);
+    private static final String NOT_ID_FIELD = String.format("%s, %s, %s, %s", KEY_WORD,
+            DESCRIPTION, PRONOUNCE, DATE_ADD);
 
     private Connection dictionaryDBConnection = null;
     private ArrayList<String> error = new ArrayList<>();
@@ -55,11 +61,12 @@ public class DictionaryManager {
      */
     public boolean insertWord(Word word) {
         final var query = String.format(
-                "insert into %s (%s) values ('%s', '%s')",
+                "insert into %s (%s) values ('%s', '%s', '%s', DATE())",
                 TABLE_NAME,
-                ALL_FIELD,
-                word.keyWord().toLowerCase(),
-                word.description().toLowerCase()
+                NOT_ID_FIELD,
+                word.getWord().toLowerCase(),
+                word.getDescription().toLowerCase(),
+                word.getPronounce().toLowerCase()
         );
 
         return executeUpdate(query);
@@ -104,10 +111,13 @@ public class DictionaryManager {
             final var resultSet = statement.executeQuery(searchQuery);
 
             while (resultSet.next()) {
+                final var id = resultSet.getInt(ID);
                 final var word = resultSet.getString(KEY_WORD);
-                final var detail = resultSet.getString(DESCRIPTION);
+                final var description = resultSet.getString(DESCRIPTION);
+                final var pronounce = resultSet.getString(PRONOUNCE);
+                final var date_add = resultSet.getString(DATE_ADD);
 
-                result.put(word, new Word(word, detail));
+                result.put(word, new Word(id, word, description, pronounce, date_add));
             }
 
             statement.close();
@@ -149,10 +159,13 @@ public class DictionaryManager {
             final var resultSet = statement.executeQuery(searchQuery);
 
             while (resultSet.next()) {
+                final var id = resultSet.getInt(ID);
                 final var word = resultSet.getString(KEY_WORD);
-                final var detail = resultSet.getString(DESCRIPTION);
+                final var description = resultSet.getString(DESCRIPTION);
+                final var pronounce = resultSet.getString(PRONOUNCE);
+                final var date_add = resultSet.getString(DATE_ADD);
 
-                result.put(word, new Word(word, detail));
+                result.put(word, new Word(id, word, description, pronounce, date_add));
             }
 
             statement.close();
