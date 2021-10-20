@@ -1,8 +1,5 @@
 package main.java;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.text.SimpleDateFormat;
@@ -60,7 +57,7 @@ public class DictionaryManager implements AutoCloseable {
     /**
      * @return false if new word can not be inserted to the database.
      */
-    public boolean insertWord(@NotNull Word word) {
+    public boolean insertWord(Word word) {
         // initiate current date
         final var now = new java.util.Date();
         final var sqlNow = new java.sql.Date(now.getTime());
@@ -98,7 +95,7 @@ public class DictionaryManager implements AutoCloseable {
     /**
      * @return false if word can not be deleted from the database.
      */
-    public boolean removeWord(@NotNull String keyWord) {
+    public boolean removeWord(String keyWord) {
         final var removeQuery = String.format(
                 "DELETE FROM %s WHERE %s = ?",
                 TABLE_NAME,
@@ -154,8 +151,7 @@ public class DictionaryManager implements AutoCloseable {
     }
 
     // supportive methods and procedures
-    private @Nullable
-    List<Word> getSearchResultFromDB(String searchQuery, String searchTerm) {
+    private List<Word> getSearchResultFromDB(String searchQuery, String searchTerm) {
         var result = new ArrayList<Word>();
 
         try (final var preStatement = dictionaryDBConnection.prepareStatement(searchQuery)) {
