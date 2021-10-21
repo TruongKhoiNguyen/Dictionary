@@ -171,11 +171,6 @@ public class DictionaryCommandLine {
 
         // This try block is used to cancel the procedure
         try {
-            if (checkedWord == null) {
-                System.out.println("Some thing have gone wrong :((.");
-                throw new Exception("Can not search for word");
-            }
-
             // notify user about existing words
             if (checkedWord.size() == 1) {
                 System.out.print("This word is already in the dictionary, do you want to update this word? [y/n]");
