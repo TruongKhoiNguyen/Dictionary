@@ -6,12 +6,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-/*
-1. Separation
-2. Generic
-3. Immutable
-*/
-
 public class DictionaryManager implements AutoCloseable {
     // database related configuration
     private static final String DB_NAME = "src/main/resources/dict_hh.db";
@@ -58,12 +52,12 @@ public class DictionaryManager implements AutoCloseable {
      * @return false if new word can not be inserted to the database.
      */
     public boolean insertWord(Word word) {
-        // initiate current date
-        final var now = new java.util.Date();
-        final var sqlNow = new java.sql.Date(now.getTime());
-
+        /*
+        In this method, the date field will be added automatically. Added date
+        member of word will be ignored. Therefore, any date added will be OK.
+         */
         final var insertQuery = String.format(
-          "INSERT INTO %s (%s, %s, %s, %s) VALUES (?, ?, ?, ?)",
+          "INSERT INTO %s (%s, %s, %s, %s) VALUES (?, ?, ?, DATE())",
           TABLE_NAME,
           KEY_WORD,
           DESCRIPTION,
@@ -74,11 +68,9 @@ public class DictionaryManager implements AutoCloseable {
         try (
                 final var preStatement = dictionaryDBConnection.prepareStatement(insertQuery)
         ) {
-            // set value
             preStatement.setString(1, word.keyWord());
             preStatement.setString(2, word.description());
             preStatement.setString(3, word.pronunciation());
-            preStatement.setDate(4, sqlNow);
 
             // execute update
             preStatement.executeUpdate();
@@ -103,9 +95,7 @@ public class DictionaryManager implements AutoCloseable {
         );
 
         try (final var preStatement = dictionaryDBConnection.prepareStatement(removeQuery)) {
-            // set deleting word
             preStatement.setString(1, keyWord);
-
             preStatement.executeUpdate();
 
         } catch (Exception e) {
