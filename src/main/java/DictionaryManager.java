@@ -111,8 +111,8 @@ public class DictionaryManager implements AutoCloseable {
 
     /**
      * This search the same as the search method above, the only difference is the limitation of
-     * result. So client methods and functions can be assured that the result can not growth to large
-     * that can make machine crash.
+     * result. So client methods and functions can be assured that the result can not grow
+     * too large to make machine crash.
      */
     public List<Word> search(String searchTerm, int limitation) {
         final var searchQuery = String.format(
