@@ -7,23 +7,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DictionaryManager implements AutoCloseable {
-    // database related configuration
+    /* constants */
     private static final String DB_NAME = "src/main/resources/dict_hh.db";
     private static final String TABLE_NAME = "av";
     private static final String DB_URL = String.format("jdbc:sqlite:%s", DB_NAME);
 
-    // dictionary main table fields
     private static final String KEY_WORD = "word";
     private static final String DESCRIPTION = "description";
     private static final String PRONUNCIATION = "pronounce";
     private static final String ADDED_DATE = "date_add";
 
-    // attributes
     private Connection dictionaryDBConnection = null;
     private final List<String> error = new ArrayList<>();
 
-    // interface
+    /* interface */
 
+    /** Constructor creates new connection with the database. */
     public DictionaryManager() {
         try {
             dictionaryDBConnection = DriverManager.getConnection(DB_URL);
@@ -34,28 +33,12 @@ public class DictionaryManager implements AutoCloseable {
     }
 
     /**
-     *  Override AutoClosable interface, used to close db connection.
-     */
-    @Override
-    public void close() {
-        if (dictionaryDBConnection != null) {
-            try {
-                dictionaryDBConnection.close();
-
-            } catch (Exception e) {
-                error.add(e.getMessage());
-            }
-        }
-    }
-
-    /**
-     * @return false if new word can not be inserted to the database.
+     * Insert word method takes a parameter type word, and insert key word and description to
+     * dictionary database. Pronunciation is not required as it is not possible to write it easily.
+     * @return true if the insertion process is done properly. Otherwise, return false. Due to its
+     * direct interaction with the database, it is recommended to avoid using this function if possible.
      */
     public boolean insertWord(Word word) {
-        /*
-        In this method, the date field will be added automatically. Added date
-        member of word will be ignored. Therefore, any date added will be OK.
-         */
         final var insertQuery = String.format(
           "INSERT INTO %s (%s, %s, %s, %s) VALUES (?, ?, ?, DATE())",
           TABLE_NAME,
@@ -72,7 +55,6 @@ public class DictionaryManager implements AutoCloseable {
             preStatement.setString(2, word.description());
             preStatement.setString(3, word.pronunciation());
 
-            // execute update
             preStatement.executeUpdate();
 
         } catch (Exception e) {
@@ -83,9 +65,10 @@ public class DictionaryManager implements AutoCloseable {
         return true;
     }
 
-
     /**
-     * @return false if word can not be deleted from the database.
+     *  Remove word method takes a string as key word to find and remove word in dictionary database.
+     *  Like insert word, this method also interacts directly with the database. So it should
+     *  also be avoided.
      */
     public boolean removeWord(String keyWord) {
         final var removeQuery = String.format(
@@ -106,9 +89,14 @@ public class DictionaryManager implements AutoCloseable {
         return true;
     }
 
+
     /**
-     * @param searchTerm first part of the word (eg: "app" -> "apple").
-     * @return null if error occurred during searching.
+     * This method return all possible results which may result in large ram consumption and crashing.
+     * It should be used with caution.
+     * @param searchTerm a string represent first part of the searched word. For examples, if the searchTerm
+     *                   is "app", this method may return "apple" or "application".
+     * @return a list of word representing the result, result set returned from the database have been parsed
+     * in this function for easy manipulation in client methods and functions.
      */
     public List<Word> search(String searchTerm) {
         final var searchQuery = String.format(
@@ -120,8 +108,11 @@ public class DictionaryManager implements AutoCloseable {
         return getSearchResultFromDB(searchQuery, searchTerm);
     }
 
+
     /**
-     * This is search function with limitation, recommend using this instead of the search method above.
+     * This search the same as the search method above, the only difference is the limitation of
+     * result. So client methods and functions can be assured that the result can not growth to large
+     * that can make machine crash.
      */
     public List<Word> search(String searchTerm, int limitation) {
         final var searchQuery = String.format(
@@ -134,13 +125,8 @@ public class DictionaryManager implements AutoCloseable {
         return getSearchResultFromDB(searchQuery, searchTerm);
     }
 
-    // getter, setter
+    /* supportive methods and functions */
 
-    public List<String> getError() {
-        return error;
-    }
-
-    // supportive methods and procedures
     private List<Word> getSearchResultFromDB(String searchQuery, String searchTerm) {
         var result = new ArrayList<Word>();
 
@@ -164,9 +150,33 @@ public class DictionaryManager implements AutoCloseable {
 
         } catch (Exception e) {
             error.add(e.getMessage());
-            return null;
+            return new ArrayList<>();
         }
 
         return result;
+    }
+
+    // getter, setter
+
+    public List<String> getError() {
+        return error;
+    }
+
+    /* other methods and functions */
+    /**
+     * This method override close method of AutoClosable interface. The purpose of this method
+     * is to be able to be closed in try-with-resources block. As a result, database connection can be
+     * properly closed after any objects of this class being removed by Garbage Collector.
+     */
+    @Override
+    public void close() {
+        if (dictionaryDBConnection != null) {
+            try {
+                dictionaryDBConnection.close();
+
+            } catch (Exception e) {
+                error.add(e.getMessage());
+            }
+        }
     }
 }

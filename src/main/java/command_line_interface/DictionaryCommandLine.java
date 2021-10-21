@@ -9,31 +9,26 @@ import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
 public class DictionaryCommandLine {
-    // functions of this application
-    //   change words
-    //   show first 10 word
-    //   dictionary lookup
-    //   remove word
-    //   insert word
-
     private static Scanner scanner;
     private final DictionaryManager dictionaryManager = new DictionaryManager();
 
     /**
-     * This constructor is used to set UTF-8 encoding for reading and printing result.
+     * Input and Output will be set to UTF-8 encoding.
      */
     public DictionaryCommandLine() {
         try {
             System.setOut(new PrintStream(System.out, true, StandardCharsets.UTF_8));
             scanner = new Scanner(new InputStreamReader(System.in, StandardCharsets.UTF_8));
         } catch (Exception e) {
-            System.out.println("Cannot output unicode characters, this app may not work as intended.");
+            System.out.println("Unicode encoding is not supported. Some character may be illegible.");
             scanner = new Scanner(System.in);
         }
     }
 
+
     /**
-     * Full application.
+     * This method acts as an operating system for all the methods below. An option menu will
+     * be displayed to the user to choose.
      */
     public void run() {
         var isRunning = true;
@@ -66,11 +61,11 @@ public class DictionaryCommandLine {
         }
     }
 
-
     /**
-     * This method get search query from the user and print the result on the screen.
-     * If any errors occurred during searching, print the error to the user.
-     * Return only 20 results, if users want to get more, suggest user to write more specific search word.
+     * Dictionary lookup is a full small program consists of asking the user for input and display
+     * result on the console. Maximum number of result is 20 for easy read, so the method will notify
+     * user about it. Previously null pointer check will be removed because dictionary manager search no
+     * longer return null for failed search.
      */
     public void dictionaryLookup() {
         // get search key word from the user
@@ -82,11 +77,10 @@ public class DictionaryCommandLine {
         final var searchResult = dictionaryManager.search(searchTerm, 20);
 
         // print search result to the screen
-        if (searchResult != null) {
+        if (searchResult.size() != 0) {
             System.out.println("""
-                    For some limitation we will just limit the number of results to 20.
-                    Also, added date will not be displayed in this version.
-                    If you want to have more functionalities, please use to the GUI version.
+                    The result will be limited to 20 result. If you want to see more, please
+                    use the GUI version.
                     """);
             System.out.println("Total search result: " + searchResult.size());
 
@@ -111,12 +105,10 @@ public class DictionaryCommandLine {
                 counter += 1;
             }
 
-            // wait for input
         } else {
-            System.out.println("Can not search the word");
+            System.out.println("This word is not in the dictionary.");
         }
 
-        // wait for input
         scanner.nextLine();
     }
 
@@ -125,12 +117,11 @@ public class DictionaryCommandLine {
      * Not many functionalities any way.
      */
     public void printFirst10Words() {
-        // just get the result and print
         // get first 10 words
         final var first10Words = dictionaryManager.search("", 10);
 
         // print result
-        if (first10Words != null) {
+        if (first10Words.size() != 0) {
             System.out.printf(
                     "%3s | %-25s | %-35s | %-25s\n",
                     "No",
@@ -157,25 +148,24 @@ public class DictionaryCommandLine {
             System.out.println("Something have gone wrong :((.");
         }
 
-        // wait for input
         scanner.nextLine();
     }
 
+
     /**
-     * This function is used for both insert new word and change word.
-     * Must notify the user for any changes in the dictionary.
-     * Can not write pronunciation to new word.
+     * This method serve for both insert and update purpose. However, any consequence must be alerted
+     * because this method change the content in the database permanently. Try, catch block is used to
+     * quit instead or return void.
      */
     public void insertWord() {
         // get the english word and check for existing word
         System.out.println("""
-                This option can not input pronunciation.
-                If you want to insert full words, please use the gui version.
-                This dictionary distinguish upper and lower case, only use upper case when necessary.
+                Pronunciation will not be insert through this. If you want to add new words
+                with pronunciation, please use the GUI version.
+                
                 """);
         System.out.print("Insert your word here: ");
         final var keyWord = scanner.nextLine();
-        System.out.println();
 
         final var checkedWord = dictionaryManager.search(keyWord, 1);
 
@@ -188,7 +178,7 @@ public class DictionaryCommandLine {
 
             // notify user about existing words
             if (checkedWord.size() == 1) {
-                System.out.print("This word is already in the dictionary, do you want to continue changing? [y/n]");
+                System.out.print("This word is already in the dictionary, do you want to update this word? [y/n]");
                 final var c = scanner.nextLine();
                 if (c.equalsIgnoreCase("n")) {
                     throw new Exception("User changed mind.");
@@ -198,7 +188,6 @@ public class DictionaryCommandLine {
             // insert remaining information
             System.out.print("Insert meaning: ");
             final var description = scanner.nextLine();
-
             final var word = new Word(keyWord, description, "", null);
 
             final var s = dictionaryManager.insertWord(word);
@@ -208,7 +197,7 @@ public class DictionaryCommandLine {
     }
 
     /**
-     * Dangerous.
+     * Also dangerous!
      */
     public void removeWord() {
         try {
