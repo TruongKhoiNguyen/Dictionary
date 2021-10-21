@@ -1,0 +1,85 @@
+
+
+.backGroundTranslate {
+    -fx-background-color: #dfe4ea;
+}
+
+.backGroundTranslatePane {
+    /*-fx-background-color: #808e9b;*/
+    -fx-background-color: #a5b1c2;
+    -fx-background-radius: 10;
+}
+
+.backGroundTranslatePane-2 {
+    -fx-background-color: #a5b1c2;
+    -fx-background-radius: 50;
+}
+
+
+/*Custom button*/
+.button {
+    -fx-background-radius: 20;
+}
+
+.buttonTranslate {
+    -fx-background-color: rgba(75, 123, 236, 0.85);
+}
+
+.buttonTranslate:hover {
+    -fx-background-color: rgba(75, 123, 236, 1);
+    -fx-translate-y: -2px;
+}
+
+.buttonTranslate:pressed {
+    -fx-translate-y: -1px;
+}
+/***************************************************************************/
+.labelBox {
+    -fx-background-color: #4b7bec;
+    -fx-background-radius: 100;
+}
+
+
+/*effect*/
+.shadow {
+    -fx-effect: dropShadow(three-pass-box,rgba(0,0,0,0.1), 10.0 , 0.0 , 0.0 ,10.0);
+}
+
+.transparent {
+    -fx-background-color: rgba(0, 0, 0, 0);
+}
+/***************************************************************************/
+
+
+.combo-box-base{
+    -fx-background-color: rgba(255, 255, 255, 0.5);
+    -fx-font-weight: bold;
+    -fx-background-radius: 10;
+    -fx-text-fill: white;
+}
+
+.combo-box-base:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.8);
+}
+
+.combo-box .list-cell {
+    -fx-text-fill: black;
+    -fx-background-radius: 10;
+}
+.combo-box .list-view {
+    -fx-background-color: rgba(255, 255, 255, 0);
+}
+
+.combo-box .list-view .list-cell {
+    -fx-text-fill: black;
+    -fx-background-color: rgba(255, 255, 255, 0.5);
+}
+
+.combo-box .list-view .list-cell:filled:selected {
+    -fx-background-color: rgba(255, 255, 255, 1);
+}
+
+.combo-box .list-view .list-cell:filled:hover {
+    -fx-background-color: rgba(255, 255, 255, 1);
+}
+
