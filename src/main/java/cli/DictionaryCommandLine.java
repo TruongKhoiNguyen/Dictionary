@@ -143,7 +143,6 @@ public class DictionaryCommandLine {
                 counter += 1;
             }
 
-            // wait for input
         } else {
             System.out.println("Something have gone wrong :((.");
         }
