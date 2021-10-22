@@ -1,4 +1,4 @@
-module untitled104 {
+module untitled {
     requires javafx.controls;
     requires javafx.fxml;
     requires javafx.graphics;

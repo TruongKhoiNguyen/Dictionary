@@ -1,5 +1,3 @@
-package main.java;
-
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 

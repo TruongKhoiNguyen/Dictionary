@@ -28,7 +28,7 @@
                                 <Insets right="10.0" />
                             </HBox.margin>
                         </Label>
-                        <Label text="Word" textFill="#103157ab">
+                        <Label text="shared.Word" textFill="#103157ab">
                             <font>
                                 <Font name="Cambria" size="24.0" />
                             </font>
@@ -87,7 +87,7 @@
             <children>
                 <HBox alignment="BOTTOM_LEFT" prefHeight="164.0" prefWidth="400.0">
                     <children>
-                        <Label text="Word" textFill="#103157d1">
+                        <Label text="shared.Word" textFill="#103157d1">
                             <font>
                                 <Font name="Cambria Bold" size="24.0" />
                             </font>

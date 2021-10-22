@@ -1,5 +1,3 @@
-package main.java;
-
 import java.io.*;
 import java.nio.file.Files;
 import java.util.LinkedHashMap;
@@ -45,7 +43,7 @@ public class DictionaryManagement {
 
     private void readInputAndPutIntoDictionary(int times) {
         for (int i = 0; i < times; i++) {
-            System.out.printf("Word no %d\n", i + 1);
+            System.out.printf("shared.Word no %d\n", i + 1);
 
             String wordTarget = readStringWithMessage("Target word");
             String wordExplain = readStringWithMessage("Explain word");

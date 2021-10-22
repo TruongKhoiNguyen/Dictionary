@@ -6,11 +6,11 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="untitled104" />
+        <module name="Dictionary" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="untitled104" target="16" />
+      <module name="Dictionary" target="16" />
     </bytecodeTargetLevel>
   </component>
 </project>

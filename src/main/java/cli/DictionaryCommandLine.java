@@ -1,7 +1,7 @@
-package main.java.command_line_interface;
+package cli;
 
-import main.java.DictionaryManager;
-import main.java.Word;
+import shared.DictionaryManager;
+import shared.Word;
 
 import java.io.InputStreamReader;
 import java.io.PrintStream;

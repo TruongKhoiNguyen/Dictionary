@@ -1,4 +1,4 @@
-package main.java.command_line_interface;
+package cli;
 
 public class DictionaryCLIApp {
     public static void main(String[] args) {
