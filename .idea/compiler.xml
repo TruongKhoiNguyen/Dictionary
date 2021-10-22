@@ -6,11 +6,8 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="Dictionary" />
+        <module name="demoFX" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="Dictionary" target="16" />
-    </bytecodeTargetLevel>
   </component>
 </project>
