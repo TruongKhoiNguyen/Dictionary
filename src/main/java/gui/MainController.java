@@ -35,7 +35,7 @@ public class MainController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         try {
-            VBox box = FXMLLoader.load(getClass().getResource("/fxml/MenuBar.fxml"));
+            VBox box = FXMLLoader.load(getClass().getClassLoader().getResource("/fxml/MenuBar.fxml"));
             drawer.setSidePane(box);
             drawer.setMouseTransparent(true);
 
@@ -58,7 +58,7 @@ public class MainController implements Initializable {
                 }
             });
 
-            pane = FXMLLoader.load(getClass().getResource("/fxml/LookupGUI.fxml"));
+            pane = FXMLLoader.load(getClass().getClassLoader().getResource("/fxml/LookupGUI.fxml"));
             anchorPane.getChildren().set(0, pane);
 
             runMenu(box, burgerTask2);
@@ -97,7 +97,7 @@ public class MainController implements Initializable {
      */
     private void loadAppOnMenu(String fxmlLink, HamburgerBackArrowBasicTransition burgerTask2) {
         try {
-            pane = FXMLLoader.load(getClass().getResource(fxmlLink));
+            pane = FXMLLoader.load(getClass().getClassLoader().getResource(fxmlLink));
             anchorPane.getChildren().set(0, pane);
 
             removeBlankLayer();
@@ -113,7 +113,7 @@ public class MainController implements Initializable {
     private void addBlankLayer(HamburgerBackArrowBasicTransition burgerTask2) {
         AnchorPane blank = new AnchorPane();
         try {
-            blank = FXMLLoader.load(getClass().getResource("/fxml/Blank.fxml"));
+            blank = FXMLLoader.load(getClass().getClassLoader().getResource("/fxml/Blank.fxml"));
         } catch (IOException e) {
             e.printStackTrace();
         }
