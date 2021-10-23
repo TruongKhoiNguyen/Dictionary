@@ -1,7 +1,9 @@
 package shared;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
+import javafx.scene.control.Alert;
+
+import java.sql.*;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,12 +12,18 @@ public class DictionaryManager implements AutoCloseable {
     /* constants */
     private static final String DB_NAME = "src/main/resources/dict_hh.db";
     private static final String TABLE_NAME = "av";
+    private static final String TABLE_NAME_H = "history";
+    private static final String TABLE_NAME_B_M = "bookmark";
     private static final String DB_URL = String.format("jdbc:sqlite:%s", DB_NAME);
 
+    private static final String ID = "id";
     private static final String KEY_WORD = "word";
     private static final String DESCRIPTION = "description";
     private static final String PRONUNCIATION = "pronounce";
     private static final String ADDED_DATE = "date_add";
+
+    private static final String ID_WORD = "id_word";
+    private static final String DATE = "date";
 
     private Connection dictionaryDBConnection = null;
     private final List<String> error = new ArrayList<>();
@@ -51,9 +59,56 @@ public class DictionaryManager implements AutoCloseable {
         try (
                 final var preStatement = dictionaryDBConnection.prepareStatement(insertQuery)
         ) {
-            preStatement.setString(1, word.keyWord());
-            preStatement.setString(2, word.description());
-            preStatement.setString(3, word.pronunciation());
+            preStatement.setString(1, word.getKeyWord());
+            preStatement.setString(2, word.getDescription());
+            preStatement.setString(3, word.getPronunciation());
+
+            preStatement.executeUpdate();
+
+        } catch (Exception e) {
+            error.add(e.getMessage());
+            return false;
+        }
+
+        return true;
+    }
+
+    /** */
+    public boolean insertHistory(Word word) {
+        final var insertQuery = String.format(
+                "INSERT INTO %s (%s, %s) VALUES (?, DATE())",
+                TABLE_NAME_H,
+                ID_WORD,
+                DATE
+        );
+
+        try (
+                final var preStatement = dictionaryDBConnection.prepareStatement(insertQuery)
+        ) {
+            preStatement.setInt(1, word.getId());
+
+            preStatement.executeUpdate();
+
+        } catch (Exception e) {
+            error.add(e.getMessage());
+            return false;
+        }
+
+        return true;
+    }
+
+    public boolean insertBookmark(Word word) {
+        final var insertQuery = String.format(
+                "INSERT INTO %s (%s, %s) VALUES (?, DATE())",
+                TABLE_NAME_B_M,
+                ID_WORD,
+                DATE
+        );
+
+        try (
+                final var preStatement = dictionaryDBConnection.prepareStatement(insertQuery)
+        ) {
+            preStatement.setInt(1, word.getId());
 
             preStatement.executeUpdate();
 
@@ -128,6 +183,10 @@ public class DictionaryManager implements AutoCloseable {
     /* supportive methods and functions */
 
     private List<Word> getSearchResultFromDB(String searchQuery, String searchTerm) {
+        if (searchTerm == "") {
+            return getHistory();
+        }
+
         var result = new ArrayList<Word>();
 
         try (final var preStatement = dictionaryDBConnection.prepareStatement(searchQuery)) {
@@ -137,6 +196,7 @@ public class DictionaryManager implements AutoCloseable {
 
             // get result and add to result list
             while (searchResult.next()) {
+                final var id = searchResult.getInt(ID);
                 final var keyWord = searchResult.getString(KEY_WORD);
                 final var description = searchResult.getString(DESCRIPTION);
                 final var pronunciation = searchResult.getString(PRONUNCIATION);
@@ -145,7 +205,7 @@ public class DictionaryManager implements AutoCloseable {
                 final var sqlAddedDate = searchResult.getString(ADDED_DATE);
                 final var addedDate = new SimpleDateFormat("yyyy-MM-dd").parse(sqlAddedDate);
 
-                result.add(new Word(keyWord, description, pronunciation, addedDate));
+                result.add(new Word(id, keyWord, description, pronunciation, addedDate));
             }
 
         } catch (Exception e) {
@@ -155,6 +215,87 @@ public class DictionaryManager implements AutoCloseable {
 
         return result;
     }
+
+    /** */
+    public List<Word> getHistory() {
+        List<Word> result = new ArrayList<>();
+        try {
+            final var sql = "SELECT * FROM history h LEFT JOIN av a ON h.id_word = a.id ORDER BY id_history DESC";
+            final var preStatement = dictionaryDBConnection.createStatement();
+            final var searchResult = preStatement.executeQuery(sql);
+
+            while (searchResult.next()) {
+                final var id = searchResult.getInt(ID);
+                final var keyWord = searchResult.getString(KEY_WORD);
+                final var description = searchResult.getString(DESCRIPTION);
+                final var pronunciation = searchResult.getString(PRONUNCIATION);
+
+                // process sql date
+                final var sqlAddedDate = searchResult.getString(ADDED_DATE);
+                final var addedDate = new SimpleDateFormat("yyyy-MM-dd").parse(sqlAddedDate);
+
+                result.add(new Word(id, keyWord, description, pronunciation, addedDate));
+            }
+            return result;
+        } catch (SQLException | ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public List<Word> getBookmark() {
+        List<Word> result = new ArrayList<>();
+        try {
+            final var sql = "SELECT * FROM bookmark b LEFT JOIN av a ON b.id_word = a.id";
+            final var preStatement = dictionaryDBConnection.createStatement();
+            final var searchResult = preStatement.executeQuery(sql);
+
+            while (searchResult.next()) {
+                final var id = searchResult.getInt(ID);
+                final var keyWord = searchResult.getString(KEY_WORD);
+                final var description = searchResult.getString(DESCRIPTION);
+                final var pronunciation = searchResult.getString(PRONUNCIATION);
+
+                // process sql date
+                final var sqlAddedDate = searchResult.getString(ADDED_DATE);
+                final var addedDate = new SimpleDateFormat("yyyy-MM-dd").parse(sqlAddedDate);
+
+                result.add(new Word(id, keyWord, description, pronunciation, addedDate));
+            }
+            return result;
+        } catch (SQLException | ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
+    public List<Word> getWord(int someDay) {
+        List<Word> result = new ArrayList<>();
+        try {
+            final var sql = "SELECT * FROM av WHERE julianday('now') - julianday(date_add) < " + someDay;
+            final var preStatement = dictionaryDBConnection.createStatement();
+            final var searchResult = preStatement.executeQuery(sql);
+
+            while (searchResult.next()) {
+                final var id = searchResult.getInt(ID);
+                final var keyWord = searchResult.getString(KEY_WORD);
+                final var description = searchResult.getString(DESCRIPTION);
+                final var pronunciation = searchResult.getString(PRONUNCIATION);
+
+                // process sql date
+                final var sqlAddedDate = searchResult.getString(ADDED_DATE);
+                final var addedDate = new SimpleDateFormat("yyyy-MM-dd").parse(sqlAddedDate);
+
+                result.add(new Word(id, keyWord, description, pronunciation, addedDate));
+            }
+            return result;
+        } catch (SQLException | ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 
     // getter, setter
 
@@ -178,5 +319,12 @@ public class DictionaryManager implements AutoCloseable {
                 error.add(e.getMessage());
             }
         }
+    }
+
+    public Alert getAlertInfo(String content, Alert.AlertType type) {
+        String notification = "Database: " + content;
+        Alert a = new Alert(type);
+        a.setContentText(notification);
+        return a;
     }
 }

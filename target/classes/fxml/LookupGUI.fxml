@@ -6,6 +6,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -40,12 +41,12 @@
                 </HBox>
                 <HBox alignment="CENTER" prefHeight="92.0" prefWidth="400.0">
                     <children>
-                        <TextField prefHeight="30.0" prefWidth="178.0" promptText="Type here search ..." styleClass="transparent">
+                        <TextField fx:id="tfSearch" focusTraversable="false" prefHeight="30.0" prefWidth="178.0" promptText="Type here search ..." styleClass="transparent">
                             <font>
                                 <Font name="Cambria Bold" size="16.0" />
                             </font>
                         </TextField>
-                        <Button fx:id="btnSearch" mnemonicParsing="false">
+                        <Button fx:id="btnSearch" mnemonicParsing="false" onAction="#onActionBtnSearch">
                             <HBox.margin>
                                 <Insets left="30.0" />
                             </HBox.margin>
@@ -68,7 +69,7 @@
                 </HBox>
                 <AnchorPane prefHeight="410.0" prefWidth="385.0">
                     <children>
-                        <ListView fx:id="lvShowWord" layoutX="47.0" layoutY="17.0" prefHeight="200.0" prefWidth="375.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="6.0">
+                        <ListView fx:id="lvShowWord" layoutX="47.0" layoutY="17.0" onMouseClicked="#onActionChooseCell" prefHeight="200.0" prefWidth="375.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="6.0">
                             <cursor>
                                 <Cursor fx:constant="HAND" />
                             </cursor></ListView>
@@ -107,26 +108,26 @@
                                 </ImageView>
                             </graphic>
                         </Button>
-                        <Button mnemonicParsing="false">
+                        <Button fx:id="btnBookmarkList" mnemonicParsing="false" onAction="#onActionBtnBookmarkList">
                             <HBox.margin>
                                 <Insets bottom="16.0" left="10.0" right="10.0" />
                             </HBox.margin>
                             <graphic>
                                 <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
-                                        <Image url="@../icon/note2.png" />
+                                        <Image url="@../icon/bookmarkList.png" />
                                     </image>
                                 </ImageView>
                             </graphic>
                         </Button>
-                        <Button mnemonicParsing="false">
+                        <Button fx:id="btnBookmark" mnemonicParsing="false" onAction="#onActionBtnBookmark">
                             <HBox.margin>
                                 <Insets bottom="16.0" left="10.0" right="10.0" />
                             </HBox.margin>
                             <graphic>
                                 <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
-                                        <Image url="@../icon/delete1.png" />
+                                        <Image url="@../icon/bookmark.png" />
                                     </image>
                                 </ImageView>
                             </graphic>
@@ -134,9 +135,6 @@
                     </children>
                 </HBox>
                 <AnchorPane prefHeight="410.0" prefWidth="400.0">
-                    <children>
-                        <ListView layoutX="80.0" layoutY="96.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
-                    </children>
                     <VBox.margin>
                         <Insets bottom="10.0" right="10.0" />
                     </VBox.margin>
@@ -144,6 +142,13 @@
                         <String fx:value="backGroundPane" />
                         <String fx:value="shadow" />
                     </styleClass>
+               <children>
+                  <TextArea fx:id="taDescription" editable="false" prefHeight="200.0" prefWidth="200.0" wrapText="true" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+                     <font>
+                        <Font name="Cambria Bold" size="18.0" />
+                     </font>
+                  </TextArea>
+               </children>
                 </AnchorPane>
             </children>
         </VBox>

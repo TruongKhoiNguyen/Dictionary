@@ -24,7 +24,7 @@
                         <AnchorPane prefHeight="121.0" prefWidth="298.0" />
                         <AnchorPane prefHeight="121.0" prefWidth="562.0">
                            <children>
-                              <HBox alignment="CENTER" layoutX="16.0" layoutY="28.0" prefHeight="64.0" prefWidth="346.0" styleClass="background-pane-edit" AnchorPane.bottomAnchor="28.0" AnchorPane.topAnchor="36.0">
+                              <HBox alignment="CENTER" layoutX="16.0" layoutY="28.0" prefHeight="64.0" prefWidth="346.0" styleClass="background-pane-edit" AnchorPane.bottomAnchor="20.0" AnchorPane.topAnchor="44.0">
                                  <children>
                                     <TextField focusTraversable="false" promptText="Type here ..." styleClass="transparent">
                                        <font>
@@ -43,7 +43,7 @@
                                           </ImageView>
                                        </graphic>
                                     </Button>
-                                    <ComboBox prefHeight="26.0" prefWidth="77.0">
+                                    <ComboBox fx:id="cbbHistoryEdit" prefHeight="26.0" prefWidth="77.0">
                                        <HBox.margin>
                                           <Insets left="10.0" />
                                        </HBox.margin>
@@ -59,7 +59,7 @@
                         <Insets bottom="20.0" left="20.0" right="10.0" top="5.0" />
                      </VBox.margin>
                      <children>
-                        <ListView fx:id="lvShow" layoutX="110.0" layoutY="88.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
+                        <ListView fx:id="lvShow" fixedCellSize="40.0" layoutX="110.0" layoutY="88.0" prefHeight="200.0" prefWidth="200.0" styleClass="view" AnchorPane.bottomAnchor="7.0" AnchorPane.leftAnchor="7.0" AnchorPane.rightAnchor="7.0" AnchorPane.topAnchor="7.0" />
                      </children>
                   </AnchorPane>
                </children>
@@ -68,7 +68,7 @@
                <children>
                   <AnchorPane prefHeight="115.0" prefWidth="306.0">
                      <children>
-                        <HBox alignment="CENTER" layoutX="75.0" layoutY="34.0" prefHeight="47.0" prefWidth="223.0" styleClass="background-pane-edit" AnchorPane.bottomAnchor="33.0" AnchorPane.leftAnchor="75.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="36.0">
+                        <HBox alignment="CENTER" layoutX="75.0" layoutY="34.0" prefHeight="47.0" prefWidth="223.0" styleClass="background-pane-edit" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="75.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="44.0">
                            <children>
                               <Button mnemonicParsing="false">
                                  <HBox.margin>
@@ -111,7 +111,7 @@
                                     <Insets bottom="15.0" />
                                  </VBox.margin>
                                  <font>
-                                    <Font name="Cambria Bold" size="13.0" />
+                                    <Font name="Cambria Bold" size="16.0" />
                                  </font>
                               </TextField>
                               <Line endX="184.8928985595703" endY="0.5928993225097656" startX="-100.0" stroke="#52575d" />
@@ -120,16 +120,16 @@
                                     <Insets bottom="15.0" top="15.0" />
                                  </VBox.margin>
                                  <font>
-                                    <Font name="Cambria Bold" size="13.0" />
+                                    <Font name="Cambria Bold" size="16.0" />
                                  </font>
                               </TextField>
                               <Line endX="182.70005798339844" startX="-100.0" stroke="#52575d" />
-                              <TextField alignment="CENTER" prefHeight="30.0" promptText="Pronounce" styleClass="transparent">
+                              <TextField alignment="CENTER" prefHeight="30.0" promptText="Pronounciation" styleClass="transparent">
                                  <VBox.margin>
                                     <Insets bottom="15.0" top="15.0" />
                                  </VBox.margin>
                                  <font>
-                                    <Font name="Cambria Bold" size="13.0" />
+                                    <Font name="Cambria Bold" size="16.0" />
                                  </font>
                               </TextField>
                               <Line endX="184.0929412841797" endY="-0.8205057382583618" startX="-100.0" stroke="#52575d" />

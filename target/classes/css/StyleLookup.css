@@ -107,16 +107,17 @@
 */
 
 /*Custom list view*/
+
+
 .list-cell {
     -fx-background-radius: 10;
     -fx-font-weight: bold;
 }
 
-.list-cell:empty {
-    /*-fx-background-color: khaki;*/
-    -fx-background-color: #D4ECDD;
-    -fx-border-color: grey
-}
+/*.list-cell:empty {*/
+/*    !*-fx-background-color: khaki;*!*/
+/*    -fx-background-color: #D4ECDD;*/
+/*}*/
 
 .list-cell:hover{
     /*-fx-background-color: blanchedalmond;*/

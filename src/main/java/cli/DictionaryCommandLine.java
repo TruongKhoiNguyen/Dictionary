@@ -98,9 +98,9 @@ public class DictionaryCommandLine {
                 System.out.printf(
                         "%3d | %-25s | %-35s | %-25s\n",
                         counter,
-                        word.keyWord(),
-                        word.description(),
-                        word.pronunciation()
+                        word.getKeyWord(),
+                        word.getDescription(),
+                        word.getPronunciation()
                 );
                 counter += 1;
             }
@@ -136,9 +136,9 @@ public class DictionaryCommandLine {
                 System.out.printf(
                         "%3d | %-25s | %-35s | %-25s\n",
                         counter,
-                        word.keyWord(),
-                        word.description(),
-                        word.pronunciation()
+                        word.getKeyWord(),
+                        word.getDescription(),
+                        word.getPronunciation()
                 );
                 counter += 1;
             }
@@ -182,7 +182,7 @@ public class DictionaryCommandLine {
             // insert remaining information
             System.out.print("Insert meaning: ");
             final var description = scanner.nextLine();
-            final var word = new Word(keyWord, description, "", null);
+            final var word = new Word(0, keyWord, description, "", null);
 
             final var s = dictionaryManager.insertWord(word);
             System.out.println(s ? "Insert completed" : "Insertion failed");

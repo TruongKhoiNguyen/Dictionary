@@ -1,15 +1,148 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Label?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
-    <children>
-        <Label layoutX="230.0" layoutY="140.0" prefHeight="110.0" prefWidth="246.0" text="Infor">
-            <font>
-                <Font size="30.0" />
-            </font>
-        </Label>
-    </children>
+<AnchorPane prefHeight="500.0" prefWidth="800.0" styleClass="background" stylesheets="@../css/StyleEdit.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.EditController">
+   <children>
+      <HBox layoutX="289.0" layoutY="168.0" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <VBox prefHeight="500.0" prefWidth="500.0">
+               <children>
+                  <HBox alignment="BOTTOM_CENTER" prefHeight="170.0" prefWidth="494.0">
+                     <children>
+                        <AnchorPane prefHeight="121.0" prefWidth="298.0" />
+                        <AnchorPane prefHeight="121.0" prefWidth="562.0">
+                           <children>
+                              <HBox alignment="CENTER" layoutX="16.0" layoutY="28.0" prefHeight="64.0" prefWidth="346.0" styleClass="background-pane-edit" AnchorPane.bottomAnchor="20.0" AnchorPane.topAnchor="44.0">
+                                 <children>
+                                    <TextField focusTraversable="false" promptText="Type here ..." styleClass="transparent">
+                                       <font>
+                                          <Font name="Cambria Bold" size="14.0" />
+                                       </font>
+                                    </TextField>
+                                    <Button mnemonicParsing="false">
+                                       <HBox.margin>
+                                          <Insets left="5.0" right="10.0" />
+                                       </HBox.margin>
+                                       <graphic>
+                                          <ImageView fitHeight="28.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../icon/search.png" />
+                                             </image>
+                                          </ImageView>
+                                       </graphic>
+                                    </Button>
+                                    <ComboBox fx:id="cbbHistoryEdit" prefHeight="26.0" prefWidth="77.0">
+                                       <HBox.margin>
+                                          <Insets left="10.0" />
+                                       </HBox.margin>
+                                    </ComboBox>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </AnchorPane>
+                     </children>
+                  </HBox>
+                  <AnchorPane prefHeight="423.0" prefWidth="500.0" styleClass="background-pane-view">
+                     <VBox.margin>
+                        <Insets bottom="20.0" left="20.0" right="10.0" top="5.0" />
+                     </VBox.margin>
+                     <children>
+                        <ListView fx:id="lvShow" fixedCellSize="40.0" layoutX="110.0" layoutY="88.0" prefHeight="200.0" prefWidth="200.0" styleClass="view" AnchorPane.bottomAnchor="7.0" AnchorPane.leftAnchor="7.0" AnchorPane.rightAnchor="7.0" AnchorPane.topAnchor="7.0" />
+                     </children>
+                  </AnchorPane>
+               </children>
+            </VBox>
+            <VBox prefHeight="500.0" prefWidth="311.0">
+               <children>
+                  <AnchorPane prefHeight="115.0" prefWidth="306.0">
+                     <children>
+                        <HBox alignment="CENTER" layoutX="75.0" layoutY="34.0" prefHeight="47.0" prefWidth="223.0" styleClass="background-pane-edit" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="75.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="44.0">
+                           <children>
+                              <Button mnemonicParsing="false">
+                                 <HBox.margin>
+                                    <Insets right="5.0" />
+                                 </HBox.margin>
+                                 <graphic>
+                                    <ImageView fitHeight="28.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true" />
+                                 </graphic>
+                              </Button>
+                              <Button mnemonicParsing="false">
+                                 <HBox.margin>
+                                    <Insets left="5.0" right="5.0" />
+                                 </HBox.margin>
+                                 <graphic>
+                                    <ImageView fitHeight="28.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true" />
+                                 </graphic>
+                              </Button>
+                              <Button mnemonicParsing="false">
+                                 <HBox.margin>
+                                    <Insets left="5.0" />
+                                 </HBox.margin>
+                                 <graphic>
+                                    <ImageView fitHeight="28.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../icon/delete1.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                           </children>
+                        </HBox>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane prefHeight="210.0" prefWidth="306.0" styleClass="background-pane-view">
+                     <children>
+                        <VBox alignment="CENTER" layoutX="103.0" layoutY="92.0" prefHeight="206.0" prefWidth="286.0" styleClass="background-edit" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+                           <children>
+                              <TextField alignment="CENTER" prefHeight="30.0" promptText="Word" styleClass="transparent">
+                                 <VBox.margin>
+                                    <Insets bottom="15.0" />
+                                 </VBox.margin>
+                                 <font>
+                                    <Font name="Cambria Bold" size="16.0" />
+                                 </font>
+                              </TextField>
+                              <Line endX="184.8928985595703" endY="0.5928993225097656" startX="-100.0" stroke="#52575d" />
+                              <TextField alignment="CENTER" prefHeight="30.0" promptText="Description" styleClass="transparent">
+                                 <VBox.margin>
+                                    <Insets bottom="15.0" top="15.0" />
+                                 </VBox.margin>
+                                 <font>
+                                    <Font name="Cambria Bold" size="16.0" />
+                                 </font>
+                              </TextField>
+                              <Line endX="182.70005798339844" startX="-100.0" stroke="#52575d" />
+                              <TextField alignment="CENTER" prefHeight="30.0" promptText="Pronounciation" styleClass="transparent">
+                                 <VBox.margin>
+                                    <Insets bottom="15.0" top="15.0" />
+                                 </VBox.margin>
+                                 <font>
+                                    <Font name="Cambria Bold" size="16.0" />
+                                 </font>
+                              </TextField>
+                              <Line endX="184.0929412841797" endY="-0.8205057382583618" startX="-100.0" stroke="#52575d" />
+                           </children>
+                        </VBox>
+                     </children>
+                     <VBox.margin>
+                        <Insets left="5.0" right="10.0" />
+                     </VBox.margin>
+                  </AnchorPane>
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+   </children>
 </AnchorPane>
