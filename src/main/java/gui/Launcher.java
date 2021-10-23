@@ -14,7 +14,7 @@ public class Launcher extends javafx.application.Application {
 //        try {
         Parent root = null;
         try {
-            root = FXMLLoader.load(getClass().getClassLoader().getResource("resources/fxml/Main.fxml"));
+            root = FXMLLoader.load(getClass().getResource("/fxml/Main.fxml"));
         } catch (IOException e) {
             e.printStackTrace();
         }
