@@ -4,6 +4,7 @@ module untitled {
     requires javafx.graphics;
     requires com.jfoenix;
     requires java.sql;
+    requires jsapi;
 
 
     opens gui to javafx.fxml;
