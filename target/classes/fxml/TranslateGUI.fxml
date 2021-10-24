@@ -46,12 +46,12 @@
                                 <Cursor fx:constant="DEFAULT" />
                             </cursor>
                             <children>
-                                <ComboBox fx:id="languageTarget" layoutX="89.0" layoutY="11.0" prefWidth="150.0" />
+                                <ComboBox fx:id="cbbLanguageTarget" layoutX="89.0" layoutY="11.0" prefWidth="150.0" promptText="English" />
                             </children>
                         </AnchorPane>
                         <AnchorPane prefHeight="100.0" prefWidth="114.0">
                             <children>
-                                <Button fx:id="reset" layoutX="23.0" layoutY="21.0" mnemonicParsing="false" styleClass="buttonTranslate">
+                                <Button fx:id="btnTranslate" layoutX="23.0" layoutY="21.0" mnemonicParsing="false" onAction="#onActionTranslate" styleClass="buttonTranslate">
                                     <graphic>
                                         <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                                             <image>
@@ -67,7 +67,7 @@
                                 <Insets bottom="15.0" right="20.0" top="15.0" />
                             </HBox.margin>
                             <children>
-                                <ComboBox fx:id="languageExplain" layoutX="89.0" layoutY="11.0" prefWidth="150.0" styleClass="combo-box-tran" />
+                                <ComboBox fx:id="cbbLanguageExplain" layoutX="89.0" layoutY="11.0" prefWidth="150.0" promptText="Vietnamese" styleClass="combo-box-tran" />
                             </children>
                         </AnchorPane>
                     </children>
@@ -79,7 +79,7 @@
                     <children>
                         <AnchorPane prefHeight="200.0" prefWidth="400.0" styleClass="backGroundTranslatePane">
                             <children>
-                                <TextArea fx:id="taTarget" editable="false" layoutX="110.0" layoutY="40.0" prefHeight="200.0" prefWidth="200.0" promptText="Type here ... " wrapText="true" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+                                <TextArea fx:id="taTarget" layoutX="110.0" layoutY="40.0" prefHeight="200.0" prefWidth="200.0" promptText="Type here ... " wrapText="true" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
                                     <font>
                                         <Font name="System Bold" size="16.0" />
                                     </font>
