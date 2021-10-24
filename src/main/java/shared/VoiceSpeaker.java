@@ -1,11 +1,11 @@
 package shared;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
 import javax.speech.Central;
 import javax.speech.synthesis.Synthesizer;
 import javax.speech.synthesis.SynthesizerModeDesc;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 public class VoiceSpeaker implements AutoCloseable {
 
@@ -24,6 +24,7 @@ public class VoiceSpeaker implements AutoCloseable {
             synthesizer = Central.createSynthesizer(new SynthesizerModeDesc(Locale.US));
 
             synthesizer.allocate();
+            synthesizer.resume();
 
         } catch (Exception e) {
             error.add(e.getMessage());
