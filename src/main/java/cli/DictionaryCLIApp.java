@@ -1,6 +1,7 @@
 package cli;
 
 import shared.DictionaryManager;
+import shared.VoiceSpeaker;
 import shared.Word;
 
 import java.util.List;

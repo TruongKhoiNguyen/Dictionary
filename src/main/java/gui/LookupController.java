@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import shared.DictionaryManager;
+import shared.VoiceSpeaker;
 import shared.Word;
 
 import java.net.URL;
@@ -26,10 +27,12 @@ public class LookupController implements Initializable {
     Button btnBookmark;
     @FXML
     Button btnBookmarkList;
+    @FXML
+    Button btnSpeech;
 
     private DictionaryManager dictionaryManager = new DictionaryManager();
 
-    private Word wordNow;
+    private Word wordNow = null;
     private List<Word> wordList = new ArrayList<>();
     private ObservableList<Word> wordObservableList;
 
@@ -93,7 +96,6 @@ public class LookupController implements Initializable {
                 selectWord += "\n" + word.getDescription() + ".";
 
                 taDescription.setText(selectWord);
-                wordList.clear();
             } else {
                 Alert alert = dictionaryManager.getAlertInfo("Word was wrong!", Alert.AlertType.INFORMATION);
                 alert.show();
@@ -118,7 +120,7 @@ public class LookupController implements Initializable {
                 alert.show();
             } else {
                 String content = "\"" + wordNow.getKeyWord() + "\" has been added!";
-                Alert alert = dictionaryManager.getAlertInfo(content, Alert.AlertType.INFORMATION);
+                Alert alert = dictionaryManager.getAlertInfo(content, Alert.AlertType.WARNING);
                 alert.show();
             }
         } catch (Exception e) {
@@ -132,5 +134,16 @@ public class LookupController implements Initializable {
         List<Word> words = dictionaryManager.getBookmark();
         wordObservableList = FXCollections.observableArrayList(words);
         lvShowWord.setItems(wordObservableList);
+    }
+
+    public void onActionBtnSpeech(ActionEvent event) {
+        VoiceSpeaker voiceSpeaker = new VoiceSpeaker();
+        if (wordNow != null) {
+            voiceSpeaker.speak(wordNow.getKeyWord());
+        } else {
+            Alert alert = voiceSpeaker.getAlertInfo("Please choose word!",
+                    Alert.AlertType.INFORMATION);
+            alert.show();
+        }
     }
 }

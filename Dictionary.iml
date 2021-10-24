@@ -28,5 +28,16 @@
     <orderEntry type="library" name="Maven: org.openjfx:javafx-base:16" level="project" />
     <orderEntry type="library" name="Maven: org.openjfx:javafx-base:win:16" level="project" />
     <orderEntry type="library" name="Maven: org.xerial:sqlite-jdbc:3.36.0.3" level="project" />
+    <orderEntry type="library" name="lib" level="project" />
+    <orderEntry type="library" name="cmu_time_awb" level="project" />
+    <orderEntry type="library" name="cmu_us_kal" level="project" />
+    <orderEntry type="library" name="cmudict04" level="project" />
+    <orderEntry type="library" name="cmulex" level="project" />
+    <orderEntry type="library" name="cmutimelex" level="project" />
+    <orderEntry type="library" name="en_us" level="project" />
+    <orderEntry type="library" name="freetts" level="project" />
+    <orderEntry type="library" name="freetts-jsapi10" level="project" />
+    <orderEntry type="library" name="jsapi" level="project" />
+    <orderEntry type="library" name="mbrola" level="project" />
   </component>
 </module>

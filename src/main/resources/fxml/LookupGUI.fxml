@@ -96,7 +96,7 @@
                                 <Insets bottom="15.0" left="20.0" right="50.0" />
                             </HBox.margin>
                         </Label>
-                        <Button mnemonicParsing="false">
+                        <Button fx:id="btnSpeech" mnemonicParsing="false" onAction="#onActionBtnSpeech">
                             <HBox.margin>
                                 <Insets bottom="16.0" left="10.0" right="10.0" />
                             </HBox.margin>
