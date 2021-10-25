@@ -64,6 +64,13 @@ public class Word {
         this.addedDate = addedDate;
     }
 
+    public Word(String keyWord, String description, String pronunciation) {
+        this.keyWord = keyWord;
+        this.description = description;
+        this.pronunciation = pronunciation;
+        this.addedDate = null;
+    }
+
     @Override
     public String toString() {
         return this.keyWord;

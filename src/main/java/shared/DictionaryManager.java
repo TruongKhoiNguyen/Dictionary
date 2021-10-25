@@ -7,6 +7,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class DictionaryManager implements AutoCloseable {
     /* constants */
@@ -180,10 +181,28 @@ public class DictionaryManager implements AutoCloseable {
         return getSearchResultFromDB(searchQuery, searchTerm);
     }
 
+    /**
+     * This search the same as the search method above, the only difference is the limitation of
+     * result. So client methods and functions can be assured that the result can not grow
+     * too large to make machine crash.
+     */
+    public List<Word> searchEdit(String searchTerm) {
+        final var searchQuery = String.format(
+                "SELECT * FROM %s WHERE %s LIKE ? AND %s > '2021-10-20'",
+                TABLE_NAME,
+                KEY_WORD,
+                ADDED_DATE
+        );
+
+        return getSearchResultFromDB(searchQuery, searchTerm);
+    }
+
+
+
     /* supportive methods and functions */
 
     private List<Word> getSearchResultFromDB(String searchQuery, String searchTerm) {
-        if (searchTerm == "") {
+        if (Objects.equals(searchTerm, "")) {
             return getHistory();
         }
 
@@ -294,6 +313,37 @@ public class DictionaryManager implements AutoCloseable {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public List<String> searchKeyWord(String searchTerm, int limitation) {
+        List<String> result = new ArrayList<>();
+
+        final var sql = String.format(
+                "SELECT %s FROM %s WHERE %s LIKE ? LIMIT %d",
+                KEY_WORD,
+                TABLE_NAME,
+                KEY_WORD,
+                limitation
+        );
+
+        try (final var preStatement = dictionaryDBConnection.prepareStatement(sql)) {
+            // search in database
+            preStatement.setString(1, searchTerm + "%");
+            final var searchResult = preStatement.executeQuery();
+
+            // get result and add to result list
+            while (searchResult.next()) {
+                final var keyWord = searchResult.getString(KEY_WORD);
+
+                result.add(keyWord);
+            }
+
+        } catch (Exception e) {
+            error.add(e.getMessage());
+            return new ArrayList<>();
+        }
+
+        return result;
     }
 
 

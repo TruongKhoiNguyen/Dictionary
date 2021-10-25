@@ -10,12 +10,7 @@ import java.util.List;
 
 public class DictionaryCLIApp {
     public static void main(String[] args) {
-//        final var dictionaryCommandLine = new DictionaryCommandLine();
-//        dictionaryCommandLine.run();
-        try {
-            System.out.println(GoogleTranslate.detectLanguage("ขอนั่งด้วยได้ไหม"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        final var dictionaryCommandLine = new DictionaryCommandLine();
+        dictionaryCommandLine.run();
     }
 }

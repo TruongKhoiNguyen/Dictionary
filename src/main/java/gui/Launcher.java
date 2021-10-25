@@ -21,7 +21,7 @@ public class Launcher extends javafx.application.Application {
         Scene scene = new Scene(root);
             primaryStage.setScene(scene);
             primaryStage.setTitle("Dictionary App");
-            primaryStage.initStyle(StageStyle.TRANSPARENT);
+            //primaryStage.initStyle(StageStyle.TRANSPARENT);
             primaryStage.show();
 //        } catch (Exception e) {
 //            System.out.println(e.getMessage());

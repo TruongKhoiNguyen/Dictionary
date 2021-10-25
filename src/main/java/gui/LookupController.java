@@ -46,14 +46,9 @@ public class LookupController implements Initializable {
         tfSearch.textProperty().addListener((observableValue, s, t1) -> {
             btnSearch.setVisible(true);
             if (t1 != "") {
-                wordList = dictionaryManager.search(tfSearch.getText().trim());
-                if (!wordList.isEmpty()) {
-                    wordObservableList = FXCollections.observableList(wordList);
-                    lvShowWord.setItems(wordObservableList);
-                } else {
-                    Alert alert = dictionaryManager.getAlertInfo("Word was wrong!", Alert.AlertType.INFORMATION);
-                    alert.show();
-                }
+                wordList = dictionaryManager.search(tfSearch.getText().trim(), 20);
+                wordObservableList = FXCollections.observableList(wordList);
+                lvShowWord.setItems(wordObservableList);
             } else {
                 wordList = dictionaryManager.getHistory();
                 wordObservableList = FXCollections.observableList(wordList);
