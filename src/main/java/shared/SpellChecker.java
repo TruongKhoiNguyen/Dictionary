@@ -1,10 +1,10 @@
 package shared;
 
-import static java.lang.Math.min;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static java.lang.Math.min;
 
 public record SpellChecker(DictionaryManager dictionaryManager) {
     private static final int EDIT_DISTANCE_THRESHOLD = 3;
