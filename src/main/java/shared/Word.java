@@ -49,6 +49,8 @@ public class Word {
         this.addedDate = addedDate;
     }
 
+    public Word() {}
+
     public Word(int id, String keyWord, String description, String pronunciation, Date addedDate) {
         this.id = id;
         this.keyWord = keyWord;

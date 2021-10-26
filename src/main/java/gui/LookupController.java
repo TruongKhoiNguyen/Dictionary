@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import shared.DictionaryManager;
+import shared.SpellChecker;
 import shared.VoiceSpeaker;
 import shared.Word;
 
@@ -47,8 +48,14 @@ public class LookupController implements Initializable {
             btnSearch.setVisible(true);
             if (t1 != "") {
                 wordList = dictionaryManager.search(tfSearch.getText().trim(), 20);
-                wordObservableList = FXCollections.observableList(wordList);
-                lvShowWord.setItems(wordObservableList);
+                if (!wordList.isEmpty()) {
+                    wordObservableList = FXCollections.observableList(wordList);
+                    lvShowWord.setItems(wordObservableList);
+                } else {
+                    wordList = spellCheck(tfSearch.getText().trim());
+                    wordObservableList = FXCollections.observableList(wordList);
+                    lvShowWord.setItems(wordObservableList);
+                }
             } else {
                 wordList = dictionaryManager.getHistory();
                 wordObservableList = FXCollections.observableList(wordList);
@@ -59,6 +66,18 @@ public class LookupController implements Initializable {
 
     }
 
+
+    public List<Word> spellCheck(String key) {
+        List<Word> list = new ArrayList<>();
+        SpellChecker spellChecker = new SpellChecker(dictionaryManager);
+        List<String> listSuggest = spellChecker.correctSpelling(key);
+
+        for (String s : listSuggest) {
+            list.add(dictionaryManager.searchKey(s));
+        }
+
+        return list;
+    }
 
     public void onActionChooseCell() {
         Word word = lvShowWord.getSelectionModel().getSelectedItem();

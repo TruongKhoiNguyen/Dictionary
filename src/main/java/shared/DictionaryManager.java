@@ -315,6 +315,35 @@ public class DictionaryManager implements AutoCloseable {
         }
     }
 
+    public boolean updateWord(Word word) {
+        final var insertQuery = String.format(
+                "UPDATE %s SET %s = ?, %s = ?, %s = ?, %s = DATE() WHERE %s = ?",
+                TABLE_NAME,
+                KEY_WORD,
+                DESCRIPTION,
+                PRONUNCIATION,
+                ADDED_DATE,
+                ID
+        );
+
+        try (
+                final var preStatement = dictionaryDBConnection.prepareStatement(insertQuery)
+        ) {
+            preStatement.setString(1, word.getKeyWord());
+            preStatement.setString(2, word.getDescription());
+            preStatement.setString(3, word.getPronunciation());
+            preStatement.setInt(4, word.getId());
+
+            preStatement.executeUpdate();
+
+        } catch (Exception e) {
+            error.add(e.getMessage());
+            return false;
+        }
+
+        return true;
+    }
+
     public List<String> searchKeyWord(String searchTerm, int limitation) {
         List<String> result = new ArrayList<>();
 
@@ -344,6 +373,43 @@ public class DictionaryManager implements AutoCloseable {
         }
 
         return result;
+    }
+
+    public Word searchKey(String key) {
+        Word word = new Word();
+
+        final var searchQuery = String.format(
+                "SELECT * FROM %s WHERE %s = ?",
+                TABLE_NAME,
+                KEY_WORD
+        );
+
+        try (final var preStatement = dictionaryDBConnection.prepareStatement(searchQuery)) {
+            // search in database
+            preStatement.setString(1, key);
+            final var searchResult = preStatement.executeQuery();
+
+            // get result and add to result list
+            while (searchResult.next()) {
+                word.setId(searchResult.getInt(ID));
+                word.setKeyWord(searchResult.getString(KEY_WORD));
+                word.setDescription(searchResult.getString(DESCRIPTION));
+                word.setPronunciation(searchResult.getString(PRONUNCIATION));
+
+
+                // process sql date
+                final var sqlAddedDate = searchResult.getString(ADDED_DATE);
+                final var addedDate = new SimpleDateFormat("yyyy-MM-dd").parse(sqlAddedDate);
+                word.setAddedDate(addedDate);
+                break;
+            }
+
+        } catch (Exception e) {
+            error.add(e.getMessage());
+            return null;
+        }
+
+        return word;
     }
 
 

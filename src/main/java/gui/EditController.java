@@ -82,9 +82,11 @@ public class EditController implements Initializable {
             if (!Objects.equals(t1, "")) {
                 btnInsert.setDisable(false);
                 btnDelete.setDisable(false);
+                btnUpdate.setDisable(false);
             } else {
                 btnInsert.setDisable(true);
                 btnDelete.setDisable(true);
+                btnUpdate.setDisable(true);
             }
         });
     }
@@ -145,7 +147,35 @@ public class EditController implements Initializable {
     }
 
     public void onActionBtnUpdate(ActionEvent event) {
+        if (wordNow != null) {
+            wordNow.setKeyWord(tfEditWord.getText());
+            wordNow.setDescription(tfEditDescription.getText());
+            wordNow.setPronunciation(tfEditPronunciation.getText());
 
+            if (dictionaryManager.updateWord(wordNow)) {
+                String content = "Update successful!";
+                Alert alert = dictionaryManager.getAlertInfo(content, Alert.AlertType.INFORMATION);
+                alert.show();
+
+                tfEditWord.clear();
+                tfEditDescription.clear();
+                tfEditPronunciation.clear();
+                wordNow = null;
+
+                int setTime = setTimeGetWord(cbbHistoryEdit.getValue());
+                wordList = dictionaryManager.getWord(setTime);
+                wordObservableList = FXCollections.observableArrayList(wordList);
+                lvShow.setItems(wordObservableList);
+            } else {
+                String content = "";
+                Alert alert = dictionaryManager.getAlertInfo(content, Alert.AlertType.ERROR);
+                alert.show();
+            }
+        } else {
+            String content = "Please choose word";
+            Alert alert = dictionaryManager.getAlertInfo(content, Alert.AlertType.WARNING);
+            alert.show();
+        }
     }
 
     public void onActionBtnDelete(ActionEvent event) {

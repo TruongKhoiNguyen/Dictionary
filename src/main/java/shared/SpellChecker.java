@@ -16,14 +16,19 @@ public record SpellChecker(DictionaryManager dictionaryManager) {
      * Check spelling and return sorted list of similar word.
      */
     public List<String> correctSpelling(String word) {
-        final var cutWindowSize = (int)round(floor(1.0 * word.length() / GENERATE_WINDOW));
+        final var cutWindowSize = (int)round(ceil(1.0 * word.length() / GENERATE_WINDOW));
 
         // create a list of query for possible words
         final var cutPosition = IntStream.rangeClosed(0, word.length() - cutWindowSize)
                 .boxed().collect(Collectors.toList());
 
         final var queries = cutPosition.stream()
-                .map(x -> word.replace(word.substring(x, x + cutWindowSize - 1), "%"))
+//                .map(x -> word.replace(word.substring(x, x + cutWindowSize - 1), "%"))
+                .map(x -> new StringBuilder()
+                        .append(word.substring(0, x))
+                        .append("%")
+                        .append(word.substring(x + cutWindowSize, word.length()))
+                        .toString())
                 .collect(Collectors.toList());
 
         // get possible words
