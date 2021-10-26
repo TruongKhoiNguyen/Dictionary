@@ -1,26 +1,52 @@
 package shared;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
+import static java.lang.Math.floor;
 import static java.lang.Math.min;
+import static java.lang.Math.round;
 
 public record SpellChecker(DictionaryManager dictionaryManager) {
     private static final int EDIT_DISTANCE_THRESHOLD = 3;
+    private static final int GENERATE_WINDOW = 3; // 1/3 of the word;
 
     /**
      * This will assume that the word parameter has some spelling error at the back of the word.
      * Any spelling error like 'apple' to '*apple' will not be detected.
      */
-    public List<String> spellCorrecting(String word) {
-        // removing the same number of edit distance threshold in last letters of the word
-        final var head = word.substring(0, word.length() - EDIT_DISTANCE_THRESHOLD);
+    public List<String> correctSpelling(String word) {
+        final var cutWindowSize = (int)round(floor(1.0 * word.length() / GENERATE_WINDOW));
 
-        // get 100 likely words
-        final var dictionary = dictionaryManager.searchKeyWord(head, 100);
+        // create a list of query for possible words
+        final var cutPosition = IntStream.rangeClosed(0, word.length() - cutWindowSize)
+                .boxed().collect(Collectors.toList());
 
-        return suggestCorrections(dictionary, word);
+        final var queries = cutPosition.stream()
+                .map(x -> word.replace(word.substring(x, x + cutWindowSize - 1), "%"))
+                .collect(Collectors.toList());
+
+        // get possible words
+        final var similarWords = queries.stream()
+                .map(query -> new HashSet<>(dictionaryManager.searchKeyWord(query, 30)))
+                .reduce(
+                        (set1, set2) -> Stream.concat(set1.stream(), set2.stream())
+                                .collect(Collectors.toCollection(HashSet::new))
+                );
+
+        final var dictionary = similarWords.isPresent() ?
+                similarWords.get()
+                : Collections.<String>emptySet();
+
+        // sort result and return it as a list
+        return suggestCorrections(dictionary, word).entrySet()
+                .stream()
+                .sorted(Map.Entry.comparingByValue())
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toList());
     }
 
     /*
@@ -28,10 +54,15 @@ public record SpellChecker(DictionaryManager dictionaryManager) {
     This will linearly iterate over all word in dictionary and come with word that satisfied certain
     edit distance threshold.
      */
-    private static List<String> suggestCorrections(List<String> dictionary, String word) {
+    private static Map<String, Integer> suggestCorrections(Set<String> dictionary, String word) {
         return dictionary.stream()
-                .filter(w -> calculateEditDistance(word, w) <= EDIT_DISTANCE_THRESHOLD)
-                .collect(Collectors.toList());
+                // calculate edit distance and put all into a map
+                .collect(Collectors.toMap(Function.identity(), x -> calculateEditDistance(word, x)))
+                .entrySet()
+                // filter all word that satisfies edit distance threshold
+                .stream()
+                .filter(entry -> entry.getValue() <= EDIT_DISTANCE_THRESHOLD)
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
     /**

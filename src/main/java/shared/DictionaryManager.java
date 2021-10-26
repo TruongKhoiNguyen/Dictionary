@@ -328,7 +328,7 @@ public class DictionaryManager implements AutoCloseable {
 
         try (final var preStatement = dictionaryDBConnection.prepareStatement(sql)) {
             // search in database
-            preStatement.setString(1, searchTerm + "%");
+            preStatement.setString(1, searchTerm);
             final var searchResult = preStatement.executeQuery();
 
             // get result and add to result list
