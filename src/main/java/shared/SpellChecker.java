@@ -6,9 +6,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import static java.lang.Math.floor;
-import static java.lang.Math.min;
-import static java.lang.Math.round;
+import static java.lang.Math.*;
 
 public record SpellChecker(DictionaryManager dictionaryManager) {
     private static final int EDIT_DISTANCE_THRESHOLD = 3;
