@@ -13,8 +13,7 @@ public record SpellChecker(DictionaryManager dictionaryManager) {
     private static final int GENERATE_WINDOW = 3; // 1/3 of the word;
 
     /**
-     * This will assume that the word parameter has some spelling error at the back of the word.
-     * Any spelling error like 'apple' to '*apple' will not be detected.
+     * Check spelling and return sorted list of similar word.
      */
     public List<String> correctSpelling(String word) {
         final var cutWindowSize = (int)round(floor(1.0 * word.length() / GENERATE_WINDOW));
