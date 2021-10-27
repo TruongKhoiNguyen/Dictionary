@@ -29,11 +29,7 @@ public record SpellChecker(DictionaryManager dictionaryManager) {
 
         // calculate distance -> filter -> sorted
         return similarWords.stream()
-                .collect(
-                        Collectors.toMap(Function.identity(), w -> calculateEditDistance(word, w))
-                )
-                .entrySet()
-                .stream()
+                .map(w -> Map.entry(w, calculateEditDistance(word, w)))
                 .filter(e -> e.getValue() < EDIT_DISTANCE_THRESHOLD)
                 .sorted(Map.Entry.comparingByValue())
                 .map(Map.Entry::getKey)
