@@ -6,6 +6,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.Background;
 import shared.DictionaryManager;
 import shared.SpellChecker;
 import shared.VoiceSpeaker;
@@ -30,6 +32,8 @@ public class LookupController implements Initializable {
     Button btnBookmarkList;
     @FXML
     Button btnSpeech;
+    @FXML
+    ImageView imgSpell;
 
     private DictionaryManager dictionaryManager = new DictionaryManager();
 
@@ -40,6 +44,7 @@ public class LookupController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         btnSearch.setVisible(false);
+        imgSpell.setVisible(false);
         wordList = dictionaryManager.getHistory();
         wordObservableList = FXCollections.observableList(wordList);
         lvShowWord.setItems(wordObservableList);
@@ -49,9 +54,11 @@ public class LookupController implements Initializable {
             if (t1 != "") {
                 wordList = dictionaryManager.search(tfSearch.getText().trim(), 20);
                 if (!wordList.isEmpty()) {
+                    imgSpell.setVisible(false);
                     wordObservableList = FXCollections.observableList(wordList);
                     lvShowWord.setItems(wordObservableList);
                 } else {
+                    imgSpell.setVisible(true);
                     wordList = spellCheck(tfSearch.getText().trim());
                     wordObservableList = FXCollections.observableList(wordList);
                     lvShowWord.setItems(wordObservableList);
@@ -83,6 +90,7 @@ public class LookupController implements Initializable {
         Word word = lvShowWord.getSelectionModel().getSelectedItem();
         dictionaryManager.insertHistory(word);
         wordNow = word;
+        tfSearch.setText(word.getKeyWord());
 
         String selectWord = word.getKeyWord();
         if (word.getPronunciation() != " ") {

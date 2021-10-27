@@ -3,6 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
@@ -21,7 +22,26 @@
                <children>
                   <HBox alignment="BOTTOM_CENTER" prefHeight="170.0" prefWidth="494.0">
                      <children>
-                        <AnchorPane prefHeight="121.0" prefWidth="298.0" />
+                        <AnchorPane prefHeight="121.0" prefWidth="298.0">
+                           <children>
+                              <VBox alignment="CENTER" layoutX="6.0" layoutY="14.0" prefHeight="60.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <children>
+                                    <Label text="Edit" textFill="#1e272e">
+                                       <font>
+                                          <Font name="Cambria Bold" size="34.0" />
+                                       </font>
+                                       <VBox.margin>
+                                          <Insets />
+                                       </VBox.margin>
+                                    </Label>
+                                    <Label text="word" textFill="#1e272e">
+                                       <font>
+                                          <Font name="Cambria" size="20.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </VBox>
+                           </children></AnchorPane>
                         <AnchorPane prefHeight="121.0" prefWidth="562.0">
                            <children>
                               <HBox alignment="CENTER" layoutX="16.0" layoutY="28.0" prefHeight="64.0" prefWidth="346.0" styleClass="background-pane-edit" AnchorPane.bottomAnchor="20.0" AnchorPane.topAnchor="44.0">
@@ -43,7 +63,7 @@
                                           </ImageView>
                                        </graphic>
                                     </Button>
-                                    <ComboBox fx:id="cbbHistoryEdit" onAction="#onActionCbbChooseTime" prefHeight="26.0" prefWidth="77.0" promptText="3D ago">
+                                    <ComboBox fx:id="cbbHistoryEdit" onAction="#onActionCbbChooseTime" prefHeight="26.0" prefWidth="87.0" promptText="3D ago">
                                        <HBox.margin>
                                           <Insets left="10.0" />
                                        </HBox.margin>
@@ -68,7 +88,7 @@
                <children>
                   <AnchorPane prefHeight="115.0" prefWidth="306.0">
                      <children>
-                        <HBox alignment="CENTER" layoutX="75.0" layoutY="34.0" prefHeight="47.0" prefWidth="227.0" styleClass="background-pane-edit" AnchorPane.bottomAnchor="24.0" AnchorPane.leftAnchor="75.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="44.0">
+                        <HBox alignment="CENTER" layoutX="116.0" layoutY="34.0" prefHeight="47.0" prefWidth="186.0" styleClass="background-pane-edit" AnchorPane.bottomAnchor="24.0" AnchorPane.leftAnchor="116.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="44.0">
                            <children>
                               <Button fx:id="btnInsert" mnemonicParsing="false" onAction="#onActionBtnInsert">
                                  <HBox.margin>
@@ -143,7 +163,7 @@
                         </VBox>
                      </children>
                      <VBox.margin>
-                        <Insets left="5.0" right="10.0" />
+                        <Insets left="5.0" right="15.0" />
                      </VBox.margin>
                   </AnchorPane>
                </children>

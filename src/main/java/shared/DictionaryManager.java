@@ -145,6 +145,60 @@ public class DictionaryManager implements AutoCloseable {
         return true;
     }
 
+    /**
+     *  Remove word method takes a string as key word to find and remove word in dictionary database.
+     *  Like insert word, this method also interacts directly with the database. So it should
+     *  also be avoided.
+     */
+    public boolean removeWord(Word word) {
+        final var removeQuery = String.format(
+                "DELETE FROM %s WHERE %s = ?",
+                TABLE_NAME,
+                KEY_WORD
+        );
+
+        try (final var preStatement = dictionaryDBConnection.prepareStatement(removeQuery)) {
+            preStatement.setString(1, word.getKeyWord());
+            preStatement.executeUpdate();
+
+        } catch (Exception e) {
+            error.add(e.getMessage());
+            return false;
+        }
+
+        final var removeQueryH = String.format(
+                "DELETE FROM %s WHERE %s = ?",
+                TABLE_NAME_H,
+                ID_WORD
+        );
+
+        try (final var preStatement = dictionaryDBConnection.prepareStatement(removeQueryH)) {
+            preStatement.setInt(1, word.getId());
+            preStatement.executeUpdate();
+
+        } catch (Exception e) {
+            error.add(e.getMessage());
+            return false;
+        }
+
+        final var removeQueryBM = String.format(
+                "DELETE FROM %s WHERE %s = ?",
+                TABLE_NAME_B_M,
+                ID_WORD
+        );
+
+        try (final var preStatement = dictionaryDBConnection.prepareStatement(removeQueryBM)) {
+            preStatement.setInt(1, word.getId());
+            preStatement.executeUpdate();
+
+        } catch (Exception e) {
+            error.add(e.getMessage());
+            return false;
+        }
+
+        return true;
+    }
+
 
     /**
      * This method return all possible results which may result in large ram consumption and crashing.

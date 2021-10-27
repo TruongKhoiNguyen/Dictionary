@@ -182,7 +182,7 @@ public class EditController implements Initializable {
         if (wordNow != null) {
             wordList = dictionaryManager.searchEdit(wordNow.getKeyWord());
             if (!wordList.isEmpty()) {
-                if (dictionaryManager.removeWord(wordNow.getKeyWord())) {
+                if (dictionaryManager.removeWord(wordNow)) {
                     String content = "Delete successful!";
                     Alert alert = dictionaryManager.getAlertInfo(content, Alert.AlertType.INFORMATION);
                     alert.show();
