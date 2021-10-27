@@ -35,7 +35,7 @@ public class LookupController implements Initializable {
 
     private DictionaryManager dictionaryManager = new DictionaryManager();
 
-    private Word wordNow = null;
+    private Word wordCurrent = null;
     private List<Word> wordList = new ArrayList<>();
     private ObservableList<Word> wordObservableList;
 
@@ -87,11 +87,11 @@ public class LookupController implements Initializable {
         try {
             Word word = lvShowWord.getSelectionModel().getSelectedItem();
             dictionaryManager.insertHistory(word);
-            wordNow = word;
+            wordCurrent = word;
             tfSearch.setText(word.getKeyWord());
 
             String selectWord = word.getKeyWord();
-            if (!word.getPronunciation().equals(" ")) {
+            if (!word.getPronunciation().equals("")) {
                 selectWord += "/" + word.getPronunciation() + "/";
             }
             selectWord += "\n" + word.getDescription() + ".";
@@ -111,10 +111,10 @@ public class LookupController implements Initializable {
             if (!words.isEmpty()) {
                 Word word = words.get(0);
                 dictionaryManager.insertHistory(wordList.get(0));
-                wordNow = word;
+                wordCurrent = word;
 
                 String selectWord = word.getKeyWord();
-                if (!word.getPronunciation().equals(" ")) {
+                if (!word.getPronunciation().equals("")) {
                     selectWord += "/" + word.getPronunciation() + "/";
                 }
                 selectWord += "\n" + word.getDescription() + ".";
@@ -137,13 +137,13 @@ public class LookupController implements Initializable {
             for (Word word : words) {
                 keyWord.add(word.getKeyWord());
             }
-            if (!keyWord.contains(wordNow.getKeyWord())) {
-                dictionaryManager.insertBookmark(wordNow);
-                String content = "add \"" + wordNow.getKeyWord() + "\" into bookmark successful!";
+            if (!keyWord.contains(wordCurrent.getKeyWord())) {
+                dictionaryManager.insertBookmark(wordCurrent);
+                String content = "add \"" + wordCurrent.getKeyWord() + "\" into bookmark successful!";
                 Alert alert = dictionaryManager.getAlertInfo(content, Alert.AlertType.INFORMATION);
                 alert.show();
             } else {
-                String content = "\"" + wordNow.getKeyWord() + "\" has been added!";
+                String content = "\"" + wordCurrent.getKeyWord() + "\" has been added!";
                 Alert alert = dictionaryManager.getAlertInfo(content, Alert.AlertType.WARNING);
                 alert.show();
             }
@@ -162,8 +162,8 @@ public class LookupController implements Initializable {
 
     public void onActionBtnSpeech(ActionEvent event) {
         VoiceSpeaker voiceSpeaker = new VoiceSpeaker();
-        if (wordNow != null) {
-            voiceSpeaker.speak(wordNow.getKeyWord());
+        if (wordCurrent != null) {
+            voiceSpeaker.speak(wordCurrent.getKeyWord());
         } else {
             Alert alert = voiceSpeaker.getAlertInfo("Please choose word!",
                     Alert.AlertType.INFORMATION);

@@ -21,9 +21,9 @@
             <children>
                 <HBox alignment="CENTER" prefHeight="92.0" prefWidth="400.0">
                     <children>
-                        <Label text="Search" textFill="#335961">
+                        <Label styleClass="shadow" text="Search" textFill="#335961">
                             <font>
-                                <Font name="Cambria Bold" size="28.0" />
+                                <Font name="Cambria Bold" size="30.0" />
                             </font>
                             <HBox.margin>
                                 <Insets right="10.0" />

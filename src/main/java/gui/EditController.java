@@ -48,7 +48,7 @@ public class EditController implements Initializable {
             "History",
             "Bookmark");
 
-    private Word wordNow = null;
+    private Word wordCurrent = null;
     private List<Word> wordList = new ArrayList<>();
     private ObservableList<Word> wordObservableList;
 
@@ -96,7 +96,7 @@ public class EditController implements Initializable {
 
             if (!words.isEmpty()) {
                 Word word = words.get(0);
-                wordNow = word;
+                wordCurrent = word;
 
                 // edit word
                 tfEditWord.setText(word.getKeyWord());
@@ -138,12 +138,12 @@ public class EditController implements Initializable {
     }
 
     public void onActionBtnUpdate(ActionEvent event) {
-        if (wordNow != null) {
-            wordNow.setKeyWord(tfEditWord.getText());
-            wordNow.setDescription(tfEditDescription.getText());
-            wordNow.setPronunciation(tfEditPronunciation.getText());
+        if (wordCurrent != null) {
+            wordCurrent.setKeyWord(tfEditWord.getText());
+            wordCurrent.setDescription(tfEditDescription.getText());
+            wordCurrent.setPronunciation(tfEditPronunciation.getText());
 
-            if (dictionaryManager.updateWord(wordNow)) {
+            if (dictionaryManager.updateWord(wordCurrent)) {
                 String content = "Update successful!";
                 Alert alert = dictionaryManager.getAlertInfo(content, Alert.AlertType.INFORMATION);
                 alert.show();
@@ -162,9 +162,9 @@ public class EditController implements Initializable {
     }
 
     public void onActionBtnDelete(ActionEvent event) {
-        if (wordNow != null) {
+        if (wordCurrent != null) {
             if (cbbHistoryEdit.getValue().equals("History")) {
-                if (onActionRemoveHistory(wordNow)) {
+                if (onActionRemoveHistory(wordCurrent)) {
                     String content = "remove form history successful!";
                     Alert alert = dictionaryManager.getAlertInfo(content, Alert.AlertType.INFORMATION);
                     alert.show();
@@ -176,7 +176,7 @@ public class EditController implements Initializable {
                     alert.show();
                 }
             } else if (cbbHistoryEdit.getValue().equals("Bookmark")) {
-                if (onActionRemoveBookmark(wordNow)) {
+                if (onActionRemoveBookmark(wordCurrent)) {
                     String content = "remove form bookmark successful!";
                     Alert alert = dictionaryManager.getAlertInfo(content, Alert.AlertType.INFORMATION);
                     alert.show();
@@ -188,9 +188,9 @@ public class EditController implements Initializable {
                     alert.show();
                 }
             } else {
-                wordList = dictionaryManager.searchEdit(wordNow.getKeyWord());
+                wordList = dictionaryManager.searchEdit(wordCurrent.getKeyWord());
                 if (!wordList.isEmpty()) {
-                    if (dictionaryManager.removeWord(wordNow)) {
+                    if (dictionaryManager.removeWord(wordCurrent)) {
                         String content = "Delete successful!";
                         Alert alert = dictionaryManager.getAlertInfo(content, Alert.AlertType.INFORMATION);
                         alert.show();
@@ -219,7 +219,7 @@ public class EditController implements Initializable {
         tfEditWord.clear();
         tfEditDescription.clear();
         tfEditPronunciation.clear();
-        wordNow = null;
+        wordCurrent = null;
 
         setUpShowWord();
     }
@@ -273,7 +273,7 @@ public class EditController implements Initializable {
     public void onActionChooseCellE() {
         try {
             Word word = lvShow.getSelectionModel().getSelectedItem();
-            wordNow = word;
+            wordCurrent = word;
 
             // edit word
             tfEditWord.setText(word.getKeyWord());

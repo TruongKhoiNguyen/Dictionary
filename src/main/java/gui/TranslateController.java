@@ -62,8 +62,8 @@ public class TranslateController implements Initializable {
                 String translating = GoogleTranslate.translate(keyTarget, keyExplain, taTarget.getText());
                 taExplain.setText(translating);
             } catch (IOException e) {
-                e.printStackTrace();
-                Alert alert = GoogleTranslate.getAlertInfo("Error", Alert.AlertType.ERROR);
+                final var content = "Network error!";
+                Alert alert = GoogleTranslate.getAlertInfo(content, Alert.AlertType.ERROR);
                 alert.show();
             }
         } else {
