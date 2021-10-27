@@ -2,10 +2,13 @@ package shared;
 
 import javafx.scene.control.Alert;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -293,32 +296,38 @@ public class DictionaryManager implements AutoCloseable {
         return result;
     }
 
-    public List<String> searchKeyWord(String searchTerm, int limitation) {
-        List<String> result = new ArrayList<>();
+    public List<String> searchKeyWord(List<String> searchTerms, int limitation) {
+        // generate skeleton for query
+        final var tmp1 = Collections.nCopies(searchTerms.size(), "?");
+        final var tmp2 = String.join(" OR " + KEY_WORD + " LIKE ", tmp1);
 
-        final var sql = String.format(
-                "SELECT %s FROM %s WHERE %s LIKE ? LIMIT %d",
+        final var queryForm = String.format(
+                "SELECT %s FROM %s WHERE %s LIKE %s LIMIT %d",
                 KEY_WORD,
                 TABLE_NAME,
                 KEY_WORD,
+                tmp2,
                 limitation
         );
 
-        try (final var preStatement = dictionaryDBConnection.prepareStatement(sql)) {
-            // search in database
-            preStatement.setString(1, searchTerm);
-            final var searchResult = preStatement.executeQuery();
+        final var result = new ArrayList<String>();
+        try (final var stmt = dictionaryDBConnection.prepareStatement(queryForm)) {
+            // add parameters
+            // sql counts from 1, why?
+            for (int i = 1; i <= searchTerms.size(); ++i) {
+                stmt.setString(i, searchTerms.get(i - 1));
+            }
 
-            // get result and add to result list
-            while (searchResult.next()) {
-                final var keyWord = searchResult.getString(KEY_WORD);
+            // search and parse values
+            final var rs = stmt.executeQuery();
 
-                result.add(keyWord);
+            while (rs.next()) {
+                result.add(rs.getString(KEY_WORD));
             }
 
         } catch (Exception e) {
             error.add(e.getMessage());
-            return new ArrayList<>();
+            return Collections.emptyList();
         }
 
         return result;
