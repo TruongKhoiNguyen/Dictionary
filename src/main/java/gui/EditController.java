@@ -113,6 +113,15 @@ public class EditController implements Initializable {
     }
 
     public void onActionBtnInsert(ActionEvent event) {
+        if (cbbHistoryEdit.getValue().equals("History")
+                || cbbHistoryEdit.getValue().equals("Bookmark")) {
+            String content = "No edit in history and bookmark";
+            Alert alert = dictionaryManager.getAlertInfo(content, Alert.AlertType.INFORMATION);
+            alert.show();
+
+            return;
+        }
+
         String keyWord = tfEditWord.getText();
         String description = tfEditDescription.getText();
         String pronunciation = tfEditPronunciation.getText();
@@ -138,6 +147,15 @@ public class EditController implements Initializable {
     }
 
     public void onActionBtnUpdate(ActionEvent event) {
+        if (cbbHistoryEdit.getValue().equals("History")
+                || cbbHistoryEdit.getValue().equals("Bookmark")) {
+            String content = "No edit in history and bookmark";
+            Alert alert = dictionaryManager.getAlertInfo(content, Alert.AlertType.INFORMATION);
+            alert.show();
+
+            return;
+        }
+
         if (wordCurrent != null) {
             wordCurrent.setKeyWord(tfEditWord.getText());
             wordCurrent.setDescription(tfEditDescription.getText());
@@ -249,6 +267,11 @@ public class EditController implements Initializable {
     }
 
     public void onActionCbbChooseEdit(ActionEvent event) {
+        tfEditWord.clear();
+        tfEditDescription.clear();
+        tfEditPronunciation.clear();
+        wordCurrent = null;
+
         setUpShowWord();
     }
 
@@ -280,8 +303,8 @@ public class EditController implements Initializable {
             tfEditDescription.setText(word.getDescription());
             tfEditPronunciation.setText(word.getPronunciation());
         } catch (Exception e) {
-            Alert alert = dictionaryManager.getAlertInfo("Row is empty!", Alert.AlertType.WARNING);
-            alert.show();
+//            Alert alert = dictionaryManager.getAlertInfo("Row is empty!", Alert.AlertType.WARNING);
+//            alert.show();
         }
     }
 

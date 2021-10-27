@@ -98,8 +98,8 @@ public class LookupController implements Initializable {
 
             taDescription.setText(selectWord);
         } catch (Exception e){
-            Alert alert = dictionaryManager.getAlertInfo("Row is empty!", Alert.AlertType.WARNING);
-            alert.show();
+//            Alert alert = dictionaryManager.getAlertInfo("Row is empty!", Alert.AlertType.WARNING);
+//            alert.show();
         }
     }
 

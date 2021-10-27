@@ -97,7 +97,7 @@
                                         <Image url="@../icon/settingBtnIcon.png" />
                                     </image>
                                 </ImageView>
-                                <Label text="Setting" textFill="WHITE">
+                                <Label text="Edit" textFill="WHITE">
                                     <HBox.margin>
                                         <Insets left="10.0" />
                                     </HBox.margin>
