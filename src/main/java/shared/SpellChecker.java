@@ -10,7 +10,7 @@ import static java.lang.Math.ceil;
 import static java.lang.Math.min;
 
 public record SpellChecker(DictionaryManager dictionaryManager) {
-    private static final int EDIT_DISTANCE_THRESHOLD = 3;
+    private static final int EDIT_DISTANCE_THRESHOLD = 4;
 
     /**
      * Check spelling and return sorted list of similar word.

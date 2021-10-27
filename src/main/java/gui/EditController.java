@@ -103,16 +103,28 @@ public class EditController implements Initializable {
                 tfEditDescription.setText(word.getDescription());
                 tfEditPronunciation.setText(word.getPronunciation());
             } else {
+                // khong tim thay trong tu dien
                 Alert alert = dictionaryManager.getAlertInfo("Word was wrong!", Alert.AlertType.INFORMATION);
                 alert.show();
             }
         } catch (Exception e) {
+            // loi database
             Alert alert = dictionaryManager.getAlertInfo("Error", Alert.AlertType.ERROR);
             alert.show();
         }
     }
 
     public void onActionBtnInsert(ActionEvent event) {
+        if (cbbHistoryEdit.getValue().equals("History")
+                || cbbHistoryEdit.getValue().equals("Bookmark")) {
+            // khong insert va update khi o history va bookmark
+            String content = "No edit in history and bookmark";
+            Alert alert = dictionaryManager.getAlertInfo(content, Alert.AlertType.INFORMATION);
+            alert.show();
+
+            return;
+        }
+
         String keyWord = tfEditWord.getText();
         String description = tfEditDescription.getText();
         String pronunciation = tfEditPronunciation.getText();
@@ -120,17 +132,20 @@ public class EditController implements Initializable {
         if (!(keyWord.equals("") || description.equals(""))) {
             Word word = new Word(keyWord, description, pronunciation);
             if (dictionaryManager.insertWord(word)) {
+                // insert successful
                 String content = "";
                 Alert alert = dictionaryManager.getAlertInfo(content, Alert.AlertType.INFORMATION);
                 alert.show();
 
                 resetEdit();
             } else {
+                // loi database khong insert duoc
                 String content = "";
                 Alert alert = dictionaryManager.getAlertInfo(content, Alert.AlertType.ERROR);
                 alert.show();
             }
         } else {
+            // thieu keyword va description
             String content = "";
             Alert alert = dictionaryManager.getAlertInfo(content, Alert.AlertType.WARNING);
             alert.show();
@@ -138,12 +153,23 @@ public class EditController implements Initializable {
     }
 
     public void onActionBtnUpdate(ActionEvent event) {
+        if (cbbHistoryEdit.getValue().equals("History")
+                || cbbHistoryEdit.getValue().equals("Bookmark")) {
+            // khong insert va update khi o history va bookmark
+            String content = "No edit in history and bookmark";
+            Alert alert = dictionaryManager.getAlertInfo(content, Alert.AlertType.INFORMATION);
+            alert.show();
+
+            return;
+        }
+
         if (wordCurrent != null) {
             wordCurrent.setKeyWord(tfEditWord.getText());
             wordCurrent.setDescription(tfEditDescription.getText());
             wordCurrent.setPronunciation(tfEditPronunciation.getText());
 
             if (dictionaryManager.updateWord(wordCurrent)) {
+                // update successful
                 String content = "Update successful!";
                 Alert alert = dictionaryManager.getAlertInfo(content, Alert.AlertType.INFORMATION);
                 alert.show();
@@ -155,6 +181,7 @@ public class EditController implements Initializable {
                 alert.show();
             }
         } else {
+            // chua chon word
             String content = "Please choose word";
             Alert alert = dictionaryManager.getAlertInfo(content, Alert.AlertType.WARNING);
             alert.show();
@@ -197,18 +224,20 @@ public class EditController implements Initializable {
 
                         resetEdit();
                     } else {
-                        String content = "";
+                        String content = "Delete error";
                         Alert alert = dictionaryManager.getAlertInfo(content, Alert.AlertType.ERROR);
                         alert.show();
                     }
 
                 } else {
+                    // khong thay word de xoa
                     String content = "";
                     Alert alert = dictionaryManager.getAlertInfo(content, Alert.AlertType.WARNING);
                     alert.show();
                 }
             }
         } else {
+            // chua chon word
             String content = "Please choose word";
             Alert alert = dictionaryManager.getAlertInfo(content, Alert.AlertType.WARNING);
             alert.show();
@@ -249,6 +278,11 @@ public class EditController implements Initializable {
     }
 
     public void onActionCbbChooseEdit(ActionEvent event) {
+        tfEditWord.clear();
+        tfEditDescription.clear();
+        tfEditPronunciation.clear();
+        wordCurrent = null;
+
         setUpShowWord();
     }
 
@@ -280,8 +314,8 @@ public class EditController implements Initializable {
             tfEditDescription.setText(word.getDescription());
             tfEditPronunciation.setText(word.getPronunciation());
         } catch (Exception e) {
-            Alert alert = dictionaryManager.getAlertInfo("Row is empty!", Alert.AlertType.WARNING);
-            alert.show();
+//            Alert alert = dictionaryManager.getAlertInfo("Row is empty!", Alert.AlertType.WARNING);
+//            alert.show();
         }
     }
 
