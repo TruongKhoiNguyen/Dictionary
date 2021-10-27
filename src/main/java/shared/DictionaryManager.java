@@ -145,11 +145,7 @@ public class DictionaryManager implements AutoCloseable {
         return true;
     }
 
-    /**
-     *  Remove word method takes a string as key word to find and remove word in dictionary database.
-     *  Like insert word, this method also interacts directly with the database. So it should
-     *  also be avoided.
-     */
+    /** */
     public boolean removeWord(Word word) {
         final var removeQuery = String.format(
                 "DELETE FROM %s WHERE %s = ?",
@@ -166,6 +162,10 @@ public class DictionaryManager implements AutoCloseable {
             return false;
         }
 
+        return removeWordFromHistory(word) && removeWordFromBookmark(word);
+    }
+
+    public boolean removeWordFromHistory(Word word) {
         final var removeQueryH = String.format(
                 "DELETE FROM %s WHERE %s = ?",
                 TABLE_NAME_H,
@@ -181,6 +181,10 @@ public class DictionaryManager implements AutoCloseable {
             return false;
         }
 
+        return true;
+    }
+
+    public boolean removeWordFromBookmark(Word word) {
         final var removeQueryBM = String.format(
                 "DELETE FROM %s WHERE %s = ?",
                 TABLE_NAME_B_M,
@@ -287,6 +291,73 @@ public class DictionaryManager implements AutoCloseable {
         }
 
         return result;
+    }
+
+    public List<String> searchKeyWord(String searchTerm, int limitation) {
+        List<String> result = new ArrayList<>();
+
+        final var sql = String.format(
+                "SELECT %s FROM %s WHERE %s LIKE ? LIMIT %d",
+                KEY_WORD,
+                TABLE_NAME,
+                KEY_WORD,
+                limitation
+        );
+
+        try (final var preStatement = dictionaryDBConnection.prepareStatement(sql)) {
+            // search in database
+            preStatement.setString(1, searchTerm);
+            final var searchResult = preStatement.executeQuery();
+
+            // get result and add to result list
+            while (searchResult.next()) {
+                final var keyWord = searchResult.getString(KEY_WORD);
+
+                result.add(keyWord);
+            }
+
+        } catch (Exception e) {
+            error.add(e.getMessage());
+            return new ArrayList<>();
+        }
+
+        return result;
+    }
+
+    public Word searchKey(String key) {
+        Word word = new Word();
+
+        final var searchQuery = String.format(
+                "SELECT * FROM %s WHERE %s = ?",
+                TABLE_NAME,
+                KEY_WORD
+        );
+
+        try (final var preStatement = dictionaryDBConnection.prepareStatement(searchQuery)) {
+            // search in database
+            preStatement.setString(1, key);
+            final var searchResult = preStatement.executeQuery();
+
+            // get result and add to result list
+            while (searchResult.next()) {
+                word.setId(searchResult.getInt(ID));
+                word.setKeyWord(searchResult.getString(KEY_WORD));
+                word.setDescription(searchResult.getString(DESCRIPTION));
+                word.setPronunciation(searchResult.getString(PRONUNCIATION));
+
+                // process sql date
+                final var sqlAddedDate = searchResult.getString(ADDED_DATE);
+                final var addedDate = new SimpleDateFormat("yyyy-MM-dd").parse(sqlAddedDate);
+                word.setAddedDate(addedDate);
+                break;
+            }
+
+        } catch (Exception e) {
+            error.add(e.getMessage());
+            return null;
+        }
+
+        return word;
     }
 
     /** */
@@ -396,74 +467,6 @@ public class DictionaryManager implements AutoCloseable {
         }
 
         return true;
-    }
-
-    public List<String> searchKeyWord(String searchTerm, int limitation) {
-        List<String> result = new ArrayList<>();
-
-        final var sql = String.format(
-                "SELECT %s FROM %s WHERE %s LIKE ? LIMIT %d",
-                KEY_WORD,
-                TABLE_NAME,
-                KEY_WORD,
-                limitation
-        );
-
-        try (final var preStatement = dictionaryDBConnection.prepareStatement(sql)) {
-            // search in database
-            preStatement.setString(1, searchTerm);
-            final var searchResult = preStatement.executeQuery();
-
-            // get result and add to result list
-            while (searchResult.next()) {
-                final var keyWord = searchResult.getString(KEY_WORD);
-
-                result.add(keyWord);
-            }
-
-        } catch (Exception e) {
-            error.add(e.getMessage());
-            return new ArrayList<>();
-        }
-
-        return result;
-    }
-
-    public Word searchKey(String key) {
-        Word word = new Word();
-
-        final var searchQuery = String.format(
-                "SELECT * FROM %s WHERE %s = ?",
-                TABLE_NAME,
-                KEY_WORD
-        );
-
-        try (final var preStatement = dictionaryDBConnection.prepareStatement(searchQuery)) {
-            // search in database
-            preStatement.setString(1, key);
-            final var searchResult = preStatement.executeQuery();
-
-            // get result and add to result list
-            while (searchResult.next()) {
-                word.setId(searchResult.getInt(ID));
-                word.setKeyWord(searchResult.getString(KEY_WORD));
-                word.setDescription(searchResult.getString(DESCRIPTION));
-                word.setPronunciation(searchResult.getString(PRONUNCIATION));
-
-
-                // process sql date
-                final var sqlAddedDate = searchResult.getString(ADDED_DATE);
-                final var addedDate = new SimpleDateFormat("yyyy-MM-dd").parse(sqlAddedDate);
-                word.setAddedDate(addedDate);
-                break;
-            }
-
-        } catch (Exception e) {
-            error.add(e.getMessage());
-            return null;
-        }
-
-        return word;
     }
 
 

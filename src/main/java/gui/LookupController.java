@@ -7,14 +7,12 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Background;
 import shared.DictionaryManager;
 import shared.SpellChecker;
 import shared.VoiceSpeaker;
 import shared.Word;
 
 import java.net.URL;
-import java.nio.file.Watchable;
 import java.util.*;
 
 public class LookupController implements Initializable {
@@ -51,7 +49,7 @@ public class LookupController implements Initializable {
 
         tfSearch.textProperty().addListener((observableValue, s, t1) -> {
             btnSearch.setVisible(true);
-            if (t1 != "") {
+            if (!t1.equals("")) {
                 wordList = dictionaryManager.search(tfSearch.getText().trim(), 20);
                 if (!wordList.isEmpty()) {
                     imgSpell.setVisible(false);
@@ -70,7 +68,6 @@ public class LookupController implements Initializable {
                 btnSearch.setVisible(false);
             }
         });
-
     }
 
 
@@ -87,18 +84,23 @@ public class LookupController implements Initializable {
     }
 
     public void onActionChooseCell() {
-        Word word = lvShowWord.getSelectionModel().getSelectedItem();
-        dictionaryManager.insertHistory(word);
-        wordNow = word;
-        tfSearch.setText(word.getKeyWord());
+        try {
+            Word word = lvShowWord.getSelectionModel().getSelectedItem();
+            dictionaryManager.insertHistory(word);
+            wordNow = word;
+            tfSearch.setText(word.getKeyWord());
 
-        String selectWord = word.getKeyWord();
-        if (word.getPronunciation() != " ") {
-            selectWord += "/" + word.getPronunciation() + "/";
+            String selectWord = word.getKeyWord();
+            if (!word.getPronunciation().equals(" ")) {
+                selectWord += "/" + word.getPronunciation() + "/";
+            }
+            selectWord += "\n" + word.getDescription() + ".";
+
+            taDescription.setText(selectWord);
+        } catch (Exception e){
+            Alert alert = dictionaryManager.getAlertInfo("Row is empty!", Alert.AlertType.WARNING);
+            alert.show();
         }
-        selectWord += "\n" + word.getDescription() + ".";
-
-        taDescription.setText(selectWord);
     }
 
     public void onActionBtnSearch(ActionEvent event) {
@@ -112,7 +114,7 @@ public class LookupController implements Initializable {
                 wordNow = word;
 
                 String selectWord = word.getKeyWord();
-                if (word.getPronunciation() != " ") {
+                if (!word.getPronunciation().equals(" ")) {
                     selectWord += "/" + word.getPronunciation() + "/";
                 }
                 selectWord += "\n" + word.getDescription() + ".";

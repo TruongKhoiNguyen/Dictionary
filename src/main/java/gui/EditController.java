@@ -42,7 +42,11 @@ public class EditController implements Initializable {
     TextField tfEditPronunciation;
 
     private final DictionaryManager dictionaryManager = new DictionaryManager();
-    private final ObservableList<String> observableList = FXCollections.observableArrayList("3D ago", "1W ago", "1M ago");
+    private final ObservableList<String> observableList = FXCollections.observableArrayList("3D ago",
+            "1W ago",
+            "1M ago",
+            "History",
+            "Bookmark");
 
     private Word wordNow = null;
     private List<Word> wordList = new ArrayList<>();
@@ -57,10 +61,7 @@ public class EditController implements Initializable {
 
         cbbHistoryEdit.setValue("3D ago");
         cbbHistoryEdit.setItems(observableList);
-        int setTime = setTimeGetWord(cbbHistoryEdit.getValue());
-        wordList = dictionaryManager.getWord(setTime);
-        wordObservableList = FXCollections.observableArrayList(wordList);
-        lvShow.setItems(wordObservableList);
+        setUpShowWord();
 
 
         tfSearchE.textProperty().addListener((observableValue, s, t1) -> {
@@ -70,10 +71,7 @@ public class EditController implements Initializable {
                 wordObservableList = FXCollections.observableList(wordList);
                 lvShow.setItems(wordObservableList);
             } else {
-                int setTimeA = setTimeGetWord(cbbHistoryEdit.getValue());
-                wordList = dictionaryManager.getWord(setTimeA);
-                wordObservableList = FXCollections.observableArrayList(wordList);
-                lvShow.setItems(wordObservableList);
+                setUpShowWord();
                 btnSearchE.setVisible(false);
             }
         });
@@ -126,14 +124,7 @@ public class EditController implements Initializable {
                 Alert alert = dictionaryManager.getAlertInfo(content, Alert.AlertType.INFORMATION);
                 alert.show();
 
-                tfEditWord.clear();
-                tfEditDescription.clear();
-                tfEditPronunciation.clear();
-                wordNow = null;
-                int setTime = setTimeGetWord(cbbHistoryEdit.getValue());
-                wordList = dictionaryManager.getWord(setTime);
-                wordObservableList = FXCollections.observableArrayList(wordList);
-                lvShow.setItems(wordObservableList);
+                resetEdit();
             } else {
                 String content = "";
                 Alert alert = dictionaryManager.getAlertInfo(content, Alert.AlertType.ERROR);
@@ -157,15 +148,7 @@ public class EditController implements Initializable {
                 Alert alert = dictionaryManager.getAlertInfo(content, Alert.AlertType.INFORMATION);
                 alert.show();
 
-                tfEditWord.clear();
-                tfEditDescription.clear();
-                tfEditPronunciation.clear();
-                wordNow = null;
-
-                int setTime = setTimeGetWord(cbbHistoryEdit.getValue());
-                wordList = dictionaryManager.getWord(setTime);
-                wordObservableList = FXCollections.observableArrayList(wordList);
-                lvShow.setItems(wordObservableList);
+                resetEdit();
             } else {
                 String content = "";
                 Alert alert = dictionaryManager.getAlertInfo(content, Alert.AlertType.ERROR);
@@ -180,31 +163,50 @@ public class EditController implements Initializable {
 
     public void onActionBtnDelete(ActionEvent event) {
         if (wordNow != null) {
-            wordList = dictionaryManager.searchEdit(wordNow.getKeyWord());
-            if (!wordList.isEmpty()) {
-                if (dictionaryManager.removeWord(wordNow)) {
-                    String content = "Delete successful!";
+            if (cbbHistoryEdit.getValue().equals("History")) {
+                if (onActionRemoveHistory(wordNow)) {
+                    String content = "remove form history successful!";
                     Alert alert = dictionaryManager.getAlertInfo(content, Alert.AlertType.INFORMATION);
                     alert.show();
 
-                    tfEditWord.clear();
-                    tfEditDescription.clear();
-                    tfEditPronunciation.clear();
-                    wordNow = null;
-                    int setTime = setTimeGetWord(cbbHistoryEdit.getValue());
-                    wordList = dictionaryManager.getWord(setTime);
-                    wordObservableList = FXCollections.observableArrayList(wordList);
-                    lvShow.setItems(wordObservableList);
+                    resetEdit();
                 } else {
-                    String content = "";
+                    String content = "remove form history error!";
                     Alert alert = dictionaryManager.getAlertInfo(content, Alert.AlertType.ERROR);
                     alert.show();
                 }
+            } else if (cbbHistoryEdit.getValue().equals("Bookmark")) {
+                if (onActionRemoveBookmark(wordNow)) {
+                    String content = "remove form bookmark successful!";
+                    Alert alert = dictionaryManager.getAlertInfo(content, Alert.AlertType.INFORMATION);
+                    alert.show();
 
+                    resetEdit();
+                } else {
+                    String content = "remove form bookmark error!";
+                    Alert alert = dictionaryManager.getAlertInfo(content, Alert.AlertType.ERROR);
+                    alert.show();
+                }
             } else {
-                String content = "";
-                Alert alert = dictionaryManager.getAlertInfo(content, Alert.AlertType.WARNING);
-                alert.show();
+                wordList = dictionaryManager.searchEdit(wordNow.getKeyWord());
+                if (!wordList.isEmpty()) {
+                    if (dictionaryManager.removeWord(wordNow)) {
+                        String content = "Delete successful!";
+                        Alert alert = dictionaryManager.getAlertInfo(content, Alert.AlertType.INFORMATION);
+                        alert.show();
+
+                        resetEdit();
+                    } else {
+                        String content = "";
+                        Alert alert = dictionaryManager.getAlertInfo(content, Alert.AlertType.ERROR);
+                        alert.show();
+                    }
+
+                } else {
+                    String content = "";
+                    Alert alert = dictionaryManager.getAlertInfo(content, Alert.AlertType.WARNING);
+                    alert.show();
+                }
             }
         } else {
             String content = "Please choose word";
@@ -213,11 +215,59 @@ public class EditController implements Initializable {
         }
     }
 
-    public void onActionCbbChooseTime(ActionEvent event) {
-        int setTime = setTimeGetWord(cbbHistoryEdit.getValue());
-        wordList = dictionaryManager.getWord(setTime);
-        wordObservableList = FXCollections.observableArrayList(wordList);
-        lvShow.setItems(wordObservableList);
+    public void resetEdit() {
+        tfEditWord.clear();
+        tfEditDescription.clear();
+        tfEditPronunciation.clear();
+        wordNow = null;
+
+        setUpShowWord();
+    }
+
+    public boolean onActionRemoveHistory(Word word) {
+        List<Word> listHistory = dictionaryManager.getHistory();
+
+        for (Word word1 : listHistory) {
+            if (word.getKeyWord().equals(word1.getKeyWord())) {
+                return dictionaryManager.removeWordFromHistory(word1);
+            }
+        }
+
+        return false;
+    }
+
+    public boolean onActionRemoveBookmark(Word word) {
+        List<Word> listBookmark = dictionaryManager.getBookmark();
+
+        for (Word word1 : listBookmark) {
+            if (word.getKeyWord().equals(word1.getKeyWord())) {
+                return dictionaryManager.removeWordFromBookmark(word1);
+            }
+        }
+
+        return false;
+    }
+
+    public void onActionCbbChooseEdit(ActionEvent event) {
+        setUpShowWord();
+    }
+
+    public void setUpShowWord() {
+        String cbbTextCurrent = cbbHistoryEdit.getValue();
+        if (cbbTextCurrent.equals("History")) {
+            wordList = dictionaryManager.getHistory();
+            wordObservableList = FXCollections.observableArrayList(wordList);
+            lvShow.setItems(wordObservableList);
+        } else if (cbbTextCurrent.equals("Bookmark")) {
+            wordList = dictionaryManager.getBookmark();
+            wordObservableList = FXCollections.observableArrayList(wordList);
+            lvShow.setItems(wordObservableList);
+        } else {
+            int setTime = setTimeGetWord(cbbTextCurrent);
+            wordList = dictionaryManager.getWord(setTime);
+            wordObservableList = FXCollections.observableArrayList(wordList);
+            lvShow.setItems(wordObservableList);
+        }
     }
 
     public void onActionChooseCellE() {
@@ -241,10 +291,10 @@ public class EditController implements Initializable {
                 return 2;
             }
             case "1W ago" -> {
-                return 3;
+                return 4;
             }
             case "1M ago" -> {
-                return 4;
+                return 6;
             }
         }
         return 3;
