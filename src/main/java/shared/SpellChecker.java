@@ -12,7 +12,11 @@ public record SpellChecker(DictionaryManager dictionaryManager) {
     private static final int EDIT_DISTANCE_THRESHOLD = 4;
 
     /**
-     * Check spelling and return sorted list of similar word.
+     * Return a list of words with edit distance from input less than certain threshold.
+     * Edit distance is Levenshtein distance.
+     *
+     * @param word input of the program with incorrect spelling
+     * @return list of words similar with input
      */
     public List<String> correctSpelling(String word) {
         final var wordLength = word.length();
@@ -38,8 +42,9 @@ public record SpellChecker(DictionaryManager dictionaryManager) {
     }
 
     /**
-     * Calculate Levenshtein distance using iterative with two matrix rows ways.
-     * Pseudocode of this algorithm is in Wikipedia.
+     * Calculate Levenshtein distance using iterative with two matrix rows.
+     * Pseudocode of this algorithm is in
+     * <a href="https://en.wikipedia.org/wiki/Levenshtein_distance">Levenshtein distance</a>.
      */
      private static int calculateEditDistance(String a, String b) {
          final var aLength = a.length();
@@ -64,7 +69,7 @@ public record SpellChecker(DictionaryManager dictionaryManager) {
             v1[0] = i + 1;
 
             // use formula to fill in the rest of the row
-            for (int j = 0; j < bLength; ++j) {
+            for (var j = 0; j < bLength; ++j) {
                 // calculating costs for A[i + 1][j + 1]
                 final var deletionCost = v0[j + 1] + 1;
                 final var insertionCost = v1[j] + 1;
