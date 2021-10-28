@@ -66,8 +66,8 @@ public class VoiceSpeaker implements AutoCloseable {
     }
 
     public Alert getAlertInfo(String content, Alert.AlertType type) {
-        String notification = "Speech: " + content;
-        Alert a = new Alert(type);
+        final var notification = "Speech: " + content;
+        final var a = new Alert(type);
         a.setContentText(notification);
         return a;
     }
