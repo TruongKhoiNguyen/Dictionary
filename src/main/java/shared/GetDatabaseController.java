@@ -59,12 +59,12 @@ public record GetDatabaseController(Dictionary dictionary) {
      * result. So client methods and functions can be assured that the result can not grow
      * too large to make machine crash.
      */
-    public List<Word> search(String searchTerm, int limitation) {
+    public List<Word> search(String searchTerm, int limit) {
         final var searchQuery = String.format(
                 "SELECT * FROM %s WHERE %s LIKE ? LIMIT %d",
                 Dictionary.TABLE_NAME,
                 Dictionary.KEY_WORD,
-                limitation
+                limit
         );
 
         return getSearchResultFromDB(searchQuery, searchTerm);

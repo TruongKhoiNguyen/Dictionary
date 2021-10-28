@@ -37,6 +37,8 @@ public class LookupController implements Initializable {
     private Word wordCurrent = null;
     private List<Word> wordList = new ArrayList<>();
     private ObservableList<Word> wordObservableList;
+    // if is true: history or bookmark
+    boolean checkStatusLvShow;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -44,6 +46,7 @@ public class LookupController implements Initializable {
         imgSpell.setVisible(false);
         wordList = dictionaryManager.getHistory();
         wordObservableList = FXCollections.observableList(wordList);
+        checkStatusLvShow = true;
         lvShowWord.setItems(wordObservableList);
 
         tfSearch.textProperty().addListener((observableValue, s, t1) -> {
@@ -52,17 +55,18 @@ public class LookupController implements Initializable {
                 wordList = dictionaryManager.search(tfSearch.getText().trim(), 20);
                 if (!wordList.isEmpty()) {
                     imgSpell.setVisible(false);
-                    wordObservableList = FXCollections.observableList(wordList);
-                    lvShowWord.setItems(wordObservableList);
+                    checkStatusLvShow = true;
                 } else {
                     imgSpell.setVisible(true);
                     wordList = spellCheck(tfSearch.getText().trim());
-                    wordObservableList = FXCollections.observableList(wordList);
-                    lvShowWord.setItems(wordObservableList);
+                    checkStatusLvShow = false;
                 }
+                wordObservableList = FXCollections.observableList(wordList);
+                lvShowWord.setItems(wordObservableList);
             } else {
                 wordList = dictionaryManager.getHistory();
                 wordObservableList = FXCollections.observableList(wordList);
+                checkStatusLvShow = true;
                 lvShowWord.setItems(wordObservableList);
                 btnSearch.setVisible(false);
             }
@@ -87,7 +91,9 @@ public class LookupController implements Initializable {
             Word word = lvShowWord.getSelectionModel().getSelectedItem();
             dictionaryManager.insertHistory(word);
             wordCurrent = word;
-            tfSearch.setText(word.getKeyWord());
+            if (!checkStatusLvShow) {
+                tfSearch.setText(word.getKeyWord());
+            }
 
             String selectWord = word.getKeyWord();
             if (!word.getPronunciation().isEmpty()) {
@@ -96,10 +102,7 @@ public class LookupController implements Initializable {
             selectWord += "\n" + word.getDescription() + ".";
 
             taDescription.setText(selectWord);
-        } catch (Exception e){
-            Alert alert = dictionaryManager.getAlertInfo("Row is empty!", Alert.AlertType.WARNING);
-            alert.show();
-        }
+        } catch (Exception ignored) {}
     }
 
     public void onActionBtnSearch() {
@@ -156,6 +159,7 @@ public class LookupController implements Initializable {
     public void onActionBtnBookmarkList() {
         List<Word> words = dictionaryManager.getBookmark();
         wordObservableList = FXCollections.observableArrayList(words);
+        checkStatusLvShow = true;
         lvShowWord.setItems(wordObservableList);
     }
 

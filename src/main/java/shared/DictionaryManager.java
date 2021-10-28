@@ -106,8 +106,8 @@ public class DictionaryManager implements AutoCloseable {
      * result. So client methods and functions can be assured that the result can not grow
      * too large to make machine crash.
      */
-    public List<Word> search(String searchTerm, int limitation) {
-        return getDatabaseController.search(searchTerm, limitation);
+    public List<Word> search(String searchTerm, int limit) {
+        return getDatabaseController.search(searchTerm, limit);
     }
 
     /**
