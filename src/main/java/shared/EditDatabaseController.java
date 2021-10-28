@@ -35,7 +35,10 @@ public record EditDatabaseController(Dictionary dictionary) {
         return true;
     }
 
-    /** */
+    /**
+     * Insert word method takes a parameter type word, and insert id_word and description to
+     * dictionary history database.
+     */
     public void insertHistory(Word word) {
         final var insertQuery = String.format(
                 "INSERT INTO %s (%s, %s) VALUES (?, DATE())",
@@ -57,7 +60,10 @@ public record EditDatabaseController(Dictionary dictionary) {
 
     }
 
-    /** */
+    /**
+     * Insert word method takes a parameter type word, and insert id_word and description to
+     * dictionary bookmark database.
+     */
     public void insertBookmark(Word word) {
         final var insertQuery = String.format(
                 "INSERT INTO %s (%s, %s) VALUES (?, DATE())",
@@ -103,7 +109,9 @@ public record EditDatabaseController(Dictionary dictionary) {
         return true;
     }
 
-    /** */
+    /**
+     * Remove word method takes Word to find and remove word in dictionary database.
+     */
     public boolean removeWord(Word word) {
         final var removeQuery = String.format(
                 "DELETE FROM %s WHERE %s = ?",
@@ -123,6 +131,9 @@ public record EditDatabaseController(Dictionary dictionary) {
         return removeWordFromHistory(word) && removeWordFromBookmark(word);
     }
 
+    /**
+     * Remove word method takes Word to find and remove word in dictionary history database.
+     */
     public boolean removeWordFromHistory(Word word) {
         final var removeQueryH = String.format(
                 "DELETE FROM %s WHERE %s = ?",
@@ -142,6 +153,9 @@ public record EditDatabaseController(Dictionary dictionary) {
         return true;
     }
 
+    /**
+     * Remove word method takes Word to find and remove word in dictionary bookmark database.
+     */
     public boolean removeWordFromBookmark(Word word) {
         final var removeQueryBM = String.format(
                 "DELETE FROM %s WHERE %s = ?",
@@ -161,7 +175,9 @@ public record EditDatabaseController(Dictionary dictionary) {
         return true;
     }
 
-    /** */
+    /**
+     * Update Word's changes to the dictionary database.
+     */
     public boolean updateWord(Word word) {
         final var insertQuery = String.format(
                 "UPDATE %s SET %s = ?, %s = ?, %s = ?, %s = DATE() WHERE %s = ?",

@@ -89,7 +89,6 @@ public record GetDatabaseController(Dictionary dictionary) {
 
 
     /* supportive methods and functions */
-
     private List<Word> getSearchResultFromDB(String searchQuery, String searchTerm) {
         if (Objects.equals(searchTerm, "")) {
             return getHistory();
@@ -153,7 +152,9 @@ public record GetDatabaseController(Dictionary dictionary) {
         return result;
     }
 
-    /** */
+    /**
+     * Return a Word using a String as the argument.
+     */
     public Word searchKey(String key) {
         Word word;
 
@@ -178,7 +179,9 @@ public record GetDatabaseController(Dictionary dictionary) {
         return word;
     }
 
-    /** */
+    /**
+     * Return a list of words from history database.
+     */
     public List<Word> getHistory() {
         final var query = String.format(
                 "SELECT * FROM %s h LEFT JOIN %s a ON h.%s = a.%s ORDER BY id_history DESC",
@@ -201,7 +204,9 @@ public record GetDatabaseController(Dictionary dictionary) {
         }
     }
 
-    /** */
+    /**
+     * Return a list of words from bookmark database.
+     */
     public List<Word> getBookmark() {
         final var query = String.format(
                 "SELECT * FROM %s b LEFT JOIN %s a ON b.%s = a.%s",
@@ -224,7 +229,9 @@ public record GetDatabaseController(Dictionary dictionary) {
         }
     }
 
-    /** */
+    /**
+     * Return a list of words from dictionary database with date limit.
+     */
     public List<Word> getWord(int someDay) {
 
         try (
