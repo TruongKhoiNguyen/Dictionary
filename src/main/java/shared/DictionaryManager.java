@@ -296,9 +296,14 @@ public class DictionaryManager implements AutoCloseable {
         return result;
     }
 
+    /**
+     * Return a list of words that match searchTerm.
+     */
     public List<String> searchKeyWord(List<String> searchTerms, int limitation) {
+        final var searchTermsSize = searchTerms.size();
+
         // generate skeleton for query
-        final var tmp1 = Collections.nCopies(searchTerms.size(), "?");
+        final var tmp1 = Collections.nCopies(searchTermsSize, "?");
         final var tmp2 = String.join(" OR " + KEY_WORD + " LIKE ", tmp1);
 
         final var queryForm = String.format(
@@ -311,10 +316,11 @@ public class DictionaryManager implements AutoCloseable {
         );
 
         final var result = new ArrayList<String>();
+
         try (final var stmt = dictionaryDBConnection.prepareStatement(queryForm)) {
             // add parameters
             // sql counts from 1, why?
-            for (int i = 1; i <= searchTerms.size(); ++i) {
+            for (var i = 1; i <= searchTermsSize; ++i) {
                 stmt.setString(i, searchTerms.get(i - 1));
             }
 

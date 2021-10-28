@@ -86,7 +86,7 @@ public record SpellChecker(DictionaryManager dictionaryManager) {
 
             // copy v1 (current row) to v0 (previous row) for next iteration
             // since data in v1 is always invalidated, a swap without copy could be more efficient
-            var tmp = v0;
+            final var tmp = v0;
             v0 = v1;
             v1 = tmp;
         }
