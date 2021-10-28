@@ -2,7 +2,6 @@ package shared;
 
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -16,20 +15,22 @@ public record SpellChecker(DictionaryManager dictionaryManager) {
      * Check spelling and return sorted list of similar word.
      */
     public List<String> correctSpelling(String word) {
-        // generate search queries
-        final var windowSize = (int)ceil(1.0 * word.length() / 3);
+        final var wordLength = word.length();
+        final var windowSize = (int)ceil(1.0 * wordLength / 3);
 
-        final var queries = IntStream.rangeClosed(0, word.length() - windowSize)
+        // searching queries is created by omit some characters and replace them with a placeholder
+        final var queries = IntStream.rangeClosed(0, wordLength - windowSize)
                 .boxed()
                 .map(x -> word.substring(0, x) + "%" + word.substring(x + windowSize))
                 .collect(Collectors.toList());
 
-        // get dictionary of similar words
         final var similarWords = dictionaryManager.searchKeyWord(queries, 100);
 
-        // calculate distance -> filter -> sorted
+
         return similarWords.stream()
+                // map each entry with its edit distance from the word
                 .map(w -> Map.entry(w, calculateEditDistance(word, w)))
+                // get only suitable word .ie: edit distance less than threshold
                 .filter(e -> e.getValue() < EDIT_DISTANCE_THRESHOLD)
                 .sorted(Map.Entry.comparingByValue())
                 .map(Map.Entry::getKey)
@@ -40,7 +41,7 @@ public record SpellChecker(DictionaryManager dictionaryManager) {
      * Calculate Levenshtein distance using iterative with two matrix rows ways.
      * Pseudocode of this algorithm is in Wikipedia.
      */
-    public static int calculateEditDistance(String a, String b) {
+     private static int calculateEditDistance(String a, String b) {
         // create two work vectors of integer distances
         var v0 = new int[b.length() + 1];
         var v1 = new int[b.length() + 1];
