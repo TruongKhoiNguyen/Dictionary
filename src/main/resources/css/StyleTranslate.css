@@ -27,7 +27,7 @@
 
 .buttonTranslate:hover {
     -fx-background-color: rgba(75, 123, 236, 1);
-    -fx-translate-y: -2px;
+    -fx-translate-y: -3px;
 }
 
 .buttonTranslate:pressed {
