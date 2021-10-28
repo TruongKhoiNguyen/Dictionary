@@ -59,9 +59,7 @@ public class VoiceSpeaker implements AutoCloseable {
     @Override
     public void close() {
         try {
-            if (synthesizer != null) {
-                synthesizer.deallocate();
-            }
+            synthesizer.deallocate();
         } catch (Exception ignored) {}
     }
 
