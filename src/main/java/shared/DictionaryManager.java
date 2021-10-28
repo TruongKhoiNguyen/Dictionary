@@ -312,12 +312,11 @@ public class DictionaryManager implements AutoCloseable {
     }
 
     /**
-     * Return a list of words that match searchTerm.
+     * Return a list of words that match searchTerms.
      */
-    public List<String> searchKeyWord(List<String> searchTerms, int limitation) {
+    public List<String> searchKeyWord(List<String> searchTerms, int limit) {
         final var searchTermsSize = searchTerms.size();
 
-        // generate skeleton for query
         final var tmp1 = Collections.nCopies(searchTermsSize, "?");
         final var tmp2 = String.join(" OR " + Dictionary.KEY_WORD + " LIKE ", tmp1);
 
@@ -327,24 +326,23 @@ public class DictionaryManager implements AutoCloseable {
                 Dictionary.TABLE_NAME,
                 Dictionary.KEY_WORD,
                 tmp2,
-                limitation
+                limit
         );
 
         final var result = new ArrayList<String>();
 
         try (final var stmt = dictionary.connection().prepareStatement(queryForm)) {
-            // add parameters
-            // sql counts from 1, why?
             for (var i = 1; i <= searchTermsSize; ++i) {
                 stmt.setString(i, searchTerms.get(i - 1));
             }
 
-            // search and parse values
             final var rs = stmt.executeQuery();
 
             while (rs.next()) {
                 result.add(rs.getString(Dictionary.KEY_WORD));
             }
+
+            rs.close();
 
         } catch (Exception e) {
             error.add(e.getMessage());
