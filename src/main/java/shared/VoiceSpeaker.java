@@ -5,13 +5,10 @@ import javafx.scene.control.Alert;
 import javax.speech.Central;
 import javax.speech.synthesis.Synthesizer;
 import javax.speech.synthesis.SynthesizerModeDesc;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 public class VoiceSpeaker implements AutoCloseable {
 
-    List<String> error = new ArrayList<>();
     Synthesizer synthesizer;
 
     public VoiceSpeaker() {
@@ -28,17 +25,7 @@ public class VoiceSpeaker implements AutoCloseable {
             synthesizer.allocate();
             synthesizer.resume();
 
-        } catch (Exception e) {
-            error.add(e.getMessage());
-        }
-    }
-
-    /**
-     * This should be used before calling speak, if error size is 0 then continue, otherwise
-     * stop calling other methods.
-     */
-    public List<String> getError() {
-        return error;
+        } catch (Exception ignored) {}
     }
 
     /**
@@ -50,9 +37,7 @@ public class VoiceSpeaker implements AutoCloseable {
             synthesizer.speakPlainText(args, null);
             synthesizer.waitEngineState(Synthesizer.QUEUE_EMPTY);
 
-        } catch (Exception e) {
-            error.add(e.getMessage());
-        }
+        } catch (Exception ignored) {}
     }
 
     /** Automatically deallocate synthesizer. */

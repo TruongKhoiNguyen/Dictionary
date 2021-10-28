@@ -3,3 +3,11 @@ target/classes/shared/DictionaryManager.class
 target/classes/shared/SpellChecker.class
 target/classes/shared/DictionaryManager.class
 target/classes/shared/SpellChecker.class
+target/classes/shared/DictionaryManager.class
+target/classes/shared/Dictionary.class
+target/classes/shared/GetDatabaseController.class
+target/classes/shared/EditDatabaseController.class
+target/classes/shared/DictionaryManager.class
+target/classes/dict_hh.db
+target/classes/dict_hh.db
+target/classes/shared/DictionaryManager.class
