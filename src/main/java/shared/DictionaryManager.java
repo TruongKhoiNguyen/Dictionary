@@ -15,6 +15,8 @@ import java.util.Objects;
 public class DictionaryManager implements AutoCloseable {
 
     private Dictionary dictionary;
+    private EditDatabaseController editDatabaseController;
+    private GetDatabaseController getDatabaseController;
     final private List<String> error = new ArrayList<>();
     /* interface */
 
@@ -25,6 +27,9 @@ public class DictionaryManager implements AutoCloseable {
                     DriverManager.getConnection(Dictionary.DB_URL),
                     error
             );
+
+            editDatabaseController = new EditDatabaseController(dictionary);
+            getDatabaseController = new GetDatabaseController(dictionary);
 
         } catch (Exception e) {
             error.add(e.getMessage());
