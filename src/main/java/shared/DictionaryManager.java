@@ -4,6 +4,7 @@ import javafx.scene.control.Alert;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -52,12 +53,12 @@ public class DictionaryManager implements AutoCloseable {
      */
     public boolean insertWord(Word word) {
         final var insertQuery = String.format(
-          "INSERT INTO %s (%s, %s, %s, %s) VALUES (?, ?, ?, DATE())",
-          TABLE_NAME,
-          KEY_WORD,
-          DESCRIPTION,
-          PRONUNCIATION,
-          ADDED_DATE
+                "INSERT INTO %s (%s, %s, %s, %s) VALUES (?, ?, ?, DATE())",
+                TABLE_NAME,
+                KEY_WORD,
+                DESCRIPTION,
+                PRONUNCIATION,
+                ADDED_DATE
         );
 
         try (
@@ -77,8 +78,33 @@ public class DictionaryManager implements AutoCloseable {
         return true;
     }
 
+    private List<Word> getDataFromResultSet(ResultSet resultSet) {
+        var list = new ArrayList<Word>();
+
+        while (true) {
+            try {
+                if (!resultSet.next()) break;
+
+                final var id = resultSet.getInt(ID);
+                final var keyWord = resultSet.getString(KEY_WORD);
+                final var description = resultSet.getString(DESCRIPTION);
+                final var pronunciation = resultSet.getString(PRONUNCIATION);
+
+                // process sql date
+                final var sqlAddedDate = resultSet.getString(ADDED_DATE);
+                final var addedDate = new SimpleDateFormat("yyyy-MM-dd").parse(sqlAddedDate);
+
+                list.add(new Word(id, keyWord, description, pronunciation, addedDate));
+
+            } catch (SQLException | ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        return list;
+    }
+
     /** */
-    public boolean insertHistory(Word word) {
+    public void insertHistory(Word word) {
         final var insertQuery = String.format(
                 "INSERT INTO %s (%s, %s) VALUES (?, DATE())",
                 TABLE_NAME_H,
@@ -95,13 +121,12 @@ public class DictionaryManager implements AutoCloseable {
 
         } catch (Exception e) {
             error.add(e.getMessage());
-            return false;
         }
 
-        return true;
     }
 
-    public boolean insertBookmark(Word word) {
+    /** */
+    public void insertBookmark(Word word) {
         final var insertQuery = String.format(
                 "INSERT INTO %s (%s, %s) VALUES (?, DATE())",
                 TABLE_NAME_B_M,
@@ -118,10 +143,8 @@ public class DictionaryManager implements AutoCloseable {
 
         } catch (Exception e) {
             error.add(e.getMessage());
-            return false;
         }
 
-        return true;
     }
 
     /**
@@ -275,22 +298,23 @@ public class DictionaryManager implements AutoCloseable {
             final var searchResult = preStatement.executeQuery();
 
             // get result and add to result list
-            while (searchResult.next()) {
-                final var id = searchResult.getInt(ID);
-                final var keyWord = searchResult.getString(KEY_WORD);
-                final var description = searchResult.getString(DESCRIPTION);
-                final var pronunciation = searchResult.getString(PRONUNCIATION);
-
-                // process sql date
-                final var sqlAddedDate = searchResult.getString(ADDED_DATE);
-                final var addedDate = new SimpleDateFormat("yyyy-MM-dd").parse(sqlAddedDate);
-
-                result.add(new Word(id, keyWord, description, pronunciation, addedDate));
-            }
+//            while (searchResult.next()) {
+//                final var id = searchResult.getInt(ID);
+//                final var keyWord = searchResult.getString(KEY_WORD);
+//                final var description = searchResult.getString(DESCRIPTION);
+//                final var pronunciation = searchResult.getString(PRONUNCIATION);
+//
+//                // process sql date
+//                final var sqlAddedDate = searchResult.getString(ADDED_DATE);
+//                final var addedDate = new SimpleDateFormat("yyyy-MM-dd").parse(sqlAddedDate);
+//
+//                result.add(new Word(id, keyWord, description, pronunciation, addedDate));
+//            }
+            result = (ArrayList<Word>) getDataFromResultSet(searchResult);
 
         } catch (Exception e) {
             error.add(e.getMessage());
-            return new ArrayList<>();
+            return Collections.emptyList();
         }
 
         return result;
@@ -339,8 +363,9 @@ public class DictionaryManager implements AutoCloseable {
         return result;
     }
 
+    /** */
     public Word searchKey(String key) {
-        Word word = new Word();
+        Word word;
 
         final var searchQuery = String.format(
                 "SELECT * FROM %s WHERE %s = ?",
@@ -354,22 +379,23 @@ public class DictionaryManager implements AutoCloseable {
             final var searchResult = preStatement.executeQuery();
 
             // get result and add to result list
-            while (searchResult.next()) {
-                word.setId(searchResult.getInt(ID));
-                word.setKeyWord(searchResult.getString(KEY_WORD));
-                word.setDescription(searchResult.getString(DESCRIPTION));
-                word.setPronunciation(searchResult.getString(PRONUNCIATION));
-
-                // process sql date
-                final var sqlAddedDate = searchResult.getString(ADDED_DATE);
-                final var addedDate = new SimpleDateFormat("yyyy-MM-dd").parse(sqlAddedDate);
-                word.setAddedDate(addedDate);
-                break;
-            }
+//            while (searchResult.next()) {
+//                word.setId(searchResult.getInt(ID));
+//                word.setKeyWord(searchResult.getString(KEY_WORD));
+//                word.setDescription(searchResult.getString(DESCRIPTION));
+//                word.setPronunciation(searchResult.getString(PRONUNCIATION));
+//
+//                // process sql date
+//                final var sqlAddedDate = searchResult.getString(ADDED_DATE);
+//                final var addedDate = new SimpleDateFormat("yyyy-MM-dd").parse(sqlAddedDate);
+//                word.setAddedDate(addedDate);
+//                break;
+//            }
+            word = getDataFromResultSet(searchResult).get(0);
 
         } catch (Exception e) {
             error.add(e.getMessage());
-            return null;
+            return new Word();
         }
 
         return word;
@@ -377,84 +403,106 @@ public class DictionaryManager implements AutoCloseable {
 
     /** */
     public List<Word> getHistory() {
-        List<Word> result = new ArrayList<>();
-        try {
-            final var sql = "SELECT * FROM history h LEFT JOIN av a ON h.id_word = a.id ORDER BY id_history DESC";
-            final var preStatement = dictionaryDBConnection.createStatement();
-            final var searchResult = preStatement.executeQuery(sql);
+        final var query = String.format(
+                "SELECT * FROM %s h LEFT JOIN %s a ON h.%s = a.%s ORDER BY id_history DESC",
+                TABLE_NAME_H,
+                TABLE_NAME,
+                ID_WORD,
+                ID
+        );
 
-            while (searchResult.next()) {
-                final var id = searchResult.getInt(ID);
-                final var keyWord = searchResult.getString(KEY_WORD);
-                final var description = searchResult.getString(DESCRIPTION);
-                final var pronunciation = searchResult.getString(PRONUNCIATION);
+        try (
+                final var preStatement = dictionaryDBConnection.createStatement()
+        ){
 
-                // process sql date
-                final var sqlAddedDate = searchResult.getString(ADDED_DATE);
-                final var addedDate = new SimpleDateFormat("yyyy-MM-dd").parse(sqlAddedDate);
+            final var searchResult = preStatement.executeQuery(query);
 
-                result.add(new Word(id, keyWord, description, pronunciation, addedDate));
-            }
-            return result;
-        } catch (SQLException | ParseException e) {
+//            while (searchResult.next()) {
+//                final var id = searchResult.getInt(ID);
+//                final var keyWord = searchResult.getString(KEY_WORD);
+//                final var description = searchResult.getString(DESCRIPTION);
+//                final var pronunciation = searchResult.getString(PRONUNCIATION);
+//
+//                // process sql date
+//                final var sqlAddedDate = searchResult.getString(ADDED_DATE);
+//                final var addedDate = new SimpleDateFormat("yyyy-MM-dd").parse(sqlAddedDate);
+//
+//                result.add(new Word(id, keyWord, description, pronunciation, addedDate));
+//            }
+//            return result;
+            return getDataFromResultSet(searchResult);
+        } catch (SQLException e) {
             e.printStackTrace();
-            return null;
+            return Collections.emptyList();
         }
     }
 
+    /** */
     public List<Word> getBookmark() {
-        List<Word> result = new ArrayList<>();
-        try {
-            final var sql = "SELECT * FROM bookmark b LEFT JOIN av a ON b.id_word = a.id";
-            final var preStatement = dictionaryDBConnection.createStatement();
-            final var searchResult = preStatement.executeQuery(sql);
+        final var query = String.format(
+                "SELECT * FROM %s b LEFT JOIN %s a ON b.%s = a.%s",
+                TABLE_NAME_B_M,
+                TABLE_NAME,
+                ID_WORD,
+                ID
+        );
 
-            while (searchResult.next()) {
-                final var id = searchResult.getInt(ID);
-                final var keyWord = searchResult.getString(KEY_WORD);
-                final var description = searchResult.getString(DESCRIPTION);
-                final var pronunciation = searchResult.getString(PRONUNCIATION);
+        try(
+                final var preStatement = dictionaryDBConnection.createStatement()
+        ) {
 
-                // process sql date
-                final var sqlAddedDate = searchResult.getString(ADDED_DATE);
-                final var addedDate = new SimpleDateFormat("yyyy-MM-dd").parse(sqlAddedDate);
+            final var searchResult = preStatement.executeQuery(query);
 
-                result.add(new Word(id, keyWord, description, pronunciation, addedDate));
-            }
-            return result;
-        } catch (SQLException | ParseException e) {
+//            while (searchResult.next()) {
+//                final var id = searchResult.getInt(ID);
+//                final var keyWord = searchResult.getString(KEY_WORD);
+//                final var description = searchResult.getString(DESCRIPTION);
+//                final var pronunciation = searchResult.getString(PRONUNCIATION);
+//
+//                // process sql date
+//                final var sqlAddedDate = searchResult.getString(ADDED_DATE);
+//                final var addedDate = new SimpleDateFormat("yyyy-MM-dd").parse(sqlAddedDate);
+//
+//                result.add(new Word(id, keyWord, description, pronunciation, addedDate));
+//            }
+//            return result;
+
+            return getDataFromResultSet(searchResult);
+        } catch (SQLException e) {
             e.printStackTrace();
-            return null;
+            return Collections.emptyList();
         }
     }
 
-
+    /** */
     public List<Word> getWord(int someDay) {
-        List<Word> result = new ArrayList<>();
-        try {
+
+        try (
+                final var preStatement = dictionaryDBConnection.createStatement()
+        ) {
             final var sql = "SELECT * FROM av WHERE julianday('now') - julianday(date_add) < " + someDay;
-            final var preStatement = dictionaryDBConnection.createStatement();
             final var searchResult = preStatement.executeQuery(sql);
 
-            while (searchResult.next()) {
-                final var id = searchResult.getInt(ID);
-                final var keyWord = searchResult.getString(KEY_WORD);
-                final var description = searchResult.getString(DESCRIPTION);
-                final var pronunciation = searchResult.getString(PRONUNCIATION);
-
-                // process sql date
-                final var sqlAddedDate = searchResult.getString(ADDED_DATE);
-                final var addedDate = new SimpleDateFormat("yyyy-MM-dd").parse(sqlAddedDate);
-
-                result.add(new Word(id, keyWord, description, pronunciation, addedDate));
-            }
-            return result;
-        } catch (SQLException | ParseException e) {
+//            while (searchResult.next()) {
+//                final var id = searchResult.getInt(ID);
+//                final var keyWord = searchResult.getString(KEY_WORD);
+//                final var description = searchResult.getString(DESCRIPTION);
+//                final var pronunciation = searchResult.getString(PRONUNCIATION);
+//
+//                // process sql date
+//                final var sqlAddedDate = searchResult.getString(ADDED_DATE);
+//                final var addedDate = new SimpleDateFormat("yyyy-MM-dd").parse(sqlAddedDate);
+//
+//                result.add(new Word(id, keyWord, description, pronunciation, addedDate));
+//            }
+            return getDataFromResultSet(searchResult);
+        } catch (SQLException e) {
             e.printStackTrace();
-            return null;
+            return Collections.emptyList();
         }
     }
 
+    /** */
     public boolean updateWord(Word word) {
         final var insertQuery = String.format(
                 "UPDATE %s SET %s = ?, %s = ?, %s = ?, %s = DATE() WHERE %s = ?",

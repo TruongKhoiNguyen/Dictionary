@@ -33,7 +33,7 @@ public class LookupController implements Initializable {
     @FXML
     ImageView imgSpell;
 
-    private DictionaryManager dictionaryManager = new DictionaryManager();
+    private final DictionaryManager dictionaryManager = new DictionaryManager();
 
     private Word wordCurrent = null;
     private List<Word> wordList = new ArrayList<>();

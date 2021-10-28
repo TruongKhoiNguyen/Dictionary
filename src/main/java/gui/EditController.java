@@ -66,7 +66,7 @@ public class EditController implements Initializable {
 
         tfSearchE.textProperty().addListener((observableValue, s, t1) -> {
             btnSearchE.setVisible(true);
-            if (t1 != "") {
+            if (!t1.equals("")) {
                 wordList = dictionaryManager.searchEdit(tfSearchE.getText().trim());
                 wordObservableList = FXCollections.observableList(wordList);
                 lvShow.setItems(wordObservableList);
