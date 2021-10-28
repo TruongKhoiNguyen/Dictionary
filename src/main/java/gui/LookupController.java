@@ -52,14 +52,12 @@ public class LookupController implements Initializable {
                 wordList = dictionaryManager.search(tfSearch.getText().trim(), 20);
                 if (!wordList.isEmpty()) {
                     imgSpell.setVisible(false);
-                    wordObservableList = FXCollections.observableList(wordList);
-                    lvShowWord.setItems(wordObservableList);
                 } else {
                     imgSpell.setVisible(true);
                     wordList = spellCheck(tfSearch.getText().trim());
-                    wordObservableList = FXCollections.observableList(wordList);
-                    lvShowWord.setItems(wordObservableList);
                 }
+                wordObservableList = FXCollections.observableList(wordList);
+                lvShowWord.setItems(wordObservableList);
             } else {
                 wordList = dictionaryManager.getHistory();
                 wordObservableList = FXCollections.observableList(wordList);

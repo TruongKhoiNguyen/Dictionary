@@ -131,20 +131,20 @@ public class EditController implements Initializable {
             Word word = new Word(keyWord, description, pronunciation);
             if (dictionaryManager.insertWord(word)) {
                 // insert successful
-                String content = "";
+                String content = "Insert completed";
                 Alert alert = dictionaryManager.getAlertInfo(content, Alert.AlertType.INFORMATION);
                 alert.show();
 
                 resetEdit();
             } else {
                 // loi database khong insert duoc
-                String content = "";
+                String content = "Insert failed";
                 Alert alert = dictionaryManager.getAlertInfo(content, Alert.AlertType.ERROR);
                 alert.show();
             }
         } else {
             // thieu keyword va description
-            String content = "";
+            String content = "Keyword or description is missing";
             Alert alert = dictionaryManager.getAlertInfo(content, Alert.AlertType.WARNING);
             alert.show();
         }
@@ -174,7 +174,7 @@ public class EditController implements Initializable {
 
                 resetEdit();
             } else {
-                String content = "";
+                String content = "Update failed";
                 Alert alert = dictionaryManager.getAlertInfo(content, Alert.AlertType.ERROR);
                 alert.show();
             }
@@ -229,7 +229,7 @@ public class EditController implements Initializable {
 
                 } else {
                     // khong thay word de xoa
-                    String content = "";
+                    String content = "Word does not exist";
                     Alert alert = dictionaryManager.getAlertInfo(content, Alert.AlertType.WARNING);
                     alert.show();
                 }
@@ -311,10 +311,7 @@ public class EditController implements Initializable {
             tfEditWord.setText(word.getKeyWord());
             tfEditDescription.setText(word.getDescription());
             tfEditPronunciation.setText(word.getPronunciation());
-        } catch (Exception e) {
-//            Alert alert = dictionaryManager.getAlertInfo("Row is empty!", Alert.AlertType.WARNING);
-//            alert.show();
-        }
+        } catch (Exception ignored) {}
     }
 
     public int setTimeGetWord(String time) {
