@@ -2,7 +2,6 @@ package gui;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -12,7 +11,6 @@ import shared.Word;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class EditController implements Initializable {
@@ -66,7 +64,7 @@ public class EditController implements Initializable {
 
         tfSearchE.textProperty().addListener((observableValue, s, t1) -> {
             btnSearchE.setVisible(true);
-            if (!t1.equals("")) {
+            if (!t1.isEmpty()) {
                 wordList = dictionaryManager.searchEdit(tfSearchE.getText().trim());
                 wordObservableList = FXCollections.observableList(wordList);
                 lvShow.setItems(wordObservableList);
@@ -77,7 +75,7 @@ public class EditController implements Initializable {
         });
 
         tfEditWord.textProperty().addListener((observableValue, s, t1) -> {
-            if (!Objects.equals(t1, "")) {
+            if (!t1.isEmpty()) {
                 btnInsert.setDisable(false);
                 btnDelete.setDisable(false);
                 btnUpdate.setDisable(false);
@@ -89,7 +87,7 @@ public class EditController implements Initializable {
         });
     }
 
-    public void onActionBtnSearchE(ActionEvent event) {
+    public void onActionBtnSearchE() {
         try {
             String searchKey = tfSearchE.getText();
             List<Word> words = dictionaryManager.searchEdit(searchKey);
@@ -114,7 +112,7 @@ public class EditController implements Initializable {
         }
     }
 
-    public void onActionBtnInsert(ActionEvent event) {
+    public void onActionBtnInsert() {
         if (cbbHistoryEdit.getValue().equals("History")
                 || cbbHistoryEdit.getValue().equals("Bookmark")) {
             // khong insert va update khi o history va bookmark
@@ -129,7 +127,7 @@ public class EditController implements Initializable {
         String description = tfEditDescription.getText();
         String pronunciation = tfEditPronunciation.getText();
 
-        if (!(keyWord.equals("") || description.equals(""))) {
+        if (!(keyWord.isEmpty() || description.isEmpty())) {
             Word word = new Word(keyWord, description, pronunciation);
             if (dictionaryManager.insertWord(word)) {
                 // insert successful
@@ -152,7 +150,7 @@ public class EditController implements Initializable {
         }
     }
 
-    public void onActionBtnUpdate(ActionEvent event) {
+    public void onActionBtnUpdate() {
         if (cbbHistoryEdit.getValue().equals("History")
                 || cbbHistoryEdit.getValue().equals("Bookmark")) {
             // khong insert va update khi o history va bookmark
@@ -188,7 +186,7 @@ public class EditController implements Initializable {
         }
     }
 
-    public void onActionBtnDelete(ActionEvent event) {
+    public void onActionBtnDelete() {
         if (wordCurrent != null) {
             if (cbbHistoryEdit.getValue().equals("History")) {
                 if (onActionRemoveHistory(wordCurrent)) {
@@ -277,7 +275,7 @@ public class EditController implements Initializable {
         return false;
     }
 
-    public void onActionCbbChooseEdit(ActionEvent event) {
+    public void onActionCbbChooseEdit() {
         tfEditWord.clear();
         tfEditDescription.clear();
         tfEditPronunciation.clear();

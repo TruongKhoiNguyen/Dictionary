@@ -22,7 +22,7 @@ public class TranslateController implements Initializable {
     private final static String CHINESE = "zh-CN";
     private final static String KOREAN = "ko";
     private final static String THAILAND = "th";
-    private ObservableList<String> languageList = FXCollections.observableArrayList("Vietnamese", "English", "Japanese",
+    private final ObservableList<String> languageList = FXCollections.observableArrayList("Vietnamese", "English", "Japanese",
             "Chinese", "Thailand", "Korean");
 
     @FXML
@@ -44,16 +44,10 @@ public class TranslateController implements Initializable {
         cbbLanguageTarget.setItems(languageList);
         btnTranslate.setVisible(false);
 
-        taTarget.textProperty().addListener((observableValue, s, t1) -> {
-            if (t1 != "") {
-                btnTranslate.setVisible(true);
-            } else {
-                btnTranslate.setVisible(false);
-            }
-        });
+        taTarget.textProperty().addListener((observableValue, s, t1) -> btnTranslate.setVisible(!t1.isEmpty()));
     }
 
-    public void onActionTranslate(ActionEvent event) {
+    public void onActionTranslate() {
         String keyTarget = keyLanguage(cbbLanguageTarget.getValue());
         String keyExplain = keyLanguage(cbbLanguageExplain.getValue());
 

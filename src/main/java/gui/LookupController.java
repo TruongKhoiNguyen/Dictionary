@@ -2,7 +2,6 @@ package gui;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -49,7 +48,7 @@ public class LookupController implements Initializable {
 
         tfSearch.textProperty().addListener((observableValue, s, t1) -> {
             btnSearch.setVisible(true);
-            if (!t1.equals("")) {
+            if (!t1.isEmpty()) {
                 wordList = dictionaryManager.search(tfSearch.getText().trim(), 20);
                 if (!wordList.isEmpty()) {
                     imgSpell.setVisible(false);
@@ -91,7 +90,7 @@ public class LookupController implements Initializable {
             tfSearch.setText(word.getKeyWord());
 
             String selectWord = word.getKeyWord();
-            if (!word.getPronunciation().equals("")) {
+            if (!word.getPronunciation().isEmpty()) {
                 selectWord += "/" + word.getPronunciation() + "/";
             }
             selectWord += "\n" + word.getDescription() + ".";
@@ -103,7 +102,7 @@ public class LookupController implements Initializable {
         }
     }
 
-    public void onActionBtnSearch(ActionEvent event) {
+    public void onActionBtnSearch() {
         try {
             String searchKey = tfSearch.getText();
             List<Word> words = dictionaryManager.search(searchKey);
@@ -114,7 +113,7 @@ public class LookupController implements Initializable {
                 wordCurrent = word;
 
                 String selectWord = word.getKeyWord();
-                if (!word.getPronunciation().equals("")) {
+                if (!word.getPronunciation().isEmpty()) {
                     selectWord += "/" + word.getPronunciation() + "/";
                 }
                 selectWord += "\n" + word.getDescription() + ".";
@@ -130,7 +129,7 @@ public class LookupController implements Initializable {
         }
     }
 
-    public void onActionBtnBookmark(ActionEvent event) {
+    public void onActionBtnBookmark() {
         try {
             List<Word> words = dictionaryManager.getBookmark();
             List<String> keyWord = new ArrayList<>();
@@ -154,13 +153,13 @@ public class LookupController implements Initializable {
 
     }
 
-    public void onActionBtnBookmarkList(ActionEvent event) {
+    public void onActionBtnBookmarkList() {
         List<Word> words = dictionaryManager.getBookmark();
         wordObservableList = FXCollections.observableArrayList(words);
         lvShowWord.setItems(wordObservableList);
     }
 
-    public void onActionBtnSpeech(ActionEvent event) {
+    public void onActionBtnSpeech() {
         VoiceSpeaker voiceSpeaker = new VoiceSpeaker();
         if (wordCurrent != null) {
             voiceSpeaker.speak(wordCurrent.getKeyWord());
