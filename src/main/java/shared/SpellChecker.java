@@ -42,18 +42,21 @@ public record SpellChecker(DictionaryManager dictionaryManager) {
      * Pseudocode of this algorithm is in Wikipedia.
      */
      private static int calculateEditDistance(String a, String b) {
+         final var aLength = a.length();
+         final var bLength = b.length();
+
         // create two work vectors of integer distances
-        var v0 = new int[b.length() + 1];
-        var v1 = new int[b.length() + 1];
+        var v0 = new int[bLength + 1];
+        var v1 = new int[bLength + 1];
 
         // initialize v0 (the previous row of distances)
         // this row is A[0][i]: edit distance for an empty s
         // the distance is just the number of characters to delete from t
-        for (int i = 0; i <= b.length(); ++i) {
+        for (var i = 0; i <= bLength; ++i) {
             v0[i] = i;
         }
 
-        for (int i = 0; i < a.length(); ++i) {
+        for (var i = 0; i < aLength; ++i) {
             // calculate v1 (current row distances) from the previous row v0
 
             // first element of v1 is A[i + 1][0]
@@ -61,7 +64,7 @@ public record SpellChecker(DictionaryManager dictionaryManager) {
             v1[0] = i + 1;
 
             // use formula to fill in the rest of the row
-            for (int j = 0; j < b.length(); ++j) {
+            for (int j = 0; j < bLength; ++j) {
                 // calculating costs for A[i + 1][j + 1]
                 final var deletionCost = v0[j + 1] + 1;
                 final var insertionCost = v1[j] + 1;
@@ -83,6 +86,6 @@ public record SpellChecker(DictionaryManager dictionaryManager) {
             v1 = tmp;
         }
 
-        return v0[b.length()];
+        return v0[bLength];
     }
 }
