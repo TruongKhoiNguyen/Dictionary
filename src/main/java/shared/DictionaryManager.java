@@ -2,7 +2,6 @@ package shared;
 
 import javafx.scene.control.Alert;
 
-import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,31 +13,18 @@ import java.util.List;
 import java.util.Objects;
 
 public class DictionaryManager implements AutoCloseable {
-    /* constants */
-    private static final String DB_NAME = "src/main/resources/dict_hh.db";
-    private static final String TABLE_NAME = "av";
-    private static final String TABLE_NAME_H = "history";
-    private static final String TABLE_NAME_B_M = "bookmark";
-    private static final String DB_URL = String.format("jdbc:sqlite:%s", DB_NAME);
 
-    private static final String ID = "id";
-    private static final String KEY_WORD = "word";
-    private static final String DESCRIPTION = "description";
-    private static final String PRONUNCIATION = "pronounce";
-    private static final String ADDED_DATE = "date_add";
-
-    private static final String ID_WORD = "id_word";
-    private static final String DATE = "date";
-
-    private Connection dictionaryDBConnection = null;
-    private final List<String> error = new ArrayList<>();
-
+    private Dictionary dictionary;
+    final private List<String> error = new ArrayList<>();
     /* interface */
 
     /** Constructor creates new connection with the database. */
     public DictionaryManager() {
         try {
-            dictionaryDBConnection = DriverManager.getConnection(DB_URL);
+            dictionary = new Dictionary(
+                    DriverManager.getConnection(Dictionary.DB_URL),
+                    error
+            );
 
         } catch (Exception e) {
             error.add(e.getMessage());
@@ -54,15 +40,15 @@ public class DictionaryManager implements AutoCloseable {
     public boolean insertWord(Word word) {
         final var insertQuery = String.format(
                 "INSERT INTO %s (%s, %s, %s, %s) VALUES (?, ?, ?, DATE())",
-                TABLE_NAME,
-                KEY_WORD,
-                DESCRIPTION,
-                PRONUNCIATION,
-                ADDED_DATE
+                Dictionary.TABLE_NAME,
+                Dictionary.KEY_WORD,
+                Dictionary.DESCRIPTION,
+                Dictionary.PRONUNCIATION,
+                Dictionary.ADDED_DATE
         );
 
         try (
-                final var preStatement = dictionaryDBConnection.prepareStatement(insertQuery)
+                final var preStatement = dictionary.connection().prepareStatement(insertQuery)
         ) {
             preStatement.setString(1, word.getKeyWord());
             preStatement.setString(2, word.getDescription());
@@ -85,13 +71,13 @@ public class DictionaryManager implements AutoCloseable {
             try {
                 if (!resultSet.next()) break;
 
-                final var id = resultSet.getInt(ID);
-                final var keyWord = resultSet.getString(KEY_WORD);
-                final var description = resultSet.getString(DESCRIPTION);
-                final var pronunciation = resultSet.getString(PRONUNCIATION);
+                final var id = resultSet.getInt(Dictionary.ID);
+                final var keyWord = resultSet.getString(Dictionary.KEY_WORD);
+                final var description = resultSet.getString(Dictionary.DESCRIPTION);
+                final var pronunciation = resultSet.getString(Dictionary.PRONUNCIATION);
 
                 // process sql date
-                final var sqlAddedDate = resultSet.getString(ADDED_DATE);
+                final var sqlAddedDate = resultSet.getString(Dictionary.ADDED_DATE);
                 final var addedDate = new SimpleDateFormat("yyyy-MM-dd").parse(sqlAddedDate);
 
                 list.add(new Word(id, keyWord, description, pronunciation, addedDate));
@@ -107,13 +93,13 @@ public class DictionaryManager implements AutoCloseable {
     public void insertHistory(Word word) {
         final var insertQuery = String.format(
                 "INSERT INTO %s (%s, %s) VALUES (?, DATE())",
-                TABLE_NAME_H,
-                ID_WORD,
-                DATE
+                Dictionary.TABLE_NAME_H,
+                Dictionary.ID_WORD,
+                Dictionary.DATE
         );
 
         try (
-                final var preStatement = dictionaryDBConnection.prepareStatement(insertQuery)
+                final var preStatement = dictionary.connection().prepareStatement(insertQuery)
         ) {
             preStatement.setInt(1, word.getId());
 
@@ -129,13 +115,13 @@ public class DictionaryManager implements AutoCloseable {
     public void insertBookmark(Word word) {
         final var insertQuery = String.format(
                 "INSERT INTO %s (%s, %s) VALUES (?, DATE())",
-                TABLE_NAME_B_M,
-                ID_WORD,
-                DATE
+                Dictionary.TABLE_NAME_B_M,
+                Dictionary.ID_WORD,
+                Dictionary.DATE
         );
 
         try (
-                final var preStatement = dictionaryDBConnection.prepareStatement(insertQuery)
+                final var preStatement = dictionary.connection().prepareStatement(insertQuery)
         ) {
             preStatement.setInt(1, word.getId());
 
@@ -155,11 +141,11 @@ public class DictionaryManager implements AutoCloseable {
     public boolean removeWord(String keyWord) {
         final var removeQuery = String.format(
                 "DELETE FROM %s WHERE %s = ?",
-                TABLE_NAME,
-                KEY_WORD
+                Dictionary.TABLE_NAME,
+                Dictionary.KEY_WORD
         );
 
-        try (final var preStatement = dictionaryDBConnection.prepareStatement(removeQuery)) {
+        try (final var preStatement = dictionary.connection().prepareStatement(removeQuery)) {
             preStatement.setString(1, keyWord);
             preStatement.executeUpdate();
 
@@ -175,11 +161,11 @@ public class DictionaryManager implements AutoCloseable {
     public boolean removeWord(Word word) {
         final var removeQuery = String.format(
                 "DELETE FROM %s WHERE %s = ?",
-                TABLE_NAME,
-                KEY_WORD
+                Dictionary.TABLE_NAME,
+                Dictionary.KEY_WORD
         );
 
-        try (final var preStatement = dictionaryDBConnection.prepareStatement(removeQuery)) {
+        try (final var preStatement = dictionary.connection().prepareStatement(removeQuery)) {
             preStatement.setString(1, word.getKeyWord());
             preStatement.executeUpdate();
 
@@ -194,11 +180,11 @@ public class DictionaryManager implements AutoCloseable {
     public boolean removeWordFromHistory(Word word) {
         final var removeQueryH = String.format(
                 "DELETE FROM %s WHERE %s = ?",
-                TABLE_NAME_H,
-                ID_WORD
+                Dictionary.TABLE_NAME_H,
+                Dictionary.ID_WORD
         );
 
-        try (final var preStatement = dictionaryDBConnection.prepareStatement(removeQueryH)) {
+        try (final var preStatement = dictionary.connection().prepareStatement(removeQueryH)) {
             preStatement.setInt(1, word.getId());
             preStatement.executeUpdate();
 
@@ -213,11 +199,11 @@ public class DictionaryManager implements AutoCloseable {
     public boolean removeWordFromBookmark(Word word) {
         final var removeQueryBM = String.format(
                 "DELETE FROM %s WHERE %s = ?",
-                TABLE_NAME_B_M,
-                ID_WORD
+                Dictionary.TABLE_NAME_B_M,
+                Dictionary.ID_WORD
         );
 
-        try (final var preStatement = dictionaryDBConnection.prepareStatement(removeQueryBM)) {
+        try (final var preStatement = dictionary.connection().prepareStatement(removeQueryBM)) {
             preStatement.setInt(1, word.getId());
             preStatement.executeUpdate();
 
@@ -241,8 +227,8 @@ public class DictionaryManager implements AutoCloseable {
     public List<Word> search(String searchTerm) {
         final var searchQuery = String.format(
                 "SELECT * FROM %s WHERE %s LIKE ?",
-                TABLE_NAME,
-                KEY_WORD
+                Dictionary.TABLE_NAME,
+                Dictionary.KEY_WORD
         );
 
         return getSearchResultFromDB(searchQuery, searchTerm);
@@ -257,8 +243,8 @@ public class DictionaryManager implements AutoCloseable {
     public List<Word> search(String searchTerm, int limitation) {
         final var searchQuery = String.format(
                 "SELECT * FROM %s WHERE %s LIKE ? LIMIT %d",
-                TABLE_NAME,
-                KEY_WORD,
+                Dictionary.TABLE_NAME,
+                Dictionary.KEY_WORD,
                 limitation
         );
 
@@ -273,9 +259,9 @@ public class DictionaryManager implements AutoCloseable {
     public List<Word> searchEdit(String searchTerm) {
         final var searchQuery = String.format(
                 "SELECT * FROM %s WHERE %s LIKE ? AND %s > '2021-10-20'",
-                TABLE_NAME,
-                KEY_WORD,
-                ADDED_DATE
+                Dictionary.TABLE_NAME,
+                Dictionary.KEY_WORD,
+                Dictionary.ADDED_DATE
         );
 
         return getSearchResultFromDB(searchQuery, searchTerm);
@@ -292,7 +278,7 @@ public class DictionaryManager implements AutoCloseable {
 
         var result = new ArrayList<Word>();
 
-        try (final var preStatement = dictionaryDBConnection.prepareStatement(searchQuery)) {
+        try (final var preStatement = dictionary.connection().prepareStatement(searchQuery)) {
             // search in database
             preStatement.setString(1, searchTerm + "%");
             final var searchResult = preStatement.executeQuery();
@@ -328,20 +314,20 @@ public class DictionaryManager implements AutoCloseable {
 
         // generate skeleton for query
         final var tmp1 = Collections.nCopies(searchTermsSize, "?");
-        final var tmp2 = String.join(" OR " + KEY_WORD + " LIKE ", tmp1);
+        final var tmp2 = String.join(" OR " + Dictionary.KEY_WORD + " LIKE ", tmp1);
 
         final var queryForm = String.format(
                 "SELECT %s FROM %s WHERE %s LIKE %s LIMIT %d",
-                KEY_WORD,
-                TABLE_NAME,
-                KEY_WORD,
+                Dictionary.KEY_WORD,
+                Dictionary.TABLE_NAME,
+                Dictionary.KEY_WORD,
                 tmp2,
                 limitation
         );
 
         final var result = new ArrayList<String>();
 
-        try (final var stmt = dictionaryDBConnection.prepareStatement(queryForm)) {
+        try (final var stmt = dictionary.connection().prepareStatement(queryForm)) {
             // add parameters
             // sql counts from 1, why?
             for (var i = 1; i <= searchTermsSize; ++i) {
@@ -352,7 +338,7 @@ public class DictionaryManager implements AutoCloseable {
             final var rs = stmt.executeQuery();
 
             while (rs.next()) {
-                result.add(rs.getString(KEY_WORD));
+                result.add(rs.getString(Dictionary.KEY_WORD));
             }
 
         } catch (Exception e) {
@@ -369,11 +355,11 @@ public class DictionaryManager implements AutoCloseable {
 
         final var searchQuery = String.format(
                 "SELECT * FROM %s WHERE %s = ?",
-                TABLE_NAME,
-                KEY_WORD
+                Dictionary.TABLE_NAME,
+                Dictionary.KEY_WORD
         );
 
-        try (final var preStatement = dictionaryDBConnection.prepareStatement(searchQuery)) {
+        try (final var preStatement = dictionary.connection().prepareStatement(searchQuery)) {
             // search in database
             preStatement.setString(1, key);
             final var searchResult = preStatement.executeQuery();
@@ -405,14 +391,14 @@ public class DictionaryManager implements AutoCloseable {
     public List<Word> getHistory() {
         final var query = String.format(
                 "SELECT * FROM %s h LEFT JOIN %s a ON h.%s = a.%s ORDER BY id_history DESC",
-                TABLE_NAME_H,
-                TABLE_NAME,
-                ID_WORD,
-                ID
+                Dictionary.TABLE_NAME_H,
+                Dictionary.TABLE_NAME,
+                Dictionary.ID_WORD,
+                Dictionary.ID
         );
 
         try (
-                final var preStatement = dictionaryDBConnection.createStatement()
+                final var preStatement = dictionary.connection().createStatement()
         ){
 
             final var searchResult = preStatement.executeQuery(query);
@@ -441,14 +427,14 @@ public class DictionaryManager implements AutoCloseable {
     public List<Word> getBookmark() {
         final var query = String.format(
                 "SELECT * FROM %s b LEFT JOIN %s a ON b.%s = a.%s",
-                TABLE_NAME_B_M,
-                TABLE_NAME,
-                ID_WORD,
-                ID
+                Dictionary.TABLE_NAME_B_M,
+                Dictionary.TABLE_NAME,
+                Dictionary.ID_WORD,
+                Dictionary.ID
         );
 
         try(
-                final var preStatement = dictionaryDBConnection.createStatement()
+                final var preStatement = dictionary.connection().createStatement()
         ) {
 
             final var searchResult = preStatement.executeQuery(query);
@@ -478,7 +464,7 @@ public class DictionaryManager implements AutoCloseable {
     public List<Word> getWord(int someDay) {
 
         try (
-                final var preStatement = dictionaryDBConnection.createStatement()
+                final var preStatement = dictionary.connection().createStatement()
         ) {
             final var sql = "SELECT * FROM av WHERE julianday('now') - julianday(date_add) < " + someDay;
             final var searchResult = preStatement.executeQuery(sql);
@@ -506,16 +492,16 @@ public class DictionaryManager implements AutoCloseable {
     public boolean updateWord(Word word) {
         final var insertQuery = String.format(
                 "UPDATE %s SET %s = ?, %s = ?, %s = ?, %s = DATE() WHERE %s = ?",
-                TABLE_NAME,
-                KEY_WORD,
-                DESCRIPTION,
-                PRONUNCIATION,
-                ADDED_DATE,
-                ID
+                Dictionary.TABLE_NAME,
+                Dictionary.KEY_WORD,
+                Dictionary.DESCRIPTION,
+                Dictionary.PRONUNCIATION,
+                Dictionary.ADDED_DATE,
+                Dictionary.ID
         );
 
         try (
-                final var preStatement = dictionaryDBConnection.prepareStatement(insertQuery)
+                final var preStatement = dictionary.connection().prepareStatement(insertQuery)
         ) {
             preStatement.setString(1, word.getKeyWord());
             preStatement.setString(2, word.getDescription());
@@ -547,14 +533,7 @@ public class DictionaryManager implements AutoCloseable {
      */
     @Override
     public void close() {
-        if (dictionaryDBConnection != null) {
-            try {
-                dictionaryDBConnection.close();
-
-            } catch (Exception e) {
-                error.add(e.getMessage());
-            }
-        }
+        dictionary.close();
     }
 
     public Alert getAlertInfo(String content, Alert.AlertType type) {
