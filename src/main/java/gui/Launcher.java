@@ -4,23 +4,24 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class Launcher extends javafx.application.Application {
     @Override
     public void start(Stage primaryStage) {
-        Parent root = null;
         try {
-            root = FXMLLoader.load(getClass().getResource("/fxml/Main.fxml"));
+            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/Main.fxml")));
+            Scene scene = new Scene(root);
+            primaryStage.setScene(scene);
+            primaryStage.setTitle("Dictionary App");
+            primaryStage.initStyle(StageStyle.TRANSPARENT);
+            primaryStage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Scene scene = new Scene(root);
-            primaryStage.setScene(scene);
-            primaryStage.setTitle("Dictionary App");
-            //primaryStage.initStyle(StageStyle.TRANSPARENT);
-            primaryStage.show();
     }
 
     public static void main(String[] args) {
