@@ -83,9 +83,7 @@ public class MainController implements Initializable {
         AnchorPane quit = (AnchorPane) box.getChildren().get(2);
         Node node = quit.getChildren().get(0);
         if (node.getAccessibleText() != null) {
-            node.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
-                System.exit(0);
-            });
+            node.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> System.exit(0));
         }
     }
 

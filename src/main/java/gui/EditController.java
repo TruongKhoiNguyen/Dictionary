@@ -96,17 +96,14 @@ public class EditController implements Initializable {
                 Word word = words.get(0);
                 wordCurrent = word;
 
-                // edit word
                 tfEditWord.setText(word.getKeyWord());
                 tfEditDescription.setText(word.getDescription());
                 tfEditPronunciation.setText(word.getPronunciation());
             } else {
-                // khong tim thay trong tu dien
-                Alert alert = dictionaryManager.getAlertInfo("Word was wrong!", Alert.AlertType.INFORMATION);
+                Alert alert = dictionaryManager.getAlertInfo("Word is wrong!", Alert.AlertType.INFORMATION);
                 alert.show();
             }
         } catch (Exception e) {
-            // loi database
             Alert alert = dictionaryManager.getAlertInfo("Error", Alert.AlertType.ERROR);
             alert.show();
         }
@@ -115,7 +112,6 @@ public class EditController implements Initializable {
     public void onActionBtnInsert() {
         if (cbbHistoryEdit.getValue().equals("History")
                 || cbbHistoryEdit.getValue().equals("Bookmark")) {
-            // khong insert va update khi o history va bookmark
             String content = "No edit in history and bookmark";
             Alert alert = dictionaryManager.getAlertInfo(content, Alert.AlertType.INFORMATION);
             alert.show();
@@ -130,20 +126,17 @@ public class EditController implements Initializable {
         if (!(keyWord.isEmpty() || description.isEmpty())) {
             Word word = new Word(keyWord, description, pronunciation);
             if (dictionaryManager.insertWord(word)) {
-                // insert successful
                 String content = "Insert completed";
                 Alert alert = dictionaryManager.getAlertInfo(content, Alert.AlertType.INFORMATION);
                 alert.show();
 
                 resetEdit();
             } else {
-                // loi database khong insert duoc
                 String content = "Insert failed";
                 Alert alert = dictionaryManager.getAlertInfo(content, Alert.AlertType.ERROR);
                 alert.show();
             }
         } else {
-            // thieu keyword va description
             String content = "Keyword or description is missing";
             Alert alert = dictionaryManager.getAlertInfo(content, Alert.AlertType.WARNING);
             alert.show();
@@ -153,7 +146,6 @@ public class EditController implements Initializable {
     public void onActionBtnUpdate() {
         if (cbbHistoryEdit.getValue().equals("History")
                 || cbbHistoryEdit.getValue().equals("Bookmark")) {
-            // khong insert va update khi o history va bookmark
             String content = "No edit in history and bookmark";
             Alert alert = dictionaryManager.getAlertInfo(content, Alert.AlertType.INFORMATION);
             alert.show();
@@ -167,7 +159,6 @@ public class EditController implements Initializable {
             wordCurrent.setPronunciation(tfEditPronunciation.getText());
 
             if (dictionaryManager.updateWord(wordCurrent)) {
-                // update successful
                 String content = "Update successful!";
                 Alert alert = dictionaryManager.getAlertInfo(content, Alert.AlertType.INFORMATION);
                 alert.show();
@@ -179,7 +170,6 @@ public class EditController implements Initializable {
                 alert.show();
             }
         } else {
-            // chua chon word
             String content = "Please choose word";
             Alert alert = dictionaryManager.getAlertInfo(content, Alert.AlertType.WARNING);
             alert.show();
@@ -196,7 +186,7 @@ public class EditController implements Initializable {
 
                     resetEdit();
                 } else {
-                    String content = "remove form history error!";
+                    String content = "remove form history failed!";
                     Alert alert = dictionaryManager.getAlertInfo(content, Alert.AlertType.ERROR);
                     alert.show();
                 }
@@ -208,7 +198,7 @@ public class EditController implements Initializable {
 
                     resetEdit();
                 } else {
-                    String content = "remove form bookmark error!";
+                    String content = "remove form bookmark failed!";
                     Alert alert = dictionaryManager.getAlertInfo(content, Alert.AlertType.ERROR);
                     alert.show();
                 }
@@ -222,20 +212,18 @@ public class EditController implements Initializable {
 
                         resetEdit();
                     } else {
-                        String content = "Delete error";
+                        String content = "Delete failed";
                         Alert alert = dictionaryManager.getAlertInfo(content, Alert.AlertType.ERROR);
                         alert.show();
                     }
 
                 } else {
-                    // khong thay word de xoa
                     String content = "Word does not exist";
                     Alert alert = dictionaryManager.getAlertInfo(content, Alert.AlertType.WARNING);
                     alert.show();
                 }
             }
         } else {
-            // chua chon word
             String content = "Please choose word";
             Alert alert = dictionaryManager.getAlertInfo(content, Alert.AlertType.WARNING);
             alert.show();
@@ -307,7 +295,6 @@ public class EditController implements Initializable {
             Word word = lvShow.getSelectionModel().getSelectedItem();
             wordCurrent = word;
 
-            // edit word
             tfEditWord.setText(word.getKeyWord());
             tfEditDescription.setText(word.getDescription());
             tfEditPronunciation.setText(word.getPronunciation());

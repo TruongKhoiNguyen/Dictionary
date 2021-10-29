@@ -41,12 +41,18 @@ public class DictionaryManager implements AutoCloseable {
     }
 
 
-    /** */
+    /**
+     * Insert word method takes a parameter type word, and insert id_word and description to
+     * dictionary history database.
+     */
     public void insertHistory(Word word) {
         editDatabaseController.insertHistory(word);
     }
 
-    /** */
+    /**
+     * Insert word method takes a parameter type word, and insert id_word and description to
+     * dictionary bookmark database.
+     */
     public void insertBookmark(Word word) {
         editDatabaseController.insertBookmark(word);
     }
@@ -60,15 +66,23 @@ public class DictionaryManager implements AutoCloseable {
         return editDatabaseController.removeWord(keyWord);
     }
 
-    /** */
+    /**
+     * Remove word method takes Word to find and remove word in dictionary database.
+     */
     public boolean removeWord(Word word) {
         return editDatabaseController.removeWord(word);
     }
 
+    /**
+     * Remove word method takes Word to find and remove word in dictionary history database.
+     */
     public boolean removeWordFromHistory(Word word) {
         return editDatabaseController.removeWordFromHistory(word);
     }
 
+    /**
+     * Remove word method takes Word to find and remove word in dictionary bookmark database.
+     */
     public boolean removeWordFromBookmark(Word word) {
         return editDatabaseController.removeWordFromBookmark(word);
     }
@@ -92,8 +106,8 @@ public class DictionaryManager implements AutoCloseable {
      * result. So client methods and functions can be assured that the result can not grow
      * too large to make machine crash.
      */
-    public List<Word> search(String searchTerm, int limitation) {
-        return getDatabaseController.search(searchTerm, limitation);
+    public List<Word> search(String searchTerm, int limit) {
+        return getDatabaseController.search(searchTerm, limit);
     }
 
     /**
@@ -114,33 +128,44 @@ public class DictionaryManager implements AutoCloseable {
         return getDatabaseController.searchKeyWord(searchTerms, limit);
     }
 
-    /** */
+    /**
+     * Return a Word using a String as the argument.
+     */
     public Word searchKey(String key) {
         return getDatabaseController.searchKey(key);
     }
 
-    /** */
+    /**
+     * Return a list of words from history database.
+     */
     public List<Word> getHistory() {
         return getDatabaseController.getHistory();
     }
 
-    /** */
+    /**
+     * Return a list of words from bookmark database.
+     */
     public List<Word> getBookmark() {
         return getDatabaseController.getBookmark();
     }
 
-    /** */
+    /**
+     * Return a list of words from dictionary database with date limit.
+     */
     public List<Word> getWord(int someDay) {
         return getDatabaseController.getWord(someDay);
     }
 
-    /** */
+    /**
+     * Update Word's changes to the dictionary database.
+     */
     public boolean updateWord(Word word) {
         return editDatabaseController.updateWord(word);
     }
 
-    // getter, setter
-
+    /**
+     * Save error occurred during run.
+     */
     public List<String> getError() {
         return error;
     }
@@ -156,6 +181,9 @@ public class DictionaryManager implements AutoCloseable {
         dictionary.close();
     }
 
+    /**
+     * Generate message from database.
+     */
     public Alert getAlertInfo(String content, Alert.AlertType type) {
         String notification = "Database: " + content;
         Alert a = new Alert(type);
