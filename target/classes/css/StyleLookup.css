@@ -1,0 +1,153 @@
+
+.backGround {
+    -fx-background-color: #E7E7DE;
+}
+
+.backGroundPane {
+    -fx-background-radius: 10;
+    -fx-background-color: #5F7A61;
+}
+
+.backGroundMenu {
+    -fx-background-color: #126E82;
+}
+
+.backGroundTranslate {
+    -fx-background-color: #dfe4ea;
+}
+
+.backGroundTranslatePane {
+    /*-fx-background-color: #808e9b;*/
+    -fx-background-color: #a5b1c2;
+    -fx-background-radius: 10;
+}
+
+.backGroundTranslatePane-2 {
+    -fx-background-color: #a5b1c2;
+    -fx-background-radius: 50;
+}
+
+
+/*Custom button*/
+.button {
+    -fx-background-color: rgba(51, 89, 97, 0.85);
+    -fx-background-radius: 20;
+}
+
+.button:hover {
+    -fx-background-color: rgba(51, 89, 97, 1);
+    -fx-translate-y: -3px;
+}
+
+.button:pressed {
+    -fx-translate-y: -1px;
+}
+
+.buttonMenu {
+    -fx-background-color: rgba(51, 89, 97, 0);
+    -fx-background-radius: 5;
+}
+
+.buttonMenu:hover {
+    -fx-background-color: rgba(51, 89, 97, 1);
+    -fx-translate-y: 0px;
+}
+
+.buttonMenu:pressed {
+    -fx-translate-y: -1px;
+}
+
+.buttonTranslate {
+    -fx-background-color: rgba(75, 123, 236, 0.85);
+}
+
+.buttonTranslate:hover {
+    -fx-background-color: rgba(75, 123, 236, 1);
+    -fx-translate-y: -2px;
+}
+
+.buttonTranslate:pressed {
+    -fx-translate-y: -1px;
+}
+/***************************************************************************/
+.labelBox {
+    -fx-background-color: #4b7bec;
+    -fx-background-radius: 100;
+}
+
+.textFieldTran {
+    -fx-text-fill: white;
+}
+
+/*effect*/
+.shadow {
+    -fx-effect: dropShadow(three-pass-box,rgba(0,0,0,0.1), 10.0 , 0.0 , 0.0 ,10.0);
+}
+
+.transparent {
+    -fx-background-color: rgba(0, 0, 0, 0);
+}
+/***************************************************************************/
+
+.list-cell {
+    -fx-background-radius: 10;
+    -fx-font-weight: bold;
+}
+
+.list-cell:hover{
+    -fx-background-color: #D4ECDD;
+}
+
+.list-cell:selected{
+    -fx-text-fill: white;
+    -fx-background-color: #345B63;
+}
+
+/***************************************************************************/
+.SearchBox {
+    -fx-background-color: white;
+    -fx-background-radius: 100;
+}
+
+.text-field {
+    -fx-background-radius: 20;
+}
+
+.combo-box-tran {
+    -fx-background-color: rgba(255, 255, 255, 0.3);
+    -fx-background-radius: 30;
+}
+
+/****************************************************************************************/
+
+.combo-box-base{
+    -fx-background-color: rgba(255, 255, 255, 0.5);
+    -fx-font-weight: bold;
+    -fx-background-radius: 10;
+    -fx-text-fill: white;
+}
+
+.combo-box-base:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.8);
+}
+
+.combo-box .list-cell {
+    -fx-text-fill: black;
+    -fx-background-radius: 10;
+}
+.combo-box .list-view {
+    -fx-background-color: rgba(255, 255, 255, 0);
+}
+
+.combo-box .list-view .list-cell {
+    -fx-text-fill: black;
+    -fx-background-color: rgba(255, 255, 255, 0.5);
+}
+
+.combo-box .list-view .list-cell:filled:selected {
+    -fx-background-color: rgba(75, 123, 236, 0.5);
+}
+
+.combo-box .list-view .list-cell:filled:hover {
+    -fx-background-color: rgba(255, 255, 255, 1);
+}

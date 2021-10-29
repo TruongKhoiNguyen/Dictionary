@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="800.0" styleClass="backGround" stylesheets="@../css/StyleLookup.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.LookupController">
+    <children>
+        <VBox alignment="CENTER" layoutX="62.0" layoutY="124.0" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="400.0" AnchorPane.topAnchor="0.0">
+            <children>
+                <HBox alignment="CENTER" prefHeight="92.0" prefWidth="400.0">
+                    <children>
+                        <Label styleClass="shadow" text="Search" textFill="#335961">
+                            <font>
+                                <Font name="Cambria Bold" size="30.0" />
+                            </font>
+                            <HBox.margin>
+                                <Insets right="10.0" />
+                            </HBox.margin>
+                        </Label>
+                        <Label text="Word" textFill="#103157ab">
+                            <font>
+                                <Font name="Cambria" size="24.0" />
+                            </font>
+                            <HBox.margin>
+                                <Insets />
+                            </HBox.margin>
+                        </Label>
+                    </children>
+                </HBox>
+                <HBox alignment="CENTER" prefHeight="92.0" prefWidth="400.0">
+                    <children>
+                        <TextField fx:id="tfSearch" focusTraversable="false" prefHeight="30.0" prefWidth="167.0" promptText="Type here search ..." styleClass="transparent">
+                            <font>
+                                <Font name="Cambria Bold" size="16.0" />
+                            </font>
+                     <HBox.margin>
+                        <Insets right="10.0" />
+                     </HBox.margin>
+                        </TextField>
+                  <ImageView fx:id="imgSpell" fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../icon/warningSpell.png" />
+                     </image>
+                  </ImageView>
+                        <Button fx:id="btnSearch" mnemonicParsing="false" onAction="#onActionBtnSearch">
+                            <HBox.margin>
+                                <Insets left="10.0" />
+                            </HBox.margin>
+                            <graphic>
+                                <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../icon/search.png" />
+                                    </image>
+                                </ImageView>
+                            </graphic>
+                        </Button>
+                    </children>
+                    <VBox.margin>
+                        <Insets bottom="15.0" left="50.0" right="50.0" top="5.0" />
+                    </VBox.margin>
+                    <styleClass>
+                        <String fx:value="SearchBox" />
+                        <String fx:value="shadow" />
+                    </styleClass>
+                </HBox>
+                <AnchorPane prefHeight="410.0" prefWidth="385.0">
+                    <children>
+                        <ListView fx:id="lvShowWord" fixedCellSize="30.0" focusTraversable="false" layoutX="47.0" layoutY="17.0" onMouseClicked="#onActionChooseCell" prefHeight="200.0" prefWidth="375.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="6.0">
+                            <cursor>
+                                <Cursor fx:constant="HAND" />
+                            </cursor></ListView>
+                    </children>
+                    <styleClass>
+                        <String fx:value="shadow" />
+                        <String fx:value="backGroundPane" />
+                    </styleClass>
+                    <VBox.margin>
+                        <Insets bottom="10.0" left="10.0" right="5.0" />
+                    </VBox.margin>
+                </AnchorPane>
+            </children>
+        </VBox>
+        <VBox layoutX="512.0" layoutY="134.0" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="400.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <children>
+                <HBox alignment="BOTTOM_LEFT" prefHeight="164.0" prefWidth="400.0">
+                    <children>
+                        <Label text="Word" textFill="#103157d1">
+                            <font>
+                                <Font name="Cambria Bold" size="24.0" />
+                            </font>
+                            <HBox.margin>
+                                <Insets bottom="15.0" left="20.0" right="50.0" />
+                            </HBox.margin>
+                        </Label>
+                        <Button fx:id="btnSpeech" mnemonicParsing="false" onAction="#onActionBtnSpeech">
+                            <HBox.margin>
+                                <Insets bottom="16.0" left="10.0" right="10.0" />
+                            </HBox.margin>
+                            <graphic>
+                                <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../icon/speech3.png" />
+                                    </image>
+                                </ImageView>
+                            </graphic>
+                        </Button>
+                        <Button fx:id="btnBookmarkList" mnemonicParsing="false" onAction="#onActionBtnBookmarkList">
+                            <HBox.margin>
+                                <Insets bottom="16.0" left="10.0" right="10.0" />
+                            </HBox.margin>
+                            <graphic>
+                                <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../icon/bookmarkList.png" />
+                                    </image>
+                                </ImageView>
+                            </graphic>
+                        </Button>
+                        <Button fx:id="btnBookmark" mnemonicParsing="false" onAction="#onActionBtnBookmark">
+                            <HBox.margin>
+                                <Insets bottom="16.0" left="10.0" right="10.0" />
+                            </HBox.margin>
+                            <graphic>
+                                <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../icon/bookmark.png" />
+                                    </image>
+                                </ImageView>
+                            </graphic>
+                        </Button>
+                    </children>
+                </HBox>
+                <AnchorPane prefHeight="410.0" prefWidth="400.0">
+                    <VBox.margin>
+                        <Insets bottom="10.0" right="10.0" />
+                    </VBox.margin>
+                    <styleClass>
+                        <String fx:value="backGroundPane" />
+                        <String fx:value="shadow" />
+                    </styleClass>
+               <children>
+                  <TextArea fx:id="taDescription" editable="false" prefHeight="200.0" prefWidth="200.0" wrapText="true" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+                     <font>
+                        <Font name="Cambria Bold" size="18.0" />
+                     </font>
+                  </TextArea>
+               </children>
+                </AnchorPane>
+            </children>
+        </VBox>
+    </children>
+</AnchorPane>

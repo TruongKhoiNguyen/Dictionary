@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<?import java.lang.String?>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="800.0" styleClass="backGroundTranslate" stylesheets="@../css/StyleTranslate.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.TranslateController">
+    <children>
+        <VBox layoutX="339.0" layoutY="144.0" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <children>
+                <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
+                    <children>
+                        <Label styleClass="shadow" text="Google" textFill="#718093">
+                            <font>
+                                <Font name="Calibri Bold" size="34.0" />
+                            </font>
+                            <HBox.margin>
+                                <Insets bottom="20.0" left="20.0" right="10.0" />
+                            </HBox.margin>
+                        </Label>
+                        <Label text="Translate" textFill="#718093">
+                            <font>
+                                <Font name="Calibri" size="24.0" />
+                            </font>
+                            <HBox.margin>
+                                <Insets top="10.0" />
+                            </HBox.margin>
+                        </Label>
+                    </children></HBox>
+                <HBox alignment="CENTER" prefHeight="81.0" prefWidth="800.0" styleClass="backGroundTranslatePane-2">
+                    <children>
+                        <AnchorPane prefHeight="100.0" prefWidth="350.0" styleClass="labelBox">
+                            <HBox.margin>
+                                <Insets bottom="15.0" left="20.0" top="15.0" />
+                            </HBox.margin>
+                            <cursor>
+                                <Cursor fx:constant="DEFAULT" />
+                            </cursor>
+                            <children>
+                                <ComboBox fx:id="cbbLanguageTarget" layoutX="89.0" layoutY="11.0" prefWidth="150.0" promptText="English" />
+                            </children>
+                        </AnchorPane>
+                        <AnchorPane prefHeight="100.0" prefWidth="114.0">
+                            <children>
+                                <Button fx:id="btnTranslate" layoutX="23.0" layoutY="21.0" mnemonicParsing="false" onAction="#onActionTranslate" styleClass="buttonTranslate">
+                                    <graphic>
+                                        <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                                            <image>
+                                                <Image url="@../icon/lookupBtnIcon2.png" />
+                                            </image>
+                                        </ImageView>
+                                    </graphic>
+                                </Button>
+                            </children>
+                        </AnchorPane>
+                        <AnchorPane prefHeight="100.0" prefWidth="350.0" styleClass="labelBox">
+                            <HBox.margin>
+                                <Insets bottom="15.0" right="20.0" top="15.0" />
+                            </HBox.margin>
+                            <children>
+                                <ComboBox fx:id="cbbLanguageExplain" layoutX="89.0" layoutY="11.0" prefWidth="150.0" promptText="Vietnamese" styleClass="combo-box-tran" />
+                            </children>
+                        </AnchorPane>
+                    </children>
+                    <VBox.margin>
+                        <Insets bottom="5.0" left="15.0" right="15.0" top="5.0" />
+                    </VBox.margin>
+                </HBox>
+                <HBox prefHeight="320.0" prefWidth="800.0">
+                    <children>
+                        <AnchorPane prefHeight="200.0" prefWidth="400.0">
+                            <children>
+                                <TextArea fx:id="taTarget" layoutX="110.0" layoutY="40.0" prefHeight="200.0" prefWidth="200.0" promptText="Type here ... " wrapText="true" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+                                    <font>
+                                        <Font name="System Bold" size="16.0" />
+                                    </font>
+                                </TextArea>
+                            </children>
+                            <HBox.margin>
+                                <Insets bottom="10.0" left="10.0" right="5.0" top="5.0" />
+                            </HBox.margin>
+                     <styleClass>
+                        <String fx:value="backGroundTranslatePane" />
+                        <String fx:value="shadow" />
+                     </styleClass>
+                        </AnchorPane>
+                        <AnchorPane prefHeight="200.0" prefWidth="400.0">
+                            <children>
+                                <TextArea fx:id="taExplain" editable="false" layoutX="100.0" layoutY="47.0" prefHeight="200.0" prefWidth="200.0" wrapText="true" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+                                    <font>
+                                        <Font name="System Bold" size="16.0" />
+                                    </font>
+                                </TextArea>
+                            </children>
+                            <HBox.margin>
+                                <Insets bottom="10.0" left="5.0" right="10.0" top="5.0" />
+                            </HBox.margin>
+                     <styleClass>
+                        <String fx:value="backGroundTranslatePane" />
+                        <String fx:value="shadow" />
+                     </styleClass>
+                        </AnchorPane>
+                    </children>
+                </HBox>
+            </children>
+        </VBox>
+    </children>
+</AnchorPane>
