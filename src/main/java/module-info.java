@@ -1,4 +1,4 @@
-module untitled {
+module Dictionary {
     requires javafx.controls;
     requires javafx.fxml;
     requires javafx.graphics;
@@ -9,4 +9,6 @@ module untitled {
 
     opens gui to javafx.fxml;
     exports gui;
+    exports shared;
+    exports cli;
 }
