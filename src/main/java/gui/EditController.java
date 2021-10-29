@@ -123,6 +123,13 @@ public class EditController implements Initializable {
         String description = tfEditDescription.getText();
         String pronunciation = tfEditPronunciation.getText();
 
+        if (keyWord.equals(dictionaryManager.searchKey(keyWord).getKeyWord())) {
+            String content = "\"" + keyWord + "\" has been added!";
+            Alert alert = dictionaryManager.getAlertInfo(content, Alert.AlertType.WARNING);
+            alert.show();
+            return;
+        }
+
         if (!(keyWord.isEmpty() || description.isEmpty())) {
             Word word = new Word(keyWord, description, pronunciation);
             if (dictionaryManager.insertWord(word)) {
