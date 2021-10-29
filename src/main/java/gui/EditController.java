@@ -46,7 +46,7 @@ public class EditController implements Initializable {
             "History",
             "Bookmark");
 
-    private Word wordCurrent = null;
+    private Word wordCurrent;
     private List<Word> wordList = new ArrayList<>();
     private ObservableList<Word> wordObservableList;
 
@@ -304,13 +304,13 @@ public class EditController implements Initializable {
     public int setTimeGetWord(String time) {
         switch (time) {
             case "3D ago" -> {
-                return 2;
+                return _3_DAY_AGO;
             }
             case "1W ago" -> {
-                return 4;
+                return _1_WEEK_AGO;
             }
             case "1M ago" -> {
-                return 6;
+                return _1_MONTH_AGO;
             }
         }
         return 3;

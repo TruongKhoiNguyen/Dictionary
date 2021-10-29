@@ -36,7 +36,7 @@ public class LookupController implements Initializable {
 
     private final DictionaryManager dictionaryManager = new DictionaryManager();
 
-    private Word wordCurrent = null;
+    private Word wordCurrent;
     private List<Word> wordList = new ArrayList<>();
     private ObservableList<Word> wordObservableList;
     // if is true: history or bookmark
@@ -125,7 +125,7 @@ public class LookupController implements Initializable {
 
                 taDescription.setText(selectWord);
             } else {
-                Alert alert = dictionaryManager.getAlertInfo("Word was wrong!", Alert.AlertType.INFORMATION);
+                Alert alert = dictionaryManager.getAlertInfo("Word is wrong!", Alert.AlertType.INFORMATION);
                 alert.show();
             }
         } catch (Exception e) {
