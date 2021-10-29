@@ -11,3 +11,6 @@ target/classes/shared/DictionaryManager.class
 target/classes/dict_hh.db
 target/classes/dict_hh.db
 target/classes/shared/DictionaryManager.class
+/.idea/
+/out/
+/target/
